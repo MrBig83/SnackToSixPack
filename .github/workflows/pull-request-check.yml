@@ -18,7 +18,7 @@ jobs:
           dotnet-version: '9.x' # Anpassa om du har annan version
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore SnackToSixPack.slnx
 
       - name: Build
         id: buildstep
