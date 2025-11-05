@@ -4,8 +4,8 @@
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
-            // This is a placeholder for the SnackToSixPack application.
+            
+            AuthForms.ShowLogInForm();
         }
     }
 }
