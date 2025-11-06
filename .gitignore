@@ -416,7 +416,3 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
-
-# Ignore local config
-appsettings.json
-appsettings.Development.json
