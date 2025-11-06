@@ -4,8 +4,9 @@
     {
         static void Main(string[] args)
         {
-            
-            AuthForms.ShowLogInForm();
+
+            //AuthForms.ShowLogInForm();
+            Authentication.TwoFactorAuth();
         }
     }
 }
