@@ -9,7 +9,7 @@ namespace SnackToSixPack
         {
 
             //AuthForms.ShowLogInForm();
-            //Authentication.TwoFactorAuth();
+            Authentication.TwoFactorAuth();
             
             //AuthForms.ShowLogInForm();
   
