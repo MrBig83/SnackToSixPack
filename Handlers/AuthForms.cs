@@ -32,4 +32,9 @@ public class AuthForms
         AnsiConsole.WriteLine();
         AnsiConsole.Markup("[bold]Welcome[/]" + ",[green]" + usernameInput + "[/]!");
     }
+
+    internal static void ShowRegisterForm()
+    {
+        throw new NotImplementedException();
+    }
 }
