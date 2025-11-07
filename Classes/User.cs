@@ -9,16 +9,16 @@ namespace SnackToSixPack.Classes
     public class User
     {
         public int Id { get; set; }
-        public string UserName { get; set; }
-        public string Name { get; set; }
-        public string Email { get; set; }
-        public string Phone { get; set; }
+        public string? UserName { get; set; }
+        public string? Name { get; set; }
+        public string? Email { get; set; }
+        public string? Phone { get; set; }
         public int Age { get; set; }
-        public string Password { get; set; } // To be hashed!
+        public string? Password { get; set; } // To be hashed!
         public double Weight { get; set; }
         public double Length { get; set; }
         public Gender Gender { get; set; }
-        public string Adress { get; set; }
+        public string? Adress { get; set; }
         public Experience Experience { get; set; }
 
         public User() { }
