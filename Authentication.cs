@@ -101,7 +101,7 @@ public class Authentication
             .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
             .Build();
         var smtpUsername = APIHandler.readAPIUN();
-        var smtpPassword = APIHandler.readAPIPW();
+        var smtpPassword = APIHandler.readAPIPW(); 
 
         using var mail = new MailMessage();
         mail.From = new MailAddress(smtpUsername);
