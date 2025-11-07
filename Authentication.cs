@@ -109,7 +109,11 @@ public class Authentication
         mail.Subject = "Your Authentication Code";
         mail.Body = "Your authentication code is: " + code;
 
-        using var smtp = new SmtpClient(config["Smtp:Host"], int.Parse(config["Smtp:Port"]!));
+        //using var smtp = new SmtpClient(config["Smtp:Host"], int.Parse(config["Smtp:Port"]!));
+        var host = config["Smtp:Host"] ?? "smtp.gmail.com";
+        var portStr = config["Smtp:Port"] ?? "587";
+
+        using var smtp = new SmtpClient(host, int.Parse(portStr));
         smtp.UseDefaultCredentials = false;
         smtp.Credentials = new NetworkCredential(smtpUsername, smtpPassword);
         smtp.EnableSsl = true; // for TLS on port 587
