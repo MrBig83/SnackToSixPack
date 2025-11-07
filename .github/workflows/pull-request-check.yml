@@ -7,6 +7,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment:
+      name: Production     # 👈 exakt samma namn som ditt environment
 
     steps:
       - name: Checkout
