@@ -34,20 +34,17 @@ jobs:
           MAIL_AUTH_PW: ${{ secrets.MAIL_AUTH_PW }}
         run: dotnet run --project SnackToSixPack.csproj
 
-      - name: Send Discord Notification (Success)
-        if: success()
+      - name: Send Discord Notification (Always)
+        if: always()
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          BRANCH: ${{ github.head_ref }}
+          STATUS: ${{ job.status }} # 'success' | 'failure' | 'cancelled'
         run: |
+          if [ "$STATUS" = "success" ]; then ICON=":white_check_mark:"; else ICON=":x:"; fi
+          CONTENT="$ICON Build $STATUS for PR #$PR_NUMBER on branch $BRANCH."
+          # Escaping enkelt utan jq
           curl -H "Content-Type: application/json" \
-            -d "{\"content\":\":white_check_mark: Build succeeded for PR #${{ github.event.pull_request.number }} on branch ${{ github.head_ref }}.\"}" \
-            "$DISCORD_WEBHOOK"
-
-      - name: Send Discord Notification (Failure)
-        if: failure()
-        env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-        run: |
-          curl -H "Content-Type: application/json" \
-            -d "{\"content\":\":x: Build FAILED for PR #${{ github.event.pull_request.number }} on branch ${{ github.head_ref }}!\"}" \
-            "$DISCORD_WEBHOOK"
+               -d "{\"content\":\"$CONTENT\"}" \
+               "$DISCORD_WEBHOOK"
