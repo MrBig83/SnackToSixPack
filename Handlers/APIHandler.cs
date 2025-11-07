@@ -13,6 +13,9 @@ namespace SnackToSixPack.Handlers
         {
 
             // Läs samma nyckel i alla miljöer
+
+            //If environment == dev (kör det som är nedan) annars använd GH vars i YAML-filen
+            
             var mailAuthUN = Environment.GetEnvironmentVariable("MAIL_AUTH_UN");
 
             if (string.IsNullOrWhiteSpace(mailAuthUN))
