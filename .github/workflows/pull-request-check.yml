@@ -15,7 +15,7 @@ jobs:
       - name: Set up .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '9.x' # Anpassa om du har annan version
+          dotnet-version: '9.x' # Anpassa vid behov
 
       - name: Restore dependencies
         run: dotnet restore SnackToSixPack.slnx
@@ -24,12 +24,13 @@ jobs:
         id: buildstep
         run: dotnet build --no-restore
 
-      # 🟢 NYTT STEG: Kör appen med API-nyckeln från GitHub Secrets
-      - name: Run application with API key
+      # Kör appen med Secrets som miljövariabler
+      - name: Run SnackToSixPack with API credentials
         env:
+          DOTNET_ENVIRONMENT: Production
           MAIL_AUTH_UN: ${{ secrets.MAIL_AUTH_UN }}
           MAIL_AUTH_PW: ${{ secrets.MAIL_AUTH_PW }}
-        run: dotnet run --project SnackToSixPack.csproj  # ⬅️ ändra denna till din faktiska .csproj-sökväg
+        run: dotnet run --project SnackToSixPack/SnackToSixPack.csproj
 
       - name: Send Discord Notification (Success)
         if: success()
@@ -38,7 +39,7 @@ jobs:
         run: |
           curl -H "Content-Type: application/json" \
             -d "{\"content\":\":white_check_mark: Build succeeded for PR #${{ github.event.pull_request.number }} on branch ${{ github.head_ref }}.\"}" \
-            $DISCORD_WEBHOOK
+            "$DISCORD_WEBHOOK"
 
       - name: Send Discord Notification (Failure)
         if: failure()
@@ -47,4 +48,4 @@ jobs:
         run: |
           curl -H "Content-Type: application/json" \
             -d "{\"content\":\":x: Build FAILED for PR #${{ github.event.pull_request.number }} on branch ${{ github.head_ref }}!\"}" \
-            $DISCORD_WEBHOOK
+            "$DISCORD_WEBHOOK"
