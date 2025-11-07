@@ -24,6 +24,13 @@ jobs:
         id: buildstep
         run: dotnet build --no-restore
 
+      # 🟢 NYTT STEG: Kör appen med API-nyckeln från GitHub Secrets
+      - name: Run application with API key
+        env:
+          MAIL_AUTH_UN: ${{ secrets.MAIL_AUTH_UN }}
+          MAIL_AUTH_PW: ${{ secrets.MAIL_AUTH_PW }}
+        run: dotnet run --project SnackToSixPack.csproj  # ⬅️ ändra denna till din faktiska .csproj-sökväg
+
       - name: Send Discord Notification (Success)
         if: success()
         env:
