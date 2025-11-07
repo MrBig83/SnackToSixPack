@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Mail;
 using Microsoft.Extensions.Configuration;
 using System.IO;
+using SnackToSixPack.Handlers;
 
 public class Authentication
 {
@@ -99,32 +100,28 @@ public class Authentication
             // sätt optional: false om filen måste finnas
             .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
             .Build();
+        var smtpUsername = APIHandler.readAPIUN();
+        var smtpPassword = APIHandler.readAPIPW();
 
-        var smtpUsername = config["Smtp:Username"];
-
-        MailMessage mail = new MailMessage();
-        if (string.IsNullOrEmpty(smtpUsername))
-        {
-            Console.WriteLine("SMTP username is not configured.");
-            return;
-        }
+        using var mail = new MailMessage();
         mail.From = new MailAddress(smtpUsername);
-        mail.To.Add("emeliecaroline99@gmail.com");
+        mail.To.Add("mjohansson176@gmail.com");
         mail.Subject = "Your Authentication Code";
         mail.Body = "Your authentication code is: " + code;
 
-        SmtpClient smtp = new SmtpClient(config["Smtp:Host"], int.Parse(config["Smtp:Port"]!));
-        smtp.Credentials = new NetworkCredential(smtpUsername, config["Smtp:Password"]);
-        smtp.EnableSsl = true;
+        using var smtp = new SmtpClient(config["Smtp:Host"], int.Parse(config["Smtp:Port"]!));
+        smtp.UseDefaultCredentials = false;
+        smtp.Credentials = new NetworkCredential(smtpUsername, smtpPassword);
+        smtp.EnableSsl = true; // for TLS on port 587
 
         try
         {
             smtp.Send(mail);
             Console.WriteLine("Email sent successfully.");
         }
-        catch (System.Exception)
+        catch (Exception ex)
         {
-            Console.WriteLine("Failed to send email."); 
+            Console.WriteLine($"Failed to send email: {ex.Message}");
         }
     }
 }
