@@ -30,7 +30,7 @@ jobs:
           DOTNET_ENVIRONMENT: Production
           MAIL_AUTH_UN: ${{ secrets.MAIL_AUTH_UN }}
           MAIL_AUTH_PW: ${{ secrets.MAIL_AUTH_PW }}
-        run: dotnet run --project SnackToSixPack/SnackToSixPack.csproj
+        run: dotnet run --project SnackToSixPack.csproj
 
       - name: Send Discord Notification (Success)
         if: success()
