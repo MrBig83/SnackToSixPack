@@ -7,12 +7,12 @@ namespace SnackToSixPack
     {
         static void Main(string[] args)
         {
+
+            //AuthForms.ShowLogInForm();
+            //Authentication.TwoFactorAuth();
             
-            AuthForms.ShowLogInForm();
-
-
-
-
+            //AuthForms.ShowLogInForm();
+  
             //// ======= Detta är bara för att provköra hämtning av JSON och User-klassen =======
             //List<User> users = JsonHelper.LoadUsers();
             //foreach (var user in users)
@@ -20,8 +20,6 @@ namespace SnackToSixPack
             //    Console.WriteLine(user.Name);
             //}
             //// ======= Slut på provkörning =======
-
-
         }
     }
 }

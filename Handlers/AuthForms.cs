@@ -30,6 +30,6 @@ public class AuthForms
         string passwordInput = AnsiConsole.Prompt(passwordPrompt);
 
         AnsiConsole.WriteLine();
-        AnsiConsole.Markup("[bold]Welcome[/] " + ",[green]" + usernameInput + "[/]!");
+        AnsiConsole.Markup("[bold]Welcome[/]" + ",[green]" + usernameInput + "[/]!");
     }
 }
