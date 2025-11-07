@@ -1,4 +1,7 @@
-﻿namespace SnackToSixPack
+﻿using SnackToSixPack.Classes;
+using SnackToSixPack.Handlers;
+
+namespace SnackToSixPack
 {
     internal class Program
     {
@@ -6,7 +9,17 @@
         {
 
             //AuthForms.ShowLogInForm();
-            Authentication.TwoFactorAuth();
+            //Authentication.TwoFactorAuth();
+            
+            //AuthForms.ShowLogInForm();
+  
+            //// ======= Detta är bara för att provköra hämtning av JSON och User-klassen =======
+            //List<User> users = JsonHelper.LoadUsers();
+            //foreach (var user in users)
+            //{
+            //    Console.WriteLine(user.Name);
+            //}
+            //// ======= Slut på provkörning =======
         }
     }
 }
