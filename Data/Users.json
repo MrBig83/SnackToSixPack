@@ -1,0 +1,30 @@
+[
+  {
+    "Id": 1,
+    "UserName": "Gymmartin",
+    "Name": "Martin Johansson",
+    "Email": "martin.j@example.com",
+    "Phone": "0701234567",
+    "Age": 42,
+    "Password": "SuperSecret123!",
+    "Weight": 120,
+    "Length": 187,
+    "Gender": "Male",
+    "Adress": "Romelanda, Sweden",
+    "Experience": "Intermediate"
+  },
+  {
+    "Id": 2,
+    "UserName": "runnerlisa",
+    "Name": "Lisa Andersson",
+    "Email": "lisa.a@example.com",
+    "Phone": "0702345678",
+    "Age": 28,
+    "Password": "SafePassword!45",
+    "Weight": 65,
+    "Length": 172,
+    "Gender": "Female",
+    "Adress": "Göteborg, Sweden",
+    "Experience": "Beginner"
+  }
+]

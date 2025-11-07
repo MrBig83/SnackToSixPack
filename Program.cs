@@ -1,11 +1,24 @@
-﻿namespace SnackToSixPack
+﻿using SnackToSixPack.Classes;
+using SnackToSixPack.Handlers;
+
+namespace SnackToSixPack
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
-            // This is a placeholder for the SnackToSixPack application.
+
+
+
+            // ======= Detta är bara för att provköra hämtning av JSON och User-klassen =======
+            List<User> users = JsonHelper.LoadUsers();
+
+            foreach (var user in users)
+            {
+                Console.WriteLine(user.Name);
+            }
+            // ======= Slut på provkörning =======
+
         }
     }
 }
