@@ -5,6 +5,7 @@ using System.Net.Mail;
 using Microsoft.Extensions.Configuration;
 using System.IO;
 using SnackToSixPack.Handlers;
+using SnackToSixPack.Classes;
 
 public class Authentication
 {
@@ -18,6 +19,7 @@ public class Authentication
         if (!emailSent)
         {
             Authentication auth = new Authentication();
+            // converts int to string but does not save as a string variable
             auth.SendEmail(code.ToString());
             emailSent = true;
         }
@@ -105,7 +107,18 @@ public class Authentication
 
         using var mail = new MailMessage();
         mail.From = new MailAddress(smtpUsername);
-        mail.To.Add("mjohansson176@gmail.com");
+        // if current user exists and has an email, use it
+        // "is string email" if the email is not null, assign it to the variable email
+        if (Session.CurrentUser?.Email is string email)
+        {
+            mail.To.Add(email);
+        }
+        else
+        {
+            // if no current user or no email, exit the method
+            Console.WriteLine("No email address available for current user.");
+            return;
+        }
         mail.Subject = "Your Authentication Code";
         mail.Body = "Your authentication code is: " + code;
 
