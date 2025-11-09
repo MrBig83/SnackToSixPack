@@ -20,7 +20,21 @@ public class Authentication
         {
             Authentication auth = new Authentication();
             // converts int to string but does not save as a string variable
-            auth.SendEmail(code.ToString());
+            bool sent = auth.SendEmail(code.ToString());
+
+            if (!sent)
+            {
+                AnsiConsole.MarkupLine("\n[bold red]Failed to send authentication email.[/]");
+                AnsiConsole.MarkupLine("[bold yellow]Press enter to return to login or 'Q' to quit.[/]");
+                var key = Console.ReadKey(true);
+                if (key.Key == ConsoleKey.Q)
+                {
+                    Environment.Exit(0);
+                }
+                AuthForms.ShowLogInForm();
+                // exit the method to avoid continuing the authentication process   
+                return;
+            }
             emailSent = true;
         }
         string inputCode = "";
@@ -80,7 +94,15 @@ public class Authentication
             // check if the code is correct
             if (inputCode == code.ToString())
             {
+                AnsiConsole.Clear();
+                AnsiConsole.Status()
+                    .Start("Redirecting...", ctx =>
+                    {
+                        // Simulate some work, 3 seconds
+                        System.Threading.Thread.Sleep(3000);
+                    });
                 AnsiConsole.MarkupLine("\n[bold green]Authentication successful![/]");
+
                 success = true;
             }
             else
@@ -94,7 +116,7 @@ public class Authentication
         }
     }
 
-    public void SendEmail(string code)
+    public bool SendEmail(string code)
     {
         // Load configuration from appsettings.json
         var config = new ConfigurationBuilder()
@@ -111,13 +133,13 @@ public class Authentication
         // "is string email" if the email is not null, assign it to the variable email
         if (Session.CurrentUser?.Email is string email)
         {
-            mail.To.Add(email);
+            mail.To.Add(email); 
         }
         else
         {
             // if no current user or no email, exit the method
             Console.WriteLine("No email address available for current user.");
-            return;
+            return false;
         }
         mail.Subject = "Your Authentication Code";
         mail.Body = "Your authentication code is: " + code;
@@ -130,11 +152,13 @@ public class Authentication
         try
         {
             smtp.Send(mail);
-            Console.WriteLine("Email sent successfully.");
+            AnsiConsole.MarkupLine("[bold green]Email sent successfully.[/]");
+            return true;
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Failed to send email: {ex.Message}");
+            AnsiConsole.MarkupLine("[bold red]Failed to send email: " + ex.Message + "[/]");
+            return false;
         }
     }
 }

@@ -21,7 +21,7 @@ namespace SnackToSixPack.Classes
                     .Border(BoxBorder.Double)
                     // makes the border color white
                     .BorderStyle(new Style(Color.White))
-                    .Padding(5, 0);
+                    .Padding(10, 0);
 
                 AnsiConsole.Write(heading);
                 AnsiConsole.WriteLine();
@@ -63,18 +63,19 @@ namespace SnackToSixPack.Classes
                     continue;
                 }
 
-                AnsiConsole.WriteLine("Please proceed to authentication...");
+                AnsiConsole.Clear();
+                AnsiConsole.WriteLine("Processing login...");
                 AnsiConsole.Status()
-                    .Start("Processing login...", ctx =>
+                    .Start("Proceeding to authentication...", ctx =>
                     {
                         // Simulate some work, 3 seconds
                         System.Threading.Thread.Sleep(3000);
                     });
                 AnsiConsole.Clear();
+                Session.SetCurrentUser(user);
                 Authentication.TwoFactorAuth();
 
                 AnsiConsole.WriteLine();
-                Session.SetCurrentUser(user);
                 AnsiConsole.Markup("[bold]Welcome[/]" + ",[green] " + usernameInput + "[/]!");
                 running = false;
             }
