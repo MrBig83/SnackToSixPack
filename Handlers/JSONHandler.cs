@@ -11,9 +11,8 @@ using System.Threading.Tasks;
 
 namespace SnackToSixPack.Handlers
 {
-    public static class JsonHelper
+    public static class JSONHelper
     {
-
 
         public static List<User> LoadUsers()
         {
