@@ -72,8 +72,7 @@ namespace SnackToSixPack.Handlers
         {
             //OBS! =================== NEDAN ÄR INTE FÄRDIGT!! ================================== OBS!
             //// Ladda en eller flera planer från JSON-fil:
-            string userID = "1"; //Ta bort denna när Session fungerar och ersätt userID med Session.CurrentUser.UserID
-            string WPFilepath = Path.Combine($"Data/Users/{userID}", "workoutplans.json");
+            string WPFilepath = Path.Combine($"Data/Users/{Session.CurrentUser.Id}", "workoutplans.json");
             string WPjson = File.ReadAllText(WPFilepath);
             WorkoutPlan plans = JsonSerializer.Deserialize<WorkoutPlan>(WPjson);
 
@@ -91,8 +90,7 @@ namespace SnackToSixPack.Handlers
         public static void SaveWP(WorkoutPlan plans)
         {
             //OBS! =================== NEDAN ÄR INTE FÄRDIGT!! ================================== OBS!
-            string userID = "1"; //Ta bort denna när Session fungerar och ersätt userID med Session.CurrentUser.UserID
-            string WPFilepath = Path.Combine($"Data/Users/{userID}", "workoutplans.json");
+            string WPFilepath = Path.Combine($"Data/Users/{Session.CurrentUser.Id}", "workoutplans.json");
             string outputJson = JsonSerializer.Serialize(plans, new JsonSerializerOptions { WriteIndented = true });
             File.WriteAllText(WPFilepath, outputJson);
         }

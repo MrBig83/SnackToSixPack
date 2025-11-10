@@ -7,12 +7,12 @@ namespace SnackToSixPack
     {
         static void Main(string[] args)
         {
-            //MenuHandler.ShowMainMenu();
+            MenuHandler.ShowMainMenu();
             //AuthForms.ShowLogInForm();
             //Authentication.TwoFactorAuth();
 
             //AuthForms.ShowLogInForm();
-            JSONHelper.ReadWP();
+            //JSONHelper.ReadWP();
 
             //// ======= Detta är bara för att provköra hämtning av JSON och User-klassen =======
             //List<User> users = JsonHelper.LoadUsers();
