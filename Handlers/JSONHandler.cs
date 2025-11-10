@@ -68,5 +68,14 @@ namespace SnackToSixPack.Handlers
             }
         }
 
+        //OBS! =================== NEDAN ÄR INTE FÄRDIGT!! ================================== OBS!
+        //// Ladda en eller flera planer från JSON-fil:
+        //string WPjson = File.ReadAllText($"users/{userID}/workoutplans.json");
+        //List<WorkoutPlan> plans = JsonSerializer.Deserialize<List<WorkoutPlan>>(json);
+
+        //string outputJson = JsonSerializer.Serialize(plans, new JsonSerializerOptions { WriteIndented = true });
+        //File.WriteAllText("users/user42/workoutplans.json", outputJson);
+
+
     }
 }
