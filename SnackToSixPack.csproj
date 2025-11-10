@@ -11,6 +11,9 @@
     <None Update="Data\Users.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Data\Users\User1\workoutplans.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
@@ -24,10 +27,6 @@
     <CopyToOutputDirectory>Always</CopyToOutputDirectory>
   </Content>
 </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Data\Users\User1\" />
-  </ItemGroup>
 
 
 </Project>

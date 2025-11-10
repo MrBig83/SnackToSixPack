@@ -68,10 +68,20 @@ namespace SnackToSixPack.Handlers
             }
         }
 
-        //OBS! =================== NEDAN ÄR INTE FÄRDIGT!! ================================== OBS!
-        //// Ladda en eller flera planer från JSON-fil:
-        //string WPjson = File.ReadAllText($"users/{userID}/workoutplans.json");
-        //List<WorkoutPlan> plans = JsonSerializer.Deserialize<List<WorkoutPlan>>(json);
+        public static void ReadWP()
+        {
+            //OBS! =================== NEDAN ÄR INTE FÄRDIGT!! ================================== OBS!
+            //// Ladda en eller flera planer från JSON-fil:
+            string userID = "User1";
+            string WPFilepath = Path.Combine($"Data/Users/{userID}", "workoutplans.json");
+            string WPjson = File.ReadAllText(WPFilepath);
+            List<WorkoutPlan> plans = JsonSerializer.Deserialize<List<WorkoutPlan>>(WPjson);
+
+            foreach (var plan in plans)
+            {
+                Console.WriteLine(plan.PlanName);
+            }
+        }
 
         //string outputJson = JsonSerializer.Serialize(plans, new JsonSerializerOptions { WriteIndented = true });
         //File.WriteAllText("users/user42/workoutplans.json", outputJson);

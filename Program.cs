@@ -11,7 +11,8 @@ namespace SnackToSixPack
             //AuthForms.ShowLogInForm();
             //Authentication.TwoFactorAuth();
 
-            AuthForms.ShowLogInForm();
+            //AuthForms.ShowLogInForm();
+            JSONHelper.ReadWP();
 
             //// ======= Detta är bara för att provköra hämtning av JSON och User-klassen =======
             //List<User> users = JsonHelper.LoadUsers();
