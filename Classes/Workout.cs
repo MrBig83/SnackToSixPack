@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 public class Workout
 {
-    public string WorkoutId { get; set; }
-    public DateTime Date { get; set; }
+    public string DayOfWeek { get; set; } // Måndag, Tisdag, etc. (eller "Monday", "Tuesday" på engelska)
     public string Title { get; set; }
     public List<Exercise> Exercises { get; set; } = new List<Exercise>();
 }
+

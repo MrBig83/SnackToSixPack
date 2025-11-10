@@ -11,7 +11,7 @@
     <None Update="Data\Users.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Data\Users\User1\workoutplans.json">
+    <None Update="Data\Users\1\workoutplans.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
