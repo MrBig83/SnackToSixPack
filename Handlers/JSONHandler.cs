@@ -95,6 +95,45 @@ namespace SnackToSixPack.Handlers
             File.WriteAllText(WPFilepath, outputJson);
         }
 
+        // FÖRBÄTTRINGSMÖJLIGHETER  PÅ BÅDA METODER
+        public static void SaveProfile(Profile profile)
+        {
+            string projectRoot = Directory.GetParent(AppContext.BaseDirectory)
+                                          .Parent.Parent.Parent.FullName;
+
+            string basePath = Path.Combine(projectRoot, "Data", "Users", Session.CurrentUser.Id.ToString());
+            Directory.CreateDirectory(basePath);
+
+            string filePath = Path.Combine(basePath, "profile.json");
+
+            string json = JsonSerializer.Serialize(profile, new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText(filePath, json);
+        }
+
+        public static Profile? LoadProfile()
+        {
+            if (Session.CurrentUser == null)
+                throw new InvalidOperationException("No user is logged in.");
+
+            // Hitta projektroten (inte bin/)
+            string projectRoot = Directory.GetParent(AppContext.BaseDirectory)
+                                        .Parent.Parent.Parent.FullName;
+
+            string filePath = Path.Combine(projectRoot, "Data", "Users", Session.CurrentUser.Id.ToString(), "profile.json");
+
+            if (!File.Exists(filePath))
+            {
+                Console.WriteLine("No profile found.");
+                return null;
+            }
+
+            string json = File.ReadAllText(filePath);
+            Profile? profile = JsonSerializer.Deserialize<Profile>(json);
+
+            return profile;
+}
+
+
 
     }
 }
