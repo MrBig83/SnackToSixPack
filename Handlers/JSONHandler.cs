@@ -48,17 +48,17 @@ namespace SnackToSixPack.Handlers
             try
             {
 
-            var options = new JsonSerializerOptions
-            {
-                WriteIndented = true,
-                Converters = { new JsonStringEnumConverter() }
-            };
+                var options = new JsonSerializerOptions
+                {
+                    WriteIndented = true,
+                    Converters = { new JsonStringEnumConverter() }
+                };
 
-            string json = JsonSerializer.Serialize(users, options);
-            File.WriteAllText(userFilePath, json);
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("[SUCCESS] Users saved successfully!");
-            Console.ResetColor();
+                string json = JsonSerializer.Serialize(users, options);
+                File.WriteAllText(userFilePath, json);
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("[SUCCESS] Users saved successfully!");
+                Console.ResetColor();
             }
             catch (Exception ex)
             {
@@ -76,14 +76,14 @@ namespace SnackToSixPack.Handlers
             string WPjson = File.ReadAllText(WPFilepath);
             WorkoutPlan plans = JsonSerializer.Deserialize<WorkoutPlan>(WPjson);
 
-            
-            
-            //    Console.WriteLine(plans.PlanName);
-            //string nyttPlanName = Console.ReadLine();
-            //plans.PlanName = nyttPlanName;
-            
-            //Console.WriteLine("Nytt plan name: " + plans.PlanName);
-            //SaveWP(plans);
+
+
+            Console.WriteLine(plans.PlanName);
+            string nyttPlanName = Console.ReadLine();
+            plans.PlanName = nyttPlanName;
+
+            Console.WriteLine("Nytt plan name: " + plans.PlanName);
+            SaveWP(plans);
 
         }
 
@@ -95,6 +95,50 @@ namespace SnackToSixPack.Handlers
             File.WriteAllText(WPFilepath, outputJson);
         }
 
+        // FÖRBÄTTRINGSMÖJLIGHETER  PÅ BÅDA METODER
+        public static void SaveProfile(Profile profile)
+        {
+            // Bygg samma typ av sökväg som i SaveWP
+            string profileDirectory = Path.Combine("Data", "Users", Session.CurrentUser.Id.ToString());
+            Directory.CreateDirectory(profileDirectory);
 
+            string profileFilePath = Path.Combine(profileDirectory, "profile.json");
+
+            string json = JsonSerializer.Serialize(profile, new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText(profileFilePath, json);
+        }
+
+
+        public static Profile? LoadProfile()
+        {
+            if (Session.CurrentUser == null)
+                throw new InvalidOperationException("No user is logged in.");
+
+            // Samma mappstruktur som i SaveProfile
+            string filePath = Path.Combine("Data", "Users", Session.CurrentUser.Id.ToString(), "profile.json");
+
+            if (!File.Exists(filePath))
+            {
+                Console.WriteLine("No profile found for this user.");
+                return null;
+            }
+
+            try
+            {
+                string json = File.ReadAllText(filePath);
+                Profile? profile = JsonSerializer.Deserialize<Profile>(json);
+                return profile;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Failed to load profile: " + ex.Message);
+                return null;
+            }
+        }
     }
 }
+
+
+
+    
+

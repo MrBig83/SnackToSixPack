@@ -1,4 +1,3 @@
-
 using Spectre.Console;
 
 public class openAIHandler
