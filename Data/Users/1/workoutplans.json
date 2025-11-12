@@ -1,0 +1,122 @@
+
+  {
+    "WorkoutPlanId": "wp-001",
+    "UserId": "User1",
+    "PlanName": "Veckoschema - Kom igång",
+    "Goal": "Bygga grundstyrka och kondition",
+    "Notes": "Veckoschemat upprepas tills vidare.",
+    "CreatedDate": "2024-03-06",
+    "LastUpdated": "2024-03-06",
+    "Workouts": [
+      {
+        "DayOfWeek": "Monday",
+        "Title": "Helkropp styrka",
+        "Exercises": [
+          {
+            "ExerciseId": "e1",
+            "Name": "Knäböj",
+            "Sets": 3,
+            "Reps": 10,
+            "Weight": null,
+            "RestTime": 60,
+            "Notes": "",
+            "IsCompleted": false
+          },
+          {
+            "ExerciseId": "e2",
+            "Name": "Armhävningar",
+            "Sets": 3,
+            "Reps": 10,
+            "Weight": null,
+            "RestTime": 60,
+            "Notes": "",
+            "IsCompleted": false
+          }
+        ]
+      },
+      {
+        "DayOfWeek": "Tuesday",
+        "Title": "Kondition - Powerwalk",
+        "Exercises": [
+          {
+            "ExerciseId": "e3",
+            "Name": "Powerwalk",
+            "Sets": 1,
+            "Reps": 1,
+            "Weight": null,
+            "RestTime": 0,
+            "Notes": "45 min",
+            "IsCompleted": false
+          }
+        ]
+      },
+      {
+        "DayOfWeek": "Wednesday",
+        "Title": "Vila",
+        "Exercises": []
+      },
+      {
+        "DayOfWeek": "Thursday",
+        "Title": "Överkropp + core",
+        "Exercises": [
+          {
+            "ExerciseId": "e4",
+            "Name": "Rodd med gummiband",
+            "Sets": 3,
+            "Reps": 12,
+            "Weight": null,
+            "RestTime": 45,
+            "Notes": "",
+            "IsCompleted": false
+          },
+          {
+            "ExerciseId": "e5",
+            "Name": "Planka",
+            "Sets": 3,
+            "Reps": 1,
+            "Weight": null,
+            "RestTime": 30,
+            "Notes": "30 sek",
+            "IsCompleted": false
+          }
+        ]
+      },
+      {
+        "DayOfWeek": "Friday",
+        "Title": "HIIT Intervaller",
+        "Exercises": [
+          {
+            "ExerciseId": "e6",
+            "Name": "Cykelintervaller",
+            "Sets": 8,
+            "Reps": 30,
+            "Weight": null,
+            "RestTime": 30,
+            "Notes": "30 sek arbete, 30 sek vila",
+            "IsCompleted": false
+          }
+        ]
+      },
+      {
+        "DayOfWeek": "Saturday",
+        "Title": "Långpromenad",
+        "Exercises": [
+          {
+            "ExerciseId": "e7",
+            "Name": "Promenad",
+            "Sets": 1,
+            "Reps": 1,
+            "Weight": null,
+            "RestTime": 0,
+            "Notes": "60 min",
+            "IsCompleted": false
+          }
+        ]
+      },
+      {
+        "DayOfWeek": "Sunday",
+        "Title": "Vila/stretch",
+        "Exercises": []
+      }
+    ]
+  }

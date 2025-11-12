@@ -79,6 +79,7 @@ namespace SnackToSixPack.Handlers
                         break;
                     case "Show Schedule":
                         // ShowSchedule();
+                        JSONHelper.ReadWP();
                         break;
                     case "Create Workout Plan":
                         // CreateWorkoutPlan();

@@ -78,7 +78,8 @@ namespace SnackToSixPack.Classes
 
                 AnsiConsole.WriteLine();
                 AnsiConsole.Markup("[bold]Welcome[/]" + ",[green] " + usernameInput + "[/]!");
-                running = false;
+                MenuHandler.ShowUserMenu();
+                //running = false;
             }
         }
 
