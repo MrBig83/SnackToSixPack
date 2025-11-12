@@ -16,7 +16,7 @@ namespace SnackToSixPack
 
             //Registration Does user exist 
 
-            FeatureRegisterForm.Run();
+            RegistrationHandler.Run();
       
             //var from = new FeatureRegisterForm();
 
