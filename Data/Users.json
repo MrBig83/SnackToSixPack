@@ -1,12 +1,12 @@
 [
   {
     "Id": 1,
-    "UserName": "Gymmartin",
+    "UserName": "test",
     "Name": "Martin Johansson",
-    "Email": "martin.j@example.com",
+    "Email": "mjohansson176@gmail.com",
     "Phone": "0701234567",
     "Age": 42,
-    "Password": "SuperSecret123!",
+    "Password": "test",
     "Weight": 120,
     "Length": 187,
     "Gender": "Male",
@@ -27,7 +27,7 @@
     "Adress": "Göteborg, Sweden",
     "Experience": "Beginner"
   },
-    {
+  {
     "Id": 3,
     "UserName": "emelie12",
     "Name": "Emelie",

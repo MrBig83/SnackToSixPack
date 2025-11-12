@@ -11,7 +11,10 @@ namespace SnackToSixPack
             //AuthForms.ShowLogInForm();
             //Authentication.TwoFactorAuth();
 
-            AuthForms.ShowLogInForm();
+            //AuthForms.ShowLogInForm();
+
+            //Registration Does user exist 
+            var from = new FeatureRegisterForm();
 
             //// ======= Detta är bara för att provköra hämtning av JSON och User-klassen =======
             //List<User> users = JsonHelper.LoadUsers();
