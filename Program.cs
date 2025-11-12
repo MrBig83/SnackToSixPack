@@ -9,8 +9,8 @@ namespace SnackToSixPack
     {
         static void Main(string[] args)
         {
-            /* Dummy data was used for testing
-            User user1 = new User
+            //Dummy data was used for testing
+            /*User user1 = new User
             {
                 Id = 1,
 
@@ -40,7 +40,8 @@ namespace SnackToSixPack
 
             //Registration Does user exist 
 
-            RegistrationHandler.Run();
+            //RegistrationHandler.Run();
+            
       
             //var from = new FeatureRegisterForm();
 
