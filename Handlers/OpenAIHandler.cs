@@ -4,9 +4,14 @@ using Spectre.Console;
 
 public class openAIHandler
 {
-    public static async Task OpenAIHander()
+    public static async Task OpenAIHandler()
     {
-        var client = new OpenAIClient("API_KEY");
+        string apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
+        if (string.IsNullOrEmpty(apiKey))
+        {
+            Console.WriteLine("API key not found");
+            return;
+        }
 
 
         bool running = true;
@@ -21,7 +26,7 @@ public class openAIHandler
             switch (choice)
             {
                 case "Ask AI":
-                    await AskAI(client);
+                    await AskAI(apiKey);
                     break;
 
                 case "Quit":
@@ -31,7 +36,7 @@ public class openAIHandler
         }
     }
 
-    private static async Task AskAI(OpenAIClient client)
+    private static async Task AskAI(string apiKey)
     {
         throw new NotImplementedException();
     }
