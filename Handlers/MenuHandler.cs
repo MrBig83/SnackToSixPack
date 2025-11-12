@@ -35,7 +35,8 @@ namespace SnackToSixPack.Handlers
                         AuthForms.ShowLogInForm();
                         break;
                     case "Register":
-                        AuthForms.ShowRegisterForm();
+                        //AuthForms.ShowRegisterForm();
+                        RegistrationHandler.Run();
                         break;
                     case "Quit":
                         exit = true;
@@ -53,9 +54,13 @@ namespace SnackToSixPack.Handlers
         //User menu , Show profile, Edit profile, Show schedule, Create Workout plan, LogOut
         public static void ShowUserMenu()
         {
-            bool logout = false;
-            while (!logout)
+            if(Session.CurrentUser != null)
             {
+                
+            //}
+            //bool logout = false;
+            //while (!logout)
+            //{
                 AnsiConsole.Clear();
                 var menu = new SelectionPrompt<string>()
                     .Title("[bold green]User Menu - Please choose an option:[/]")
@@ -85,10 +90,11 @@ namespace SnackToSixPack.Handlers
                         // CreateWorkoutPlan();
                         break;
                     case "Log Out":
-                        logout = true;
+                        Session.CurrentUserLogout();
+                        //logout = true;
                         break;
                 }
-                if (!logout)
+                if (Session.CurrentUser != null)
                 {
                     AnsiConsole.WriteLine();
                     AnsiConsole.Markup("[grey]Press any key to return to the user menu...[/]");

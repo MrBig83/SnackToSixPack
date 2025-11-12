@@ -35,14 +35,10 @@ namespace SnackToSixPack
             //AuthForms.ShowLogInForm();
             //Authentication.TwoFactorAuth();
 
-            //AuthForms.ShowLogInForm();
-
-
             //Registration Does user exist 
 
             //RegistrationHandler.Run();
-            
-      
+            MenuHandler.ShowMainMenu();
             //var from = new FeatureRegisterForm();
 
 
