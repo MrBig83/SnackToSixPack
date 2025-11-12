@@ -34,8 +34,7 @@ namespace SnackToSixPack.Handlers
                     continue;
                 }
 
-                bool usernameExists = users.Any(u =>
-                    u.Username != null && u.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
+                bool usernameExists = users.Any(u => u.UserName.Equals(username, StringComparison.OrdinalIgnoreCase));
 
                 if (usernameExists)
                 {
@@ -90,7 +89,7 @@ namespace SnackToSixPack.Handlers
             // ---------- CREATE USER ----------
             var newUser = new User
             {
-                Username = username,
+                UserName = username,
                 Email = email,
                 Password = password
             };
