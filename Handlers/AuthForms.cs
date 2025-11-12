@@ -37,7 +37,8 @@ namespace SnackToSixPack.Classes
 
                 string passwordInput = AnsiConsole.Prompt(passwordPrompt);
 
-                var user = users.FirstOrDefault(u => u.UserName.Equals(usernameInput, StringComparison.OrdinalIgnoreCase)
+                //var user = users.FirstOrDefault(u => u.UserName.Equals(usernameInput, StringComparison.OrdinalIgnoreCase)
+                var user = users.FirstOrDefault(u => u.Username.Equals(usernameInput, StringComparison.OrdinalIgnoreCase)
                                                      && u.Password.Equals(passwordInput));
                 AnsiConsole.Status()
                     .Start("Verifying credentials...", ctx =>
