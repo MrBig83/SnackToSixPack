@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="OpenAIHandler.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="Data\Users.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -27,6 +31,10 @@
     <CopyToOutputDirectory>Always</CopyToOutputDirectory>
   </Content>
 </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Handlers\OpenAIHandler.cs" />
+  </ItemGroup>
 
 
 </Project>
