@@ -1,5 +1,4 @@
-using OpenAI;
-using OpenAI.Chat;
+
 using Spectre.Console;
 
 public class openAIHandler

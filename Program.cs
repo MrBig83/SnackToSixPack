@@ -8,7 +8,7 @@ namespace SnackToSixPack
     {
         static void Main(string[] args)
         {
-            MenuHandler.ShowMainMenu();
+            //MenuHandler.ShowMainMenu();
             //AuthForms.ShowLogInForm();
             //Authentication.TwoFactorAuth();
 
@@ -18,7 +18,7 @@ namespace SnackToSixPack
             //Registration Does user exist 
 
             RegistrationHandler.Run();
-      
+            //openAIHandler.OpenAIHandler();
             //var from = new FeatureRegisterForm();
 
 

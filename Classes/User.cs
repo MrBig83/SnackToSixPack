@@ -20,8 +20,6 @@ namespace SnackToSixPack.Classes
         public Gender Gender { get; set; }
         public string Adress { get; set; }
         public Experience Experience { get; set; }
-        public string Username { get; internal set; }
-        public int UserID { get; internal set; }
 
         public User() { }
 
