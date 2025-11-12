@@ -98,17 +98,16 @@ namespace SnackToSixPack.Handlers
         // FÖRBÄTTRINGSMÖJLIGHETER  PÅ BÅDA METODER
         public static void SaveProfile(Profile profile)
         {
-            string projectRoot = Directory.GetParent(AppContext.BaseDirectory)
-                                          .Parent.Parent.Parent.FullName;
+            // Bygg samma typ av sökväg som i SaveWP
+            string profileDirectory = Path.Combine("Data", "Users", Session.CurrentUser.Id.ToString());
+            Directory.CreateDirectory(profileDirectory);
 
-            string basePath = Path.Combine(projectRoot, "Data", "Users", Session.CurrentUser.Id.ToString());
-            Directory.CreateDirectory(basePath);
-
-            string filePath = Path.Combine(basePath, "profile.json");
+            string profileFilePath = Path.Combine(profileDirectory, "profile.json");
 
             string json = JsonSerializer.Serialize(profile, new JsonSerializerOptions { WriteIndented = true });
-            File.WriteAllText(filePath, json);
+            File.WriteAllText(profileFilePath, json);
         }
+
 
         public static Profile? LoadProfile()
         {
