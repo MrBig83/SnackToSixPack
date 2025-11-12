@@ -1,0 +1,38 @@
+using OpenAI;
+using OpenAI.Chat;
+using Spectre.Console;
+
+class Program
+{
+    static async Task Main()
+    {
+        var client = new OpenAIClient("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");
+
+
+        bool running = true;
+
+        while (running)
+        {
+            var choice = AnsiConsole.Prompt(
+                new SelectionPrompt<string>()
+                    .Title("Choose an option:")
+                    .AddChoices("Ask AI", "Quit"));
+
+            switch (choice)
+            {
+                case "Ask AI":
+                    await AskAI(client);
+                    break;
+
+                case "Quit":
+                    running = false;
+                    break;
+            }
+        }
+    }
+
+    private static async Task AskAI(OpenAIClient client)
+    {
+        throw new NotImplementedException();
+    }
+}
