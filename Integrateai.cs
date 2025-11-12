@@ -2,11 +2,11 @@ using OpenAI;
 using OpenAI.Chat;
 using Spectre.Console;
 
-class Program
+public class openAIHandler
 {
-    static async Task Main()
+    public static async Task OpenAIHander()
     {
-        var client = new OpenAIClient("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");
+        var client = new OpenAIClient("API_KEY");
 
 
         bool running = true;
