@@ -48,17 +48,17 @@ namespace SnackToSixPack.Handlers
             try
             {
 
-            var options = new JsonSerializerOptions
-            {
-                WriteIndented = true,
-                Converters = { new JsonStringEnumConverter() }
-            };
+                var options = new JsonSerializerOptions
+                {
+                    WriteIndented = true,
+                    Converters = { new JsonStringEnumConverter() }
+                };
 
-            string json = JsonSerializer.Serialize(users, options);
-            File.WriteAllText(userFilePath, json);
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("[SUCCESS] Users saved successfully!");
-            Console.ResetColor();
+                string json = JsonSerializer.Serialize(users, options);
+                File.WriteAllText(userFilePath, json);
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("[SUCCESS] Users saved successfully!");
+                Console.ResetColor();
             }
             catch (Exception ex)
             {
@@ -76,12 +76,12 @@ namespace SnackToSixPack.Handlers
             string WPjson = File.ReadAllText(WPFilepath);
             WorkoutPlan plans = JsonSerializer.Deserialize<WorkoutPlan>(WPjson);
 
-            
-            
-                Console.WriteLine(plans.PlanName);
+
+
+            Console.WriteLine(plans.PlanName);
             string nyttPlanName = Console.ReadLine();
             plans.PlanName = nyttPlanName;
-            
+
             Console.WriteLine("Nytt plan name: " + plans.PlanName);
             SaveWP(plans);
 
@@ -114,25 +114,31 @@ namespace SnackToSixPack.Handlers
             if (Session.CurrentUser == null)
                 throw new InvalidOperationException("No user is logged in.");
 
-            // Hitta projektroten (inte bin/)
-            string projectRoot = Directory.GetParent(AppContext.BaseDirectory)
-                                        .Parent.Parent.Parent.FullName;
-
-            string filePath = Path.Combine(projectRoot, "Data", "Users", Session.CurrentUser.Id.ToString(), "profile.json");
+            // Samma mappstruktur som i SaveProfile
+            string filePath = Path.Combine("Data", "Users", Session.CurrentUser.Id.ToString(), "profile.json");
 
             if (!File.Exists(filePath))
             {
-                Console.WriteLine("No profile found.");
+                Console.WriteLine("No profile found for this user.");
                 return null;
             }
 
-            string json = File.ReadAllText(filePath);
-            Profile? profile = JsonSerializer.Deserialize<Profile>(json);
-
-            return profile;
-}
-
-
-
+            try
+            {
+                string json = File.ReadAllText(filePath);
+                Profile? profile = JsonSerializer.Deserialize<Profile>(json);
+                return profile;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Failed to load profile: " + ex.Message);
+                return null;
+            }
+        }
     }
 }
+
+
+
+    
+
