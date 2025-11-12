@@ -4,16 +4,19 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using SnackToSixPack.Classes;
 using Spectre.Console; // För färg och snygga texter
 
 namespace SnackToSixPack.Handlers
 {
     internal class FeatureRegisterForm
     {
-        public void Run()
+        public static void Run()
         {
+            User user = new User();
             // Läs in användare från JSON (eller skapa en tom lista)
             List<User> users = LoadUsers();
+            
 
             // === Titel ===
             AnsiConsole.MarkupLine("[bold yellow]=== REGISTER NEW USER ===[/]");
@@ -32,7 +35,7 @@ namespace SnackToSixPack.Handlers
                 }
 
                 bool usernameExists = users.Any(u =>
-                    u.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
+                    u.Username != null && u.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
 
                 if (usernameExists)
                 {
@@ -72,12 +75,12 @@ namespace SnackToSixPack.Handlers
             string password;
             while (true)
             {
-                AnsiConsole.Markup("[green]Enter password (min 4 characters):[/] ");
+                AnsiConsole.Markup("[green]Enter password (min 6 characters):[/] ");
                 password = Console.ReadLine();
 
-                if (string.IsNullOrWhiteSpace(password) || password.Length < 4)
+                if (string.IsNullOrWhiteSpace(password) || password.Length < 6)
                 {
-                    AnsiConsole.MarkupLine("[red] Password must be at least 4 characters long.[/]");
+                    AnsiConsole.MarkupLine("[red] Password must be at least 6 characters long.[/]");
                     continue;
                 }
 
@@ -102,7 +105,7 @@ namespace SnackToSixPack.Handlers
         // =======================
         // Save users to JSON file
         // =======================
-        private void SaveUsers(List<User> users)
+        private static void SaveUsers(List<User> users)
         {
             string folder = "Data";
             string path = Path.Combine(folder, "Users.json");
@@ -121,7 +124,7 @@ namespace SnackToSixPack.Handlers
         // =======================
         // Load users from JSON file (säker version)
         // =======================
-        private List<User> LoadUsers()
+        private static List<User> LoadUsers()
         {
             string folder = "Data";
             string path = Path.Combine(folder, "Users.json");
@@ -153,10 +156,10 @@ namespace SnackToSixPack.Handlers
     }
 
     // Enkel klass för användaren
-    public class User
-    {
-        public string Username { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
-    }
+    //public class User
+    //{
+    //    public string Username { get; set; }
+    //    public string Email { get; set; }
+    //    public string Password { get; set; }
+    //}
 }

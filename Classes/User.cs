@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace SnackToSixPack.Classes
 {
-    //public enum Gender { Male, Female, NonBinary, Other }
+    public enum Gender { Male, Female, NonBinary, Other }
     public enum Experience { Beginner, Intermediate, Advanced }
 
     public class User
@@ -17,7 +17,7 @@ namespace SnackToSixPack.Classes
         public string Password { get; set; } // To be hashed!
         public double Weight { get; set; }
         public double Length { get; set; }
-        public string Gender { get; set; }
+        public Gender Gender { get; set; }
         public string Adress { get; set; }
         public Experience Experience { get; set; }
         public string Username { get; internal set; }
