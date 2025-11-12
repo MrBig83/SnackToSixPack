@@ -78,12 +78,12 @@ namespace SnackToSixPack.Handlers
 
             
             
-                Console.WriteLine(plans.PlanName);
-            string nyttPlanName = Console.ReadLine();
-            plans.PlanName = nyttPlanName;
+            //    Console.WriteLine(plans.PlanName);
+            //string nyttPlanName = Console.ReadLine();
+            //plans.PlanName = nyttPlanName;
             
-            Console.WriteLine("Nytt plan name: " + plans.PlanName);
-            SaveWP(plans);
+            //Console.WriteLine("Nytt plan name: " + plans.PlanName);
+            //SaveWP(plans);
 
         }
 
