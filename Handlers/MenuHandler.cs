@@ -86,8 +86,7 @@ namespace SnackToSixPack.Handlers
                         profileHandler.UpdateProfile(Session.CurrentUser.Profile);
                         break;
                     case "Show Schedule":
-                        // ShowSchedule();
-                        JSONHelper.ReadWP();
+                        WPUI.ShowWPUI(JSONHelper.ReadWP());
                         break;
                     case "Create Workout Plan":
                         await openAIHandler.OpenAIHandler();
