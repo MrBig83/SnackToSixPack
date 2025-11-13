@@ -9,14 +9,6 @@ public class openAIHandler
     private static readonly HttpClient client = new HttpClient();
     public static async Task OpenAIHandler()
     {
-        //string apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
-        //if (string.IsNullOrEmpty(apiKey))
-        //{
-        //    Console.WriteLine("API key not found");
-        //    return;
-        //}
-
-
         bool running = true;
 
         while (running)
@@ -41,15 +33,12 @@ public class openAIHandler
 
     private static async Task AskAI()
     {
-
-
         //string apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
         //if (string.IsNullOrEmpty(apiKey))
         //{
         //    Console.WriteLine("API key not found");
         //    return;
         //}
-
 
         //client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", apiKey);
 
@@ -106,67 +95,17 @@ public class openAIHandler
         //.Replace("```", "")
         //.Trim();
 
-
-        ////string json2Store = cleanedJson;
-        ////// Spara det till en fil
-        ////File.WriteAllText("sample_workoutplan.json", json2Store);
-
-
         //WorkoutPlan AiReply = JsonSerializer.Deserialize<WorkoutPlan>(cleanedJson);
+        //WPUI.ShowWPUI(AiReply);
 
+        // ======== FOR DEMO UN-COMMENT THE CODE ABOVE AND COMMENT THE CODE BELOW ========
+        // =============== FOR DEV PURPOSES ONLY ================================
+        //string json2Store = cleanedJson;
+        //// Spara det till en fil
+        //File.WriteAllText("sample_workoutplan.json", json2Store);
 
-
-
-        // =============================================================================================
-        string json = File.ReadAllText("sample_workoutplan.json");
-
-        // Antar att WorkoutPlan är din modell
-        WorkoutPlan aiReply = JsonSerializer.Deserialize<WorkoutPlan>(json);
-
-        // Nu kan du kalla din UI-metod
+        string localJson = File.ReadAllText("sample_workoutplan.json");
+        WorkoutPlan aiReply = JsonSerializer.Deserialize<WorkoutPlan>(localJson);
         WPUI.ShowWPUI(aiReply);
-
-
-        
-
-        //Console.WriteLine("Ditt träningsschema: ");
-        //Console.WriteLine(AiReply.PlanName);
-        //Console.WriteLine(AiReply.Goal);
-        //AiReply.Workouts.ForEach(workout =>
-        //{
-        //    Console.WriteLine($"\n{workout.DayOfWeek} - {workout.Title}");
-        //    workout.Exercises.ForEach(exercise =>
-        //    {
-        //        Console.WriteLine($"  - {exercise.Name}: {exercise.Sets} set x {exercise.Reps} reps @ {exercise.Weight}kg, vila {exercise.RestTime}s");
-        //    });
-        //});
-
-
-        //Jag vill gå ner 20kg på ett år. Jag kan träna 3 dagar per vecka och avsätta 90 minuter per gång.
-
-
-
-
-        //Console.WriteLine(cleanReply.Title);
-        //Console.WriteLine(cleanReply.Description);
-        //Console.WriteLine($"Material: {cleanReply.Amount}st {cleanReply.Commodity} Från {cleanReply.From_station} till {cleanReply.To_station}");
-        //Console.WriteLine($"Din belöning: {cleanReply.Reward_cr}cr, {cleanReply.Reward_reputation} ryktesökning");
-        //Console.WriteLine("\nVill du acceptera detta uppdraget? J - Ja/N - Nej eller tryck på 'x' för att återgå till menyn");
-        Console.ReadLine();
-
-        //string questResponse = Console.ReadLine().ToLower();
-        //if (questResponse == "j")
-        //{
-        //    MissionHandler.AddMission(session, cleanReply);
-        //}
-        //else if (questResponse == "n")
-        //{
-        //    Console.WriteLine("Du fortsätter leta efter uppdragsgivare...");
-        //}
-        //else
-        //{
-        //    Console.WriteLine("Avbryter och återgår till stationsmenyn");
-
-        //}
     }
 }
