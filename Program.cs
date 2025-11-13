@@ -10,6 +10,12 @@ namespace SnackToSixPack
     {
         static async Task Main(string[] args) // Mark Main as async and return Task
         {
+            if (Console.IsInputRedirected)
+            {
+                Console.WriteLine("CI mode – hoppar över interaktiv del.");
+                return;
+            }
+
             //Dummy data was used for testing
             /*User user1 = new User
             {
