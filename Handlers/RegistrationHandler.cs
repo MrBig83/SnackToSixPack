@@ -87,7 +87,7 @@ namespace SnackToSixPack.Handlers
             }
 
             // ---------- CREATE USER ----------
-            int nextId = (users.Any() ? users.Max(u => u.Id) + 1 : 1);
+            int nextId = (users.Any() ? users.Max(u => u.Id) + 1 : 1); 
 
             var newUser = new User
             {
