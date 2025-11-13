@@ -32,7 +32,7 @@ namespace SnackToSixPack
             };
             JSONHelper.SaveProfile(profile1);*/
 
-            //AuthForms.ShowLogInForm();
+            AuthForms.ShowLogInForm();
             //Authentication.TwoFactorAuth();
 
             //Registration Does user exist 

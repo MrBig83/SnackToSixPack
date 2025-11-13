@@ -1,3 +1,5 @@
+using Spectre.Console;
+
 public class PasswordValidator
 {
     public static bool IsPassWordStrong(string password)
