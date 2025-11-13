@@ -19,6 +19,7 @@ namespace SnackToSixPack.Handlers
 
 
             // === Titel ===
+            AnsiConsole.Clear();
             AnsiConsole.MarkupLine("[bold yellow]=== REGISTER NEW USER ===[/]");
 
             // ---------- USERNAME ----------
@@ -44,6 +45,20 @@ namespace SnackToSixPack.Handlers
 
                 break;
             }
+                        // ---------- PASSWORD ----------
+            string password = "";
+            bool rightPassword = false;
+            while (!rightPassword)
+            {
+                var passwordPrompt =
+                new TextPrompt<string>("[green]Enter password (min 6 characters):[/]")
+                    .PromptStyle("white")
+                    .Secret();
+
+                string passwordInput = AnsiConsole.Prompt(passwordPrompt);
+
+                rightPassword = PasswordValidator.IsPassWordStrong(passwordInput);
+            };
 
             // ---------- EMAIL ----------
             string email;
@@ -70,31 +85,16 @@ namespace SnackToSixPack.Handlers
                 break;
             }
 
-            // ---------- PASSWORD ----------
-            string password;
-            while (true)
-            {
-                AnsiConsole.Markup("[green]Enter password (min 6 characters):[/] ");
-                password = Console.ReadLine();
-
-                if (string.IsNullOrWhiteSpace(password) || password.Length < 6)
-                {
-                    AnsiConsole.MarkupLine("[red] Password must be at least 6 characters long.[/]");
-                    continue;
-                }
-
-                break;
-            }
-
             // ---------- CREATE USER ----------
-            var newUser = new User
-            {
-                UserName = username,
-                Email = email,
-                Password = password
-            };
+                var newUser = new User
+                {
+                    Username = username,
+                    Email = email,
+                    Password = password
+                };
+                users.Add(newUser);
+                AnsiConsole.Clear();
 
-            users.Add(newUser);
             SaveUsers(users);
 
             AnsiConsole.MarkupLine("\n[bold green] Registration successful![/]");

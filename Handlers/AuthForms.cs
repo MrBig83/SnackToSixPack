@@ -30,7 +30,7 @@ namespace SnackToSixPack.Classes
 
                 string usernameInput = AnsiConsole.Ask<string>("[bold]Username:[/][grey][/]");
 
-                var passwordPrompt = new TextPrompt<string>("[bold]Password:[/][grey][/] ")
+                var passwordPrompt = new TextPrompt<string>("[bold]Password:[/][grey][/]")
                     .PromptStyle("green")
                     .Secret();
 
