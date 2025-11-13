@@ -54,7 +54,7 @@ namespace SnackToSixPack.Handlers
         }
 
         //User menu , Show profile, Edit profile, Show schedule, Create Workout plan, LogOut
-        public static void ShowUserMenu()
+        public static async void ShowUserMenu()
         {
             while(Session.CurrentUser != null)
             {
@@ -90,7 +90,7 @@ namespace SnackToSixPack.Handlers
                         JSONHelper.ReadWP();
                         break;
                     case "Create Workout Plan":
-                        // CreateWorkoutPlan();
+                        await openAIHandler.OpenAIHandler();
                         break;
                     case "Log Out":
                         Session.CurrentUserLogout();
