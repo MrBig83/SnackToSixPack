@@ -58,7 +58,10 @@ namespace SnackToSixPack.Handlers
                 string passwordInput = AnsiConsole.Prompt(passwordPrompt);
 
                 rightPassword = PasswordValidator.IsPassWordStrong(passwordInput);
-                password = passwordInput;
+                if (rightPassword)
+                {
+                    password = passwordInput;
+                }
             };
 
             // ---------- EMAIL ----------
