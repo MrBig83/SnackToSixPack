@@ -70,6 +70,7 @@ namespace SnackToSixPack.Classes
             }
 
             profile.Height = ReadDoubleInput(" Height (cm): ");
+            profile.Weight = ReadDoubleInput(" Weight (kg): ");
             profile.Waist = ReadDoubleInput(" Waist (cm): ");
             profile.Chest = ReadDoubleInput(" Chest (cm): ");
             profile.Hips = ReadDoubleInput(" Hips (cm): ");
@@ -98,6 +99,7 @@ namespace SnackToSixPack.Classes
             table.AddRow("Name", profile.Name);
             table.AddRow("Age", profile.Age.ToString());
             table.AddRow("Height (cm)", profile.Height.ToString());
+            table.AddRow("Weight (kg)", profile.Weight.ToString());
             table.AddRow("Waist (cm)", profile.Waist.ToString());
             table.AddRow("Chest (cm)", profile.Chest.ToString());
             table.AddRow("Hips (cm)", profile.Hips.ToString());
@@ -211,5 +213,5 @@ namespace SnackToSixPack.Classes
         }
 
 
-            }
+    }
 }

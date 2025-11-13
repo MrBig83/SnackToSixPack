@@ -56,7 +56,7 @@ namespace SnackToSixPack.Handlers
         //User menu , Show profile, Edit profile, Show schedule, Create Workout plan, LogOut
         public static void ShowUserMenu()
         {
-            if(Session.CurrentUser != null)
+            while(Session.CurrentUser != null)
             {
                 
             //}
