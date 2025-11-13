@@ -6,23 +6,21 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace SnackToSixPack.Handlers
 {
     internal class RegistrationHandler
     {
-        public static void Run()
+        public static async Task Run()
         {
             User user = new User();
             // Läs in användare från JSON (eller skapa en tom lista)
             List<User> users = LoadUsers();
 
-
-            // === Titel ===
             AnsiConsole.Clear();
             AnsiConsole.MarkupLine("[bold yellow]=== REGISTER NEW USER ===[/]");
 
-            // ---------- USERNAME ----------
             string username;
             while (true)
             {
@@ -45,7 +43,7 @@ namespace SnackToSixPack.Handlers
 
                 break;
             }
-                        // ---------- PASSWORD ----------
+
             string password = "";
             bool rightPassword = false;
             while (!rightPassword)
@@ -62,9 +60,9 @@ namespace SnackToSixPack.Handlers
                 {
                     password = passwordInput;
                 }
-            };
+            }
+            ;
 
-            // ---------- EMAIL ----------
             string email;
             while (true)
             {
@@ -89,13 +87,11 @@ namespace SnackToSixPack.Handlers
                 break;
             }
 
-            // ---------- CREATE USER ----------
-
-            int nextId = (users.Any() ? users.Max(u => u.Id) + 1 : 1); 
+            int nextId = (users.Any() ? users.Max(u => u.Id) + 1 : 1);
 
             var newUser = new User
             {
-                Id = nextId,    
+                Id = nextId,
                 UserName = username,
                 Email = email,
                 Password = password
@@ -108,17 +104,27 @@ namespace SnackToSixPack.Handlers
 
             SaveUsers(users);
 
+            // Sätt inloggad användare temporärt så CreateProfile funkar
             Session.SetCurrentUser(newUser);
+
+            // Skapa profil
             ProfileHandler newProfile = new ProfileHandler();
             newProfile.CreateProfile();
-            AnsiConsole.Clear();
-            AnsiConsole.MarkupLine("\n[bold green] Registration successful![/]");
-            AnsiConsole.MarkupLine($"[yellow]Welcome, {username}![/]");
-        }
 
-        // =======================
+            // Efter profil: logga ut så användaren får logga in manuellt
+            Session.SetCurrentUser(null);
+
+            AnsiConsole.Clear();
+            AnsiConsole.MarkupLine("\n[bold green]Registration successful![/]");
+            AnsiConsole.MarkupLine("Please log in to continue.");
+
+            await Task.Delay(3000);
+            AuthForms.ShowLogInForm();
+            return;
+
+        }
+        
         // Save users to JSON file
-        // =======================
         private static void SaveUsers(List<User> users)
         {
             string folder = "Data";
@@ -135,9 +141,7 @@ namespace SnackToSixPack.Handlers
             File.WriteAllText(path, json);
         }
 
-        // =======================
-        // Load users from JSON file (säker version)
-        // =======================
+        // Load users from JSON file 
         private static List<User> LoadUsers()
         {
             string folder = "Data";

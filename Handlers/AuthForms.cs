@@ -15,11 +15,8 @@ namespace SnackToSixPack.Classes
             {
                 AnsiConsole.Clear();
 
-                // Display the title
-                // [green] makes the text green
                 var heading = new Panel("[green] Log in[/]")
                     .Border(BoxBorder.Double)
-                    // makes the border color white
                     .BorderStyle(new Style(Color.White))
                     .Padding(10, 0);
 
@@ -34,10 +31,8 @@ namespace SnackToSixPack.Classes
                     .PromptStyle("green")
                     .Secret();
 
-
                 string passwordInput = AnsiConsole.Prompt(passwordPrompt);
 
-                //var user = users.FirstOrDefault(u => u.UserName.Equals(usernameInput, StringComparison.OrdinalIgnoreCase)
                 var user = users.FirstOrDefault(u => u.UserName.Equals(usernameInput, StringComparison.OrdinalIgnoreCase)
                                                      && u.Password.Equals(passwordInput));
 
@@ -75,17 +70,21 @@ namespace SnackToSixPack.Classes
                     });
                 AnsiConsole.Clear();
                 Session.SetCurrentUser(user);
-                //Authentication.TwoFactorAuth(); //Commented for dev-purposes. Un-comment before demo =====================================
+                Authentication.TwoFactorAuth();
                 Session.CurrentUser.Profile = JSONHelper.LoadProfile();
                 AnsiConsole.WriteLine();
-                AnsiConsole.Markup("[bold]Welcome[/]" + ",[green] " + usernameInput + "[/]!");
+
+                AnsiConsole.Write(
+                    new FigletText("Welcome " + usernameInput!)
+                        .Centered()
+                        .Color(Color.Purple));
+
+                AnsiConsole.Write(new Markup
+                                    ("[bold yellow]Glad to see you back![/]").Centered());
+
                 running = false;
+                return;
             }
         }
-
-        //internal static void ShowRegisterForm()
-        //{
-        //    throw new NotImplementedException();
-        //}
     }
 }
