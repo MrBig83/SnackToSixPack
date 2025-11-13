@@ -75,18 +75,18 @@ namespace SnackToSixPack.Classes
                     });
                 AnsiConsole.Clear();
                 Session.SetCurrentUser(user);
-                Authentication.TwoFactorAuth();
+                //Authentication.TwoFactorAuth(); //Commented for dev-purposes. Un-comment before demo =====================================
 
                 AnsiConsole.WriteLine();
                 AnsiConsole.Markup("[bold]Welcome[/]" + ",[green] " + usernameInput + "[/]!");
                 MenuHandler.ShowUserMenu();
-                //running = false;
+                running = false;
             }
         }
 
-        internal static void ShowRegisterForm()
-        {
-            throw new NotImplementedException();
-        }
+        //internal static void ShowRegisterForm()
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

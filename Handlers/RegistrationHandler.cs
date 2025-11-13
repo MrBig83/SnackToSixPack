@@ -1,11 +1,11 @@
 ﻿// Dessa "using"-rader berättar för C# vilka delar vi använder
+using SnackToSixPack.Classes;
+using Spectre.Console; // För färg och snygga texter
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
-using SnackToSixPack.Classes;
-using Spectre.Console; // För färg och snygga texter
 
 namespace SnackToSixPack.Handlers
 {
@@ -86,14 +86,21 @@ namespace SnackToSixPack.Handlers
             }
 
             // ---------- CREATE USER ----------
-                var newUser = new User
-                {
-                    Username = username,
-                    Email = email,
-                    Password = password
-                };
-                users.Add(newUser);
-                AnsiConsole.Clear();
+
+            int nextId = (users.Any() ? users.Max(u => u.Id) + 1 : 1); 
+
+            var newUser = new User
+            {
+                Id = nextId,    
+                UserName = username,
+                Email = email,
+                Password = password
+            };
+
+            if (!Directory.Exists($"Data/Users/{nextId.ToString()}"))
+                Directory.CreateDirectory($"Data/Users/{nextId.ToString()}");
+
+            users.Add(newUser);
 
             SaveUsers(users);
 
