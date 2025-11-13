@@ -76,7 +76,7 @@ namespace SnackToSixPack.Classes
                 AnsiConsole.Clear();
                 Session.SetCurrentUser(user);
                 //Authentication.TwoFactorAuth(); //Commented for dev-purposes. Un-comment before demo =====================================
-
+                Session.CurrentUser.Profile = JSONHelper.LoadProfile();
                 AnsiConsole.WriteLine();
                 AnsiConsole.Markup("[bold]Welcome[/]" + ",[green] " + usernameInput + "[/]!");
                 running = false;

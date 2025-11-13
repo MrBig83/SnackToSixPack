@@ -70,7 +70,7 @@ namespace SnackToSixPack.Handlers
                     .AddChoices(new[]
                     {
                         "Show Profile",
-                        "Edit Profile",
+                        "Update Profile",
                         "Show Schedule",
                         "Create Workout Plan",
                         "Log Out"
@@ -79,10 +79,11 @@ namespace SnackToSixPack.Handlers
                 switch (choice)
                 {
                     case "Show Profile":
-                        // ShowProfile();
+                        ProfileHandler.ShowProfile(Session.CurrentUser.Profile);
                         break;
-                    case "Edit Profile":
-                        // EditProfile();
+                    case "Update Profile":
+                        ProfileHandler profileHandler = new ProfileHandler();
+                        profileHandler.UpdateProfile(Session.CurrentUser.Profile);
                         break;
                     case "Show Schedule":
                         // ShowSchedule();

@@ -50,6 +50,9 @@ namespace SnackToSixPack
             //}
             //// ======= Slut på provkörning =======
             ///
+            /// 
+            //ProfileHandler profileHandler = new ProfileHandler();
+            //profileHandler.CreateProfile();
 
 
         }

@@ -38,5 +38,8 @@ namespace SnackToSixPack.Classes
             Adress = adress;
             Experience = experience;
         }
+
+        public Profile Profile { get; set; }
     }
+
 }
