@@ -8,7 +8,7 @@ namespace SnackToSixPack
 {
     internal class Program
     {
-        static async Task Main(string[] args) // Mark Main as async and return Task
+        static async Task Main(string[] args) 
         {
             if (Console.IsInputRedirected)
             {
@@ -16,6 +16,9 @@ namespace SnackToSixPack
                 return;
             }
             await MenuHandler.ShowMainMenu();
+
+
+
         }
     }
 }

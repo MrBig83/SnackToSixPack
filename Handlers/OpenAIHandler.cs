@@ -80,7 +80,8 @@ public class OpenAIHandler
         File.WriteAllText("sample_workoutplan.json", json2Store);
 
         string localJson = File.ReadAllText("sample_workoutplan.json");
-        WorkoutPlan aiReply = JsonSerializer.Deserialize<WorkoutPlan>(localJson);
-        WPUI.ShowWPUI(aiReply);
+        WorkoutPlan AiReply = JsonSerializer.Deserialize<WorkoutPlan>(localJson);
+        JSONHelper.SaveWP(AiReply);
+        WPUI.ShowWPUI(AiReply);
     }
 }

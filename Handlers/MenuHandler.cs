@@ -50,6 +50,8 @@ public static async Task ShowMainMenu()
 }
 
         public static async Task ShowUserMenu()
+        //User menu , Show profile, Edit profile, Show schedule, Create Workout plan, LogOut
+        public static async void ShowUserMenu()
         {
             while (Session.CurrentUser != null)
             {
@@ -80,6 +82,10 @@ public static async Task ShowMainMenu()
                         break;
                     case "Create Workout Plan":
                         await AIMenu();
+                        WPUI.ShowWPUI(JSONHelper.ReadWP());
+                        break;
+                    case "Create Workout Plan":
+                        await openAIHandler.OpenAIHandler();
                         break;
                     case "Log Out":
                         Session.CurrentUserLogout();

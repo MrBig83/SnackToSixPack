@@ -65,7 +65,7 @@ namespace SnackToSixPack.Handlers
             }
         }
 
-        public static void ReadWP()
+        public static WorkoutPlan ReadWP()
         {
             //// Ladda en eller flera planer från JSON-fil:
             string WPFilepath = Path.Combine($"Data/Users/{Session.CurrentUser.Id}", "workoutplans.json");
@@ -78,6 +78,7 @@ namespace SnackToSixPack.Handlers
 
             Console.WriteLine("Nytt plan name: " + plans.PlanName);
             SaveWP(plans);
+            return JsonSerializer.Deserialize<WorkoutPlan>(WPjson);
 
         }
 
