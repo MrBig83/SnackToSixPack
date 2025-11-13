@@ -61,8 +61,8 @@ jobs:
           RUN_STATUS: ${{ steps.runapp.outcome }}      # success | failure | cancelled | skipped
         run: |
           if [ "$BUILD_STATUS" = "success" ]; then BUILD_ICON=":white_check_mark:"; else BUILD_ICON=":x:"; fi
-          if [ "$RUN_STATUS" = "success" ]; then RUN_ICON=":rocket:"; else RUN_ICON=":warning:"; fi
-          CONTENT="$BUILD_ICON Build $BUILD_STATUS • $RUN_ICON App run $RUN_STATUS for PR #$PR_NUMBER on branch $BRANCH."
+          if [ "$RUN_STATUS" = "success" ]; then RUN_ICON=":rocket:"; else RUN_ICON=":rocket:"; fi
+          CONTENT="$BUILD_ICON Build $BUILD_STATUS for PR #$PR_NUMBER on branch $BRANCH."
           curl -H "Content-Type: application/json" \
                -d "{\"content\":\"$CONTENT\"}" \
                "$DISCORD_WEBHOOK"
