@@ -2,12 +2,13 @@
 using SnackToSixPack.Classes;
 using SnackToSixPack.Handlers;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks; // Ensure Task is available
 
 namespace SnackToSixPack
 {
     internal class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args) // Mark Main as async and return Task
         {
             //Dummy data was used for testing
             /*User user1 = new User
@@ -38,7 +39,8 @@ namespace SnackToSixPack
             //Registration Does user exist 
 
             //RegistrationHandler.Run();
-            MenuHandler.ShowMainMenu();
+            //MenuHandler.ShowMainMenu();
+            await openAIHandler.OpenAIHandler();
             //var from = new FeatureRegisterForm();
 
 

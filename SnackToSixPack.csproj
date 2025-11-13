@@ -21,7 +21,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Spectre.Console" Version="0.47.0" />
+    <PackageReference Include="OpenAI" Version="2.6.0" />
+    <PackageReference Include="Spectre.Console" Version="0.54.0" />
   <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
   <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
   </ItemGroup>
