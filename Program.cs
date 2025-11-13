@@ -45,8 +45,8 @@ namespace SnackToSixPack
             //Registration Does user exist 
 
             //RegistrationHandler.Run();
-            //MenuHandler.ShowMainMenu();
-            await openAIHandler.OpenAIHandler();
+            MenuHandler.ShowMainMenu();
+            //await openAIHandler.OpenAIHandler();
             //var from = new FeatureRegisterForm();
 
 
