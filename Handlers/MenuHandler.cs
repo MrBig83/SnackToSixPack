@@ -12,57 +12,49 @@ namespace SnackToSixPack.Handlers
     public class MenuHandler
     {
 
-        //Start menu, Login, Register, Quit
-        public static void ShowMainMenu()
-        {
-            bool exit = false;
-            while (!exit)
-            {
-                AnsiConsole.Clear();
-                var menu = new SelectionPrompt<string>()
-                    .Title("[bold green]Welcome to SnackToSixPack! Please choose an option:[/]")
-                    .PageSize(10)
-                    .AddChoices(new[]
-                    {
-                        "Login",
-                        "Register",
-                        "Quit"
-                    });
-                string choice = AnsiConsole.Prompt(menu);
-                switch (choice)
-                {
-                    case "Login":
-                        AuthForms.ShowLogInForm();
-                        break;
-                    case "Register":
-                        //AuthForms.ShowRegisterForm();
-                        RegistrationHandler.Run();
-                        break;
-                    case "Quit":
-                        exit = true;
-                        break;
-                }
-                if (!exit)
-                {
-                    AnsiConsole.WriteLine();
-                    AnsiConsole.Markup("[grey]Press any key to continue to the User menu...[/]");
-                    Console.ReadKey(true);
-                    ShowUserMenu();
-                    
-                }
-            }
-        }
+public static async Task ShowMainMenu()
+{
+    bool exit = false;
+    while (!exit)
+    {
+        AnsiConsole.Clear();
+        var menu = new SelectionPrompt<string>()
+            .Title("[bold green]Welcome to SnackToSixPack! Please choose an option:[/]")
+            .PageSize(10)
+            .AddChoices("Login", "Register", "Quit");
 
+        string choice = AnsiConsole.Prompt(menu);
+
+        switch (choice)
+        {
+            case "Login":
+                AuthForms.ShowLogInForm();
+
+                // Visa UserMenu bara om login lyckades
+                if (Session.CurrentUser != null)
+                    await ShowUserMenu();
+                break;
+
+            case "Register":
+                    await RegistrationHandler.Run();
+                    if (Session.CurrentUser != null)
+                    await ShowUserMenu();
+                break;
+
+            case "Quit":
+                exit = true;
+                break;
+        }
+    }
+
+}
+
+        public static async Task ShowUserMenu()
         //User menu , Show profile, Edit profile, Show schedule, Create Workout plan, LogOut
         public static async void ShowUserMenu()
         {
-            while(Session.CurrentUser != null)
+            while (Session.CurrentUser != null)
             {
-                
-            //}
-            //bool logout = false;
-            //while (!logout)
-            //{
                 AnsiConsole.Clear();
                 var menu = new SelectionPrompt<string>()
                     .Title("[bold green]User Menu - Please choose an option:[/]")
@@ -86,6 +78,10 @@ namespace SnackToSixPack.Handlers
                         profileHandler.UpdateProfile(Session.CurrentUser.Profile);
                         break;
                     case "Show Schedule":
+                        JSONHelper.ReadWP();
+                        break;
+                    case "Create Workout Plan":
+                        await AIMenu();
                         WPUI.ShowWPUI(JSONHelper.ReadWP());
                         break;
                     case "Create Workout Plan":
@@ -93,7 +89,6 @@ namespace SnackToSixPack.Handlers
                         break;
                     case "Log Out":
                         Session.CurrentUserLogout();
-                        //logout = true;
                         break;
                 }
                 if (Session.CurrentUser != null)
@@ -101,6 +96,30 @@ namespace SnackToSixPack.Handlers
                     AnsiConsole.WriteLine();
                     AnsiConsole.Markup("[grey]Press any key to return to the user menu...[/]");
                     Console.ReadKey(true);
+                }
+            }
+        }
+        
+        public static async Task AIMenu()
+        {
+            bool running = true;
+
+            while (running)
+            {
+                var choice = AnsiConsole.Prompt(
+                    new SelectionPrompt<string>()
+                        .Title("Choose an option:")
+                        .AddChoices("Generate a training schedule", "Quit"));
+
+                switch (choice)
+                {
+                    case "Ask AI":
+                        await OpenAIHandler.AskAI();
+                        break;
+
+                    case "Quit":
+                        running = false;
+                        break;
                 }
             }
         }

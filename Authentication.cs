@@ -94,7 +94,6 @@ public class Authentication
             // check if the code is correct
             if (inputCode == code.ToString())
             {
-                AnsiConsole.Clear();
                 AnsiConsole.Status()
                     .Start("Redirecting...", ctx =>
                     {

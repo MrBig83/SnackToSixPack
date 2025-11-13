@@ -13,7 +13,7 @@ namespace SnackToSixPack.Handlers
         public static void ShowWPUI(WorkoutPlan plan)
         {
 
-            // ====== Huvudtabell ======
+            //Huvudtabell
             var header = new Table()
             {
                 Border = TableBorder.Rounded,
@@ -29,7 +29,7 @@ namespace SnackToSixPack.Handlers
 
             AnsiConsole.Write(header);
 
-            // ====== En tabell per träningsdag ======
+            //En tabell per träningsdag
             foreach (var day in plan.Workouts)
             {
                 var dayTable = new Table()

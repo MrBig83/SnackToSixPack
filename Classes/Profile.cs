@@ -5,9 +5,9 @@ namespace SnackToSixPack.Classes
     {
         public string Name { get; set; }
         public int Age { get; set; }
-        public double Weight { get; set; } // in kilograms
-        public double Height { get; set; } // in centimeters
-        public string FitnessLevel { get; set; } //Beginner, Intermediate, Advanced
+        public double Weight { get; set; } 
+        public double Height { get; set; } 
+        public string FitnessLevel { get; set; } 
         public double Waist { get; set; }
         public double Chest { get; set; }
         public double Hips { get; set; }

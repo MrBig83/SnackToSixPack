@@ -79,6 +79,8 @@ namespace SnackToSixPack.Classes
             profile.FitnessLevel = ReadFitnessLevel();
             AnsiConsole.MarkupLine("---------------------------");
             AnsiConsole.MarkupLine("[bold purple]Profile created.[/]");
+            System.Threading.Thread.Sleep(3000);
+
 
             Session.CurrentUser.Profile = profile;
             JSONHelper.SaveProfile(profile);
@@ -88,29 +90,46 @@ namespace SnackToSixPack.Classes
         public static void ShowProfile(Profile profile)
         {
             AnsiConsole.Clear();
-            AnsiConsole.MarkupLine("[bold purple]Your Profile[/]");
-            AnsiConsole.MarkupLine("");
+            AnsiConsole.MarkupLine($"[bold underline purple]{profile.Name}'s Profile[/]\n");
 
-            var table = new Table();
-            table.Border = TableBorder.Rounded;
-            table.AddColumn("[bold]Field[/]");
-            table.AddColumn("[bold]Value[/]");
+            AnsiConsole.MarkupLine("[bold yellow]Personal Info[/]");
+            var personalTable = new Table().Border(TableBorder.MinimalHeavyHead);
+            personalTable.AddColumn(new TableColumn("Field").Width(18));
+            personalTable.AddColumn(new TableColumn("Value").Width(18));
+            personalTable.AddRow("Name", profile.Name);
+            personalTable.AddRow("Age", profile.Age.ToString());
+            AnsiConsole.Write(personalTable);
+            AnsiConsole.WriteLine();
 
-            table.AddRow("Name", profile.Name);
-            table.AddRow("Age", profile.Age.ToString());
-            table.AddRow("Height (cm)", profile.Height.ToString());
-            table.AddRow("Weight (kg)", profile.Weight.ToString());
-            table.AddRow("Waist (cm)", profile.Waist.ToString());
-            table.AddRow("Chest (cm)", profile.Chest.ToString());
-            table.AddRow("Hips (cm)", profile.Hips.ToString());
-            table.AddRow("Arm (cm)", profile.Arm.ToString());
-            table.AddRow("Thigh (cm)", profile.Thigh.ToString());
-            table.AddRow("Fitness Level", profile.FitnessLevel);
+            AnsiConsole.MarkupLine("[bold yellow]Body Data[/]");
+            var bodyTable = new Table().Border(TableBorder.MinimalHeavyHead);
+            bodyTable.AddColumn(new TableColumn("Field").Width(18));
+            bodyTable.AddColumn(new TableColumn("Value").Width(18));
+            bodyTable.AddRow("Height (cm)", profile.Height.ToString());
+            bodyTable.AddRow("Weight (kg)", profile.Weight.ToString());
+            AnsiConsole.Write(bodyTable);
+            AnsiConsole.WriteLine();
 
-            AnsiConsole.Write(table);
+            AnsiConsole.MarkupLine("[bold yellow]Measurements[/]");
+            var measurementsTable = new Table().Border(TableBorder.MinimalHeavyHead);
+            measurementsTable.AddColumn(new TableColumn("Field").Width(18));
+            measurementsTable.AddColumn(new TableColumn("Value").Width(18));
+            measurementsTable.AddRow("Waist (cm)", profile.Waist.ToString());
+            measurementsTable.AddRow("Chest (cm)", profile.Chest.ToString());
+            measurementsTable.AddRow("Hips (cm)", profile.Hips.ToString());
+            measurementsTable.AddRow("Arm (cm)", profile.Arm.ToString());
+            measurementsTable.AddRow("Thigh (cm)", profile.Thigh.ToString());
+            AnsiConsole.Write(measurementsTable);
+            AnsiConsole.WriteLine();
 
-            AnsiConsole.MarkupLine("");
-            AnsiConsole.MarkupLine("[grey]Press Enter to continue...[/]");
+            AnsiConsole.MarkupLine("[bold yellow]Fitness[/]");
+            var fitnessTable = new Table().Border(TableBorder.MinimalHeavyHead);
+            fitnessTable.AddColumn(new TableColumn("Field").Width(18));
+            fitnessTable.AddColumn(new TableColumn("Value").Width(18));
+            fitnessTable.AddRow("Level", profile.FitnessLevel);
+            AnsiConsole.Write(fitnessTable);
+
+            AnsiConsole.MarkupLine("\n[grey]Press Enter to return...[/]");
             Console.ReadLine();
         }
 
@@ -139,7 +158,8 @@ namespace SnackToSixPack.Classes
                             "Arm",
                             "Thigh",
                             "Fitness Level",
-                            "[green]Done[/]"
+                            "[green]Done[/]",
+                            "[red]Exit[/]"
                         })
                 );
 
@@ -199,19 +219,16 @@ namespace SnackToSixPack.Classes
                     case "[green]Done[/]":
                         editing = false;
                         break;
+                    case "[red]Exit[/]":
+                        MenuHandler.ShowUserMenu();
+                        return;
                 }
 
                 // Save back to current user
                 Session.CurrentUser.Profile = profile;
                 JSONHelper.SaveProfile(profile);
-
             }
-
             AnsiConsole.MarkupLine("\n[bold green]Profile updated successfully![/]");
-            AnsiConsole.MarkupLine("[grey]Press Enter to continue...[/]");
-            Console.ReadLine();
         }
-
-
     }
 }
