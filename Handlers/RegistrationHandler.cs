@@ -104,6 +104,8 @@ namespace SnackToSixPack.Handlers
 
             SaveUsers(users);
 
+            Session.CurrentUser = newUser;
+
             AnsiConsole.MarkupLine("\n[bold green] Registration successful![/]");
             AnsiConsole.MarkupLine($"[yellow]Welcome, {username}![/]");
         }

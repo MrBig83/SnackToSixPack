@@ -45,8 +45,10 @@ namespace SnackToSixPack.Handlers
                 if (!exit)
                 {
                     AnsiConsole.WriteLine();
-                    AnsiConsole.Markup("[grey]Press any key to return to the main menu...[/]");
+                    AnsiConsole.Markup("[grey]Press any key to continue to the User menu...[/]");
                     Console.ReadKey(true);
+                    ShowUserMenu();
+                    
                 }
             }
         }
