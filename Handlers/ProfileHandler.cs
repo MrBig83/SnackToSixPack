@@ -90,48 +90,84 @@ namespace SnackToSixPack.Classes
         public static void ShowProfile(Profile profile)
         {
             AnsiConsole.Clear();
-            AnsiConsole.MarkupLine($"[bold underline purple]{profile.Name}'s Profile[/]\n");
 
-            AnsiConsole.MarkupLine("[bold yellow]Personal Info[/]");
-            var personalTable = new Table().Border(TableBorder.MinimalHeavyHead);
-            personalTable.AddColumn(new TableColumn("Field").Width(18));
-            personalTable.AddColumn(new TableColumn("Value").Width(18));
+        AnsiConsole.Write(
+            new FigletText($"{profile.Name}'s Profile")
+                .Centered()
+                .Color(Color.Purple));
+
+
+            AnsiConsole.WriteLine();
+            AnsiConsole.Write(
+                new Markup("[bold yellow]Personal Info[/]")
+                    .Centered());
+
+            var personalTable = new Table()
+                .Border(TableBorder.MinimalHeavyHead)
+                .Centered();   
+
+            personalTable.AddColumn(new TableColumn("Field").Centered());
+            personalTable.AddColumn(new TableColumn("Value").Centered());
+
             personalTable.AddRow("Name", profile.Name);
             personalTable.AddRow("Age", profile.Age.ToString());
+
             AnsiConsole.Write(personalTable);
             AnsiConsole.WriteLine();
 
-            AnsiConsole.MarkupLine("[bold yellow]Body Data[/]");
-            var bodyTable = new Table().Border(TableBorder.MinimalHeavyHead);
-            bodyTable.AddColumn(new TableColumn("Field").Width(18));
-            bodyTable.AddColumn(new TableColumn("Value").Width(18));
+            AnsiConsole.Write(
+                new Markup("[bold yellow]Body Data[/]")
+                    .Centered());
+
+            var bodyTable = new Table()
+                .Border(TableBorder.MinimalHeavyHead)
+                .Centered();
+
+            bodyTable.AddColumn(new TableColumn("Field").Centered());
+            bodyTable.AddColumn(new TableColumn("Value").Centered());
+
             bodyTable.AddRow("Height (cm)", profile.Height.ToString());
             bodyTable.AddRow("Weight (kg)", profile.Weight.ToString());
+
             AnsiConsole.Write(bodyTable);
             AnsiConsole.WriteLine();
 
-            AnsiConsole.MarkupLine("[bold yellow]Measurements[/]");
-            var measurementsTable = new Table().Border(TableBorder.MinimalHeavyHead);
-            measurementsTable.AddColumn(new TableColumn("Field").Width(18));
-            measurementsTable.AddColumn(new TableColumn("Value").Width(18));
+            AnsiConsole.Write(
+                new Markup("[bold yellow]Measurements[/]")
+                    .Centered());
+
+            var measurementsTable = new Table()
+                .Border(TableBorder.MinimalHeavyHead)
+                .Centered();
+
+            measurementsTable.AddColumn(new TableColumn("Field").Centered());
+            measurementsTable.AddColumn(new TableColumn("Value").Centered());
+
             measurementsTable.AddRow("Waist (cm)", profile.Waist.ToString());
             measurementsTable.AddRow("Chest (cm)", profile.Chest.ToString());
             measurementsTable.AddRow("Hips (cm)", profile.Hips.ToString());
             measurementsTable.AddRow("Arm (cm)", profile.Arm.ToString());
             measurementsTable.AddRow("Thigh (cm)", profile.Thigh.ToString());
+
             AnsiConsole.Write(measurementsTable);
             AnsiConsole.WriteLine();
 
-            AnsiConsole.MarkupLine("[bold yellow]Fitness[/]");
-            var fitnessTable = new Table().Border(TableBorder.MinimalHeavyHead);
-            fitnessTable.AddColumn(new TableColumn("Field").Width(18));
-            fitnessTable.AddColumn(new TableColumn("Value").Width(18));
-            fitnessTable.AddRow("Level", profile.FitnessLevel);
-            AnsiConsole.Write(fitnessTable);
+            AnsiConsole.Write(
+                new Markup("[bold yellow]Fitness[/]")
+                    .Centered());
 
-            AnsiConsole.MarkupLine("\n[grey]Press Enter to return...[/]");
-            Console.ReadLine();
+            var fitnessTable = new Table()
+                .Border(TableBorder.MinimalHeavyHead)
+                .Centered();
+
+            fitnessTable.AddColumn(new TableColumn("Field").Centered());
+            fitnessTable.AddColumn(new TableColumn("Value").Centered());
+
+            fitnessTable.AddRow("Level", profile.FitnessLevel);
+
+            AnsiConsole.Write(fitnessTable);
         }
+
 
         public void UpdateProfile(Profile profile)
         {
