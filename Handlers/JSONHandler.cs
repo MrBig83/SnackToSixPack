@@ -36,6 +36,10 @@ namespace SnackToSixPack.Handlers
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"[ERROR] Failed to load users: {ex.Message}");
                 Console.ResetColor();
+
+                // Log the error to a log file (catch)
+                File.AppendAllText("log.json", $"[{DateTime.Now}] ERROR: Failed to load users: {ex.Message}{Environment.NewLine}");
+
                 return new List<User>();
             }
         }
@@ -118,7 +122,7 @@ namespace SnackToSixPack.Handlers
             }
         }
     }
-}
+} 
 
 
 
