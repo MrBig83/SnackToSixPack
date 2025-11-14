@@ -73,14 +73,14 @@ public class OpenAIHandler
         .Trim();
 
         WorkoutPlan AiReply = JsonSerializer.Deserialize<WorkoutPlan>(cleanedJson);
-        WPUI.ShowWPUI(AiReply);
+        //WPUI.ShowWPUI(AiReply);
 
-        string json2Store = cleanedJson;
+        //string json2Store = cleanedJson;
         // Spara det till en fil
-        File.WriteAllText("sample_workoutplan.json", json2Store);
+        //File.WriteAllText("sample_workoutplan.json", json2Store);
 
-        string localJson = File.ReadAllText("sample_workoutplan.json");
-        WorkoutPlan AiReply = JsonSerializer.Deserialize<WorkoutPlan>(localJson);
+        //string localJson = File.ReadAllText("sample_workoutplan.json");
+        //WorkoutPlan AiReply = JsonSerializer.Deserialize<WorkoutPlan>(localJson);
         JSONHelper.SaveWP(AiReply);
         WPUI.ShowWPUI(AiReply);
     }
