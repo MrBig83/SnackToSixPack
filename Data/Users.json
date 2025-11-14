@@ -1,44 +1,17 @@
 [
   {
     "Id": 1,
-    "UserName": "test",
-    "Name": "Martin Johansson",
-    "Email": "mjohansson176@gmail.com",
-    "Phone": "0701234567",
-    "Age": 42,
-    "Password": "test",
-    "Weight": 120,
-    "Length": 187,
-    "Gender": "Male",
-    "Adress": "Romelanda, Sweden",
-    "Experience": "Intermediate"
-  },
-  {
-    "Id": 2,
-    "UserName": "runnerlisa",
-    "Name": "Lisa Andersson",
-    "Email": "lisa.a@example.com",
-    "Phone": "0702345678",
-    "Age": 28,
-    "Password": "SafePassword!45",
-    "Weight": 65,
-    "Length": 172,
-    "Gender": "Female",
-    "Adress": "Göteborg, Sweden",
-    "Experience": "Beginner"
-  },
-  {
-    "Id": 3,
-    "UserName": "emelie12",
-    "Name": "Emelie",
+    "UserName": "emelie",
+    "Name": null,
     "Email": "emeliecaroline99@gmail.com",
-    "Phone": "0703456789",
-    "Age": 30,
-    "Password": "AnotherSafe!67",
-    "Weight": 65,
-    "Length": 172,
-    "Gender": "Female",
-    "Adress": "Göteborg, Sweden",
-    "Experience": "Beginner"
+    "Phone": null,
+    "Age": 0,
+    "Password": "Emelie123!",
+    "Weight": 0,
+    "Length": 0,
+    "Gender": 0,
+    "Adress": null,
+    "Experience": 0,
+    "Profile": null
   }
 ]
