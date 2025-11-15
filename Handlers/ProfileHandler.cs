@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using SnackToSixPack.Classes;
 using SnackToSixPack.Handlers;
 using Spectre.Console;
@@ -87,11 +88,17 @@ namespace SnackToSixPack.Classes
             return profile;
         }
 
-        public static void ShowProfile(Profile profile)
+        public static async Task ShowProfile(Profile profile)
         {
             AnsiConsole.Clear();
+            
+            if (profile == null)
+            {
+                AnsiConsole.MarkupLine("[red]Profile does not exist.[/]");
+                return;
+            }
 
-        AnsiConsole.Write(
+            AnsiConsole.Write(
             new FigletText($"{profile.Name}'s Profile")
                 .Centered()
                 .Color(Color.Purple));
@@ -166,6 +173,21 @@ namespace SnackToSixPack.Classes
             fitnessTable.AddRow("Level", profile.FitnessLevel);
 
             AnsiConsole.Write(fitnessTable);
+
+            var personalMenu = new SelectionPrompt<string>()
+                .PageSize(10)
+                .AddChoices("Delete account", "[red]Exit[/]");
+                
+            
+            string choice = AnsiConsole.Prompt(personalMenu);
+            switch (choice)
+            {
+                case "Delete account":
+                    await RegistrationHandler.DeleteCurrentUser();
+                    return;
+                case "[red]Exit[/]":
+                    break;
+            }
         }
 
 
