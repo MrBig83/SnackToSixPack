@@ -171,7 +171,52 @@ namespace SnackToSixPack.Handlers
                 return new List<User>();
             }
         }
+    
+        public static async Task DeleteCurrentUser()
+        {
+            var user = Session.CurrentUser;
+
+            List<User> users = LoadUsers();
+
+            int removed = users.RemoveAll(u => u.Id == user.Id);
+
+            if (removed == 0)
+            {
+                AnsiConsole.MarkupLine("[red]User not found.[/]");
+                return;
+            }
+
+            AnsiConsole.MarkupLine("[red]Are your sure you want to delete the account?[/]");
+            var confirmChoice = new SelectionPrompt<string>();
+                confirmChoice.AddChoice("Yes");
+                confirmChoice.AddChoice("No");
+
+            var choiceConfirmed = AnsiConsole.Prompt<string>(confirmChoice);
+            if (choiceConfirmed == "Yes")
+            {
+                            SaveUsers(users);
+
+            // 4. Ta bort användarmapp
+            string userFolder = "Data/Users/" + user.Id;
+            if (Directory.Exists(userFolder))
+            {
+                Directory.Delete(userFolder, true); 
+            }
+
+            // 5. Logga ut
+            Session.SetCurrentUser(null);
+
+            AnsiConsole.MarkupLine("[green]Your account has been deleted successfully.[/]");
+            AnsiConsole.MarkupLine("[yellow]Returning to main menu...[/]");
+
+            Thread.Sleep(3000);
+            await MenuHandler.ShowMainMenu();
+            if (choiceConfirmed == "No")
+            {
+                return;
+            }
+
+            }
+        }
     }
-
-
 }

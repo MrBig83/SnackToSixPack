@@ -13,25 +13,38 @@ namespace SnackToSixPack.Classes
             bool running = true;
             while (running)
             {
-                AnsiConsole.Clear();
+            AnsiConsole.Clear();
 
-                var heading = new Panel("[green] Log in[/]")
-                    .Border(BoxBorder.Double)
-                    .BorderStyle(new Style(Color.White))
-                    .Padding(10, 0);
+            var heading = new Panel("[green] Log in[/]")
+                .Border(BoxBorder.Double)
+                .BorderStyle(new Style(Color.White))
+                .Padding(10, 0);
 
-                AnsiConsole.Write(heading);
-                AnsiConsole.WriteLine();
+            AnsiConsole.Write(heading);
+            AnsiConsole.WriteLine();
 
-                var users = JSONHelper.LoadUsers();
+            var users = JSONHelper.LoadUsers();
 
-                string usernameInput = AnsiConsole.Ask<string>("[bold]Username:[/][grey][/]");
+            string usernameInput = AnsiConsole.Ask<string>("[bold]Username:[/][grey][/]");
 
-                var passwordPrompt = new TextPrompt<string>("[bold]Password:[/][grey][/]")
-                    .PromptStyle("green")
-                    .Secret();
+            var passwordPrompt = new TextPrompt<string>("[bold]Password:[/][grey][/]")
+                .PromptStyle("green")
+                .Secret();
 
-                string passwordInput = AnsiConsole.Prompt(passwordPrompt);
+            string passwordInput = AnsiConsole.Prompt(passwordPrompt);
+
+            AnsiConsole.WriteLine();
+
+            var exitPrompt = new SelectionPrompt<string>();
+            exitPrompt.AddChoice("Log in");
+            exitPrompt.AddChoice("[red]Exit[/]");
+
+            var exitChoice = AnsiConsole.Prompt<string>(exitPrompt);
+
+            if (exitChoice == "[red]Exit[/]")
+            {
+                return; 
+            }
 
                 var user = users.FirstOrDefault(u => u.UserName.Equals(usernameInput, StringComparison.OrdinalIgnoreCase)
                                                      && u.Password.Equals(passwordInput));
@@ -70,7 +83,7 @@ namespace SnackToSixPack.Classes
                     });
                 AnsiConsole.Clear();
                 Session.SetCurrentUser(user);
-                Authentication.TwoFactorAuth();
+                //Authentication.TwoFactorAuth();
                 Session.CurrentUser.Profile = JSONHelper.LoadProfile();
                 AnsiConsole.WriteLine();
 
