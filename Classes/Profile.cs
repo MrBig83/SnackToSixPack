@@ -7,16 +7,16 @@ namespace SnackToSixPack.Classes
         public int Age { get; set; }
         public double Weight { get; set; } 
         public double Height { get; set; } 
-        public string FitnessLevel { get; set; } 
         public double Waist { get; set; }
         public double Chest { get; set; }
         public double Hips { get; set; }
         public double Arm { get; set; }
         public double Thigh { get; set; }
+        public FitnessLevel FitnessLevel { get; set; } 
 
         public Profile(){}
 
-        public Profile(int age, double weight, double height, string fitnessLevel, double waist, double chest, double hips, double arm, double thigh)
+        public Profile(int age, double weight, double height, FitnessLevel fitnessLevel, double waist, double chest, double hips, double arm, double thigh)
         {
             Age = age;
             Weight = weight;
@@ -29,4 +29,10 @@ namespace SnackToSixPack.Classes
             Thigh = thigh;
         }
     }
+            public enum FitnessLevel
+        {
+            Beginner,
+            Intermediate,
+            Advanced
+        }
 }

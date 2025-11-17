@@ -8,6 +8,7 @@ namespace SnackToSixPack.Classes
 {
     public class ProfileHandler
     {
+
         //Generic
         private double ReadDoubleInput(string label)
         {
@@ -26,19 +27,28 @@ namespace SnackToSixPack.Classes
             }
         }
 
-        private string ReadFitnessLevel()
+        private FitnessLevel ReadFitnessLevel()
         {
-            string[] valid = { "Beginner", "Intermediate", "Advanced" };
+            AnsiConsole.WriteLine();
+            var choice = AnsiConsole.Prompt(
+                new SelectionPrompt<string>()
+                .Title("[bold]Select fitness level:[/]")
+                .AddChoices("Beginner", "Intermediate", "Advanced"));
 
-            while (true)
+            AnsiConsole.WriteLine("Level: " + choice);
+            switch (choice)
             {
-                AnsiConsole.Markup("[bold] Fitness level (Beginner / Intermediate / Advanced): [/]");
-                string input = Console.ReadLine();
+                case "Beginner":
+                    return FitnessLevel.Beginner;
 
-                if (valid.Contains(input, StringComparer.OrdinalIgnoreCase))
-                    return input;
+                case "Intermediate":
+                    return FitnessLevel.Intermediate;
 
-                AnsiConsole.MarkupLine("[yellow]Invalid level. Try again.[/]");
+                case "Advanced":
+                    return FitnessLevel.Advanced;
+
+                default:
+                    return FitnessLevel.Beginner;
             }
         }
 
@@ -170,7 +180,7 @@ namespace SnackToSixPack.Classes
             fitnessTable.AddColumn(new TableColumn("Field").Centered());
             fitnessTable.AddColumn(new TableColumn("Value").Centered());
 
-            fitnessTable.AddRow("Level", profile.FitnessLevel);
+            fitnessTable.AddRow("Level", profile.FitnessLevel.ToString());
 
             AnsiConsole.Write(fitnessTable);
 
