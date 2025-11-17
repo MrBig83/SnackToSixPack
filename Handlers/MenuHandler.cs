@@ -78,8 +78,16 @@ public static async Task ShowMainMenu()
                         profileHandler.UpdateProfile(Session.CurrentUser.Profile);
                         break;
                     case "Show Schedule":
-                        //JSONHelper.ReadWP();
+                    try
+                    {
+                        JSONHelper.ReadWP();
                         WPUI.ShowWPUI(JSONHelper.ReadWP());
+                    }
+                    catch (FileNotFoundException)
+                    {
+                        AnsiConsole.MarkupLine("[red]No workout plan genereated yet.[/]");
+                        AnsiConsole.MarkupLine("Please generate a workout plan from User Menu.");
+                    }
                         break;
                     case "Create Workout Plan":
                         await AIMenu();
@@ -91,7 +99,7 @@ public static async Task ShowMainMenu()
                 if (Session.CurrentUser != null)
                 {
                     AnsiConsole.WriteLine();
-                    AnsiConsole.Markup("[grey]Press any key to return to the user menu...[/]");
+                    AnsiConsole.Markup("[grey]Press any key to return to the User Menu...[/]");
                     Console.ReadKey(true);
                 }
             }
