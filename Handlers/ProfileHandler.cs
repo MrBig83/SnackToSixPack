@@ -52,6 +52,30 @@ namespace SnackToSixPack.Classes
             }
         }
 
+        private Gender ChooseGender()
+        {
+            AnsiConsole.WriteLine();
+            var choice = AnsiConsole.Prompt(
+                new SelectionPrompt<string>()
+                .Title("[bold]Select gender:[/]")
+                .AddChoices("Woman", "Man", "PreferNotToSay")
+            );
+
+            AnsiConsole.WriteLine("Gender: " + choice);
+            switch (choice)
+            {
+                case "Woman":
+                    return Gender.Woman;
+                case "Man":
+                    return Gender.Man;
+                case "PreferNotToSay":
+                    return Gender.PreferNotToSay;
+            }
+            // No default case needed because the user must select one of the provided options,
+            // but the compiler does not know that, so we handle the "impossible" case below.
+            throw new Exception("Unexpected gender selecion.");
+        }
+
         public Profile CreateProfile()
         {
             Profile profile = new Profile();
@@ -88,6 +112,7 @@ namespace SnackToSixPack.Classes
             profile.Arm = ReadDoubleInput(" Arm (cm): ");
             profile.Thigh = ReadDoubleInput(" Thigh (cm): ");
             profile.FitnessLevel = ReadFitnessLevel();
+            profile.Gender = ChooseGender();
             AnsiConsole.MarkupLine("---------------------------");
             AnsiConsole.MarkupLine("[bold purple]Profile created.[/]");
             System.Threading.Thread.Sleep(3000);
@@ -181,6 +206,7 @@ namespace SnackToSixPack.Classes
             fitnessTable.AddColumn(new TableColumn("Value").Centered());
 
             fitnessTable.AddRow("Level", profile.FitnessLevel.ToString());
+            fitnessTable.AddRow("Gender", profile.Gender.ToString());
 
             AnsiConsole.Write(fitnessTable);
 
@@ -199,7 +225,6 @@ namespace SnackToSixPack.Classes
                     break;
             }
         }
-
 
         public void UpdateProfile(Profile profile)
         {
