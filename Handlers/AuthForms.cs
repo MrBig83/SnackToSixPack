@@ -23,7 +23,10 @@ namespace SnackToSixPack.Classes
             AnsiConsole.Write(heading);
             AnsiConsole.WriteLine();
 
-            var users = JSONHelper.LoadUsers();
+            var users = JSONFileHanldler<List<User>>.Load<List<User>>(
+            Path.Combine($"Data", "Users.json")
+            );
+            //var users = JSONHelper.LoadUsers();
 
             string usernameInput = AnsiConsole.Ask<string>("[bold]Username:[/][grey][/]");
 
@@ -84,7 +87,12 @@ namespace SnackToSixPack.Classes
                 AnsiConsole.Clear();
                 Session.SetCurrentUser(user);
                 //Authentication.TwoFactorAuth();
-                Session.CurrentUser.Profile = JSONHelper.LoadProfile();
+                Console.WriteLine("Hej");
+                var userProfile = JSONFileHanldler<Profile>.Load<Profile>(
+                Path.Combine($"Data/Users/{Session.CurrentUser.Id}", "profile.json")
+                );
+
+                Session.CurrentUser.Profile = userProfile;
                 AnsiConsole.WriteLine();
 
                 AnsiConsole.Write(

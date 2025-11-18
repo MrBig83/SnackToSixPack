@@ -119,7 +119,8 @@ namespace SnackToSixPack.Classes
 
 
             Session.CurrentUser.Profile = profile;
-            JSONHelper.SaveProfile(profile);
+            JSONFileHanldler<Profile>.Save($"Data/Users/{Session.CurrentUser.Id}/profile.json", profile);
+            //JSONHelper.SaveProfile(profile);
             return profile;
         }
 
@@ -319,7 +320,7 @@ namespace SnackToSixPack.Classes
 
                 // Save back to current user
                 Session.CurrentUser.Profile = profile;
-                JSONHelper.SaveProfile(profile);
+                JSONFileHanldler<Profile>.Save($"Data/Users/{Session.CurrentUser.Id}/profile.json", profile);
             }
             AnsiConsole.MarkupLine("\n[bold green]Profile updated successfully![/]");
         }
