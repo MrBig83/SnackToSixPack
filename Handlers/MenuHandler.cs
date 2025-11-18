@@ -80,8 +80,13 @@ public static async Task ShowMainMenu()
                     case "Show Schedule":
                     try
                     {
-                        JSONHelper.ReadWP();
-                        WPUI.ShowWPUI(JSONHelper.ReadWP());
+                        var plans = JSONFileHanldler<WorkoutPlan>.Load<WorkoutPlan>(
+                        Path.Combine($"Data/Users/{Session.CurrentUser.Id}", "workoutplans.json")
+                    );
+
+                        //JSONHelper.ReadWP();
+                        Console.WriteLine("Hejhej");
+                        WPUI.ShowWPUI(plans);
                     }
                     catch (FileNotFoundException)
                     {

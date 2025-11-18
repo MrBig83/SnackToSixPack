@@ -10,6 +10,7 @@ public class OpenAIHandler
 
     public static async Task AskAI()
     {
+        
         string apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
         if (string.IsNullOrEmpty(apiKey))
         {
@@ -73,15 +74,18 @@ public class OpenAIHandler
         .Trim();
 
         WorkoutPlan AiReply = JsonSerializer.Deserialize<WorkoutPlan>(cleanedJson);
-        //WPUI.ShowWPUI(AiReply);
+        JSONFileHanldler<WorkoutPlan>.Save($"Data/Users/{Session.CurrentUser.Id}/workoutplan.json", AiReply);
+        WPUI.ShowWPUI(AiReply);
 
         //string json2Store = cleanedJson;
         // Spara det till en fil
         //File.WriteAllText("sample_workoutplan.json", json2Store);
 
-        //string localJson = File.ReadAllText("sample_workoutplan.json");
-        //WorkoutPlan AiReply = JsonSerializer.Deserialize<WorkoutPlan>(localJson);
-        JSONHelper.SaveWP(AiReply);
-        WPUI.ShowWPUI(AiReply);
+        /*string localJson = File.ReadAllText("sample_workoutplan.json");
+        var AiReply = JsonSerializer.Deserialize<WorkoutPlan>(localJson);
+        JSONFileHanldler<WorkoutPlan>.Save($"Data/Users/{Session.CurrentUser.Id}/workoutplan.json", AiReply);
+        //JSONFileHanldler<List<User>>.Save("Data/Users.json", users);
+        //JSONHelper.SaveWP(AiReply);
+        WPUI.ShowWPUI(AiReply);*/
     }
 }
