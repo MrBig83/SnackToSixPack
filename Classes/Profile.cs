@@ -13,6 +13,8 @@ namespace SnackToSixPack.Classes
         public double Arm { get; set; }
         public double Thigh { get; set; }
         public FitnessLevel FitnessLevel { get; set; } 
+        public Gender Gender { get; set; }
+
 
         public Profile(){}
 
@@ -29,10 +31,17 @@ namespace SnackToSixPack.Classes
             Thigh = thigh;
         }
     }
-            public enum FitnessLevel
+    public enum FitnessLevel
         {
             Beginner,
             Intermediate,
             Advanced
         }
+
+    public enum Gender
+    {
+        Woman,
+        Man,
+        PreferNotToSay
+    }
 }
