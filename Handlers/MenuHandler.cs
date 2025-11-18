@@ -81,8 +81,7 @@ public static async Task ShowMainMenu()
                     try
                     {
                         var plans = JSONFileHanldler<WorkoutPlan>.Load<WorkoutPlan>(
-                        Path.Combine($"Data/Users/{Session.CurrentUser.Id}", "workoutplans.json")
-                    );
+                        Path.Combine($"Data/Users/{Session.CurrentUser.Id}", "workoutplans.json"));
 
                         //JSONHelper.ReadWP();
                         Console.WriteLine("Hejhej");

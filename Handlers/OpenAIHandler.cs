@@ -10,7 +10,7 @@ public class OpenAIHandler
 
     public static async Task AskAI()
     {
-        
+
         string apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
         if (string.IsNullOrEmpty(apiKey))
         {
@@ -21,6 +21,7 @@ public class OpenAIHandler
         client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", apiKey);
 
         Console.WriteLine("Beskriv vad som �r m�let med din tr�ning:");
+        Console.WriteLine(apiKey);
         string userInput = Console.ReadLine();
 
         string AiPrompt = $@"
@@ -74,16 +75,16 @@ public class OpenAIHandler
         .Trim();
 
         WorkoutPlan AiReply = JsonSerializer.Deserialize<WorkoutPlan>(cleanedJson);
-        JSONFileHanldler<WorkoutPlan>.Save($"Data/Users/{Session.CurrentUser.Id}/workoutplan.json", AiReply);
+        JSONFileHanldler<WorkoutPlan>.Save($"Data/Users/{Session.CurrentUser.Id}/workoutplans.json", AiReply);
         WPUI.ShowWPUI(AiReply);
 
         //string json2Store = cleanedJson;
         // Spara det till en fil
-        //File.WriteAllText("sample_workoutplan.json", json2Store);
+        //File.WriteAllText("sample_workoutplans.json", json2Store);
 
-        /*string localJson = File.ReadAllText("sample_workoutplan.json");
+        /*string localJson = File.ReadAllText("sample_workoutplans.json");
         var AiReply = JsonSerializer.Deserialize<WorkoutPlan>(localJson);
-        JSONFileHanldler<WorkoutPlan>.Save($"Data/Users/{Session.CurrentUser.Id}/workoutplan.json", AiReply);
+        JSONFileHanldler<WorkoutPlan>.Save($"Data/Users/{Session.CurrentUser.Id}/workoutplans.json", AiReply);
         //JSONFileHanldler<List<User>>.Save("Data/Users.json", users);
         //JSONHelper.SaveWP(AiReply);
         WPUI.ShowWPUI(AiReply);*/

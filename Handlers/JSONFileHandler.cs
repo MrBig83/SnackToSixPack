@@ -5,7 +5,7 @@ public static class JSONFileHanldler<T>
     public static T Load<T>(string filePath)
     {
         if (!File.Exists(filePath))
-            return default!;
+        throw new FileNotFoundException($"File not found: {filePath}");
 
         string json = File.ReadAllText(filePath);
         return JsonSerializer.Deserialize<T>(json);
