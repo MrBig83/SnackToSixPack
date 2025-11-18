@@ -14,8 +14,8 @@ public class OpenAIHandler
         string apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
         if (string.IsNullOrEmpty(apiKey))
         {
-           Console.WriteLine("API key not found");
-           return;
+            Console.WriteLine("API key not found");
+            return;
         }
 
         client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", apiKey);
@@ -48,8 +48,8 @@ public class OpenAIHandler
 
         var requestBody = new
         {
-           model = "gpt-4.1-mini",
-           messages = new[]
+            model = "gpt-4.1-mini",
+            messages = new[]
            {
                new { role = "system", content = "You are a helpful personal trainer," },
                new { role = "user", content = AiPrompt }
@@ -75,10 +75,17 @@ public class OpenAIHandler
         .Trim();
 
         WorkoutPlan AiReply = JsonSerializer.Deserialize<WorkoutPlan>(cleanedJson);
+
         JSONFileHanldler<WorkoutPlan>.Save($"Data/Users/{Session.CurrentUser.Id}/workoutplans.json", AiReply);
         WPUI.ShowWPUI(AiReply);
 
+
+
+
+
+        ////======== Spara en Sample-workout till en JSON-fil =======
         //string json2Store = cleanedJson;
+
         // Spara det till en fil
         //File.WriteAllText("sample_workoutplans.json", json2Store);
 
@@ -88,5 +95,6 @@ public class OpenAIHandler
         //JSONFileHanldler<List<User>>.Save("Data/Users.json", users);
         //JSONHelper.SaveWP(AiReply);
         WPUI.ShowWPUI(AiReply);*/
+
     }
 }
