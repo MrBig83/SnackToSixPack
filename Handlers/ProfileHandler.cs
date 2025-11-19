@@ -212,17 +212,18 @@ namespace SnackToSixPack.Classes
             AnsiConsole.Write(fitnessTable);
 
             var personalMenu = new SelectionPrompt<string>()
-                .PageSize(10)
-                .AddChoices("Delete account", "[red]Exit[/]");
-                
-            
+    .PageSize(10)
+    .AddChoices("Exit", "[red]Delete account[/]");
+
             string choice = AnsiConsole.Prompt(personalMenu);
+
             switch (choice)
             {
-                case "Delete account":
+                case "[red]Delete account[/]":
                     await RegistrationHandler.DeleteCurrentUser();
                     return;
-                case "[red]Exit[/]":
+
+                case "Exit":
                     break;
             }
         }
