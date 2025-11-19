@@ -22,13 +22,25 @@ namespace SnackToSixPack.Classes
 
             AnsiConsole.Write(heading);
             AnsiConsole.WriteLine();
+                List<User> users;
+                try
+                {
+                    users = JSONFileHanldler<List<User>>.Load<List<User>>(        
+                    Path.Combine($"Data", "Users.json")
+                     );
+                }
+                catch (FileNotFoundException ex)
+                {
+                    File.AppendAllText("log.json", $"[{DateTime.Now}] ERROR: Failed to load users: {ex.Message}{Environment.NewLine}");
+                    AnsiConsole.MarkupLine("[red]No users found. Please register a user first.[/]");
+                    AnsiConsole.MarkupLine("Press any key to return to the main menu...");
+                    Console.ReadKey(true);
+                    return;
+                }
 
-            var users = JSONFileHanldler<List<User>>.Load<List<User>>(
-            Path.Combine($"Data", "Users.json")
-            );
-            //var users = JSONHelper.LoadUsers();
+                //var users = JSONHelper.LoadUsers();
 
-            string usernameInput = AnsiConsole.Ask<string>("[bold]Username:[/][grey][/]");
+                string usernameInput = AnsiConsole.Ask<string>("[bold]Username:[/][grey][/]");
 
             var passwordPrompt = new TextPrompt<string>("[bold]Password:[/][grey][/]")
                 .PromptStyle("green")
@@ -88,9 +100,22 @@ namespace SnackToSixPack.Classes
                 Session.SetCurrentUser(user);
                 //Authentication.TwoFactorAuth();
                 Console.WriteLine("Hej"); // ======= Ta bort denna raden
-                var userProfile = JSONFileHanldler<Profile>.Load<Profile>(
-                Path.Combine($"Data/Users/{Session.CurrentUser.Id}", "profile.json")
-                );
+                Profile userProfile;
+                try
+                {
+                 userProfile = JSONFileHanldler<Profile>.Load<Profile>(
+                 Path.Combine($"Data/Users/{Session.CurrentUser.Id}", "profile.json")
+                 );
+
+                } catch (FileNotFoundException ex)
+                {
+                    File.AppendAllText("log.json", $"[{DateTime.Now}] ERROR: Failed to load users: {ex.Message}{Environment.NewLine}");
+                    AnsiConsole.MarkupLine("[red] User profile not found. Please create your profile.[/]");
+                    AnsiConsole.MarkupLine("Press any key to continue...");
+                    Console.ReadKey(true);
+                    return;
+                }
+
 
                 Session.CurrentUser.Profile = userProfile;
                 AnsiConsole.WriteLine();

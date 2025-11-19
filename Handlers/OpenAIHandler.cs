@@ -75,9 +75,18 @@ public class OpenAIHandler
         .Trim();
 
         WorkoutPlan AiReply = JsonSerializer.Deserialize<WorkoutPlan>(cleanedJson);
+        try
+        {
+            JSONFileHanldler<WorkoutPlan>.Save($"Data/Users/{Session.CurrentUser.Id}/workoutplans.json", AiReply);
+            WPUI.ShowWPUI(AiReply);
 
-        JSONFileHanldler<WorkoutPlan>.Save($"Data/Users/{Session.CurrentUser.Id}/workoutplans.json", AiReply);
-        WPUI.ShowWPUI(AiReply);
+        } catch (FileNotFoundException ex) {
+            File.AppendAllText("log.json", $"[{DateTime.Now}] ERROR: Failed to load users: {ex.Message}{Environment.NewLine}");
+            AnsiConsole.MarkupLine("[red] Could not found workout plan .[/]");
+            AnsiConsole.MarkupLine("Press any key to return to the main menu...");
+            Console.ReadKey(true);
+            return;
+        }
 
 
 

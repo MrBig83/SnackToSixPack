@@ -156,6 +156,7 @@ public class Authentication
         }
         catch (Exception ex)
         {
+            File.AppendAllText("log.json", $"[{DateTime.Now}] ERROR: Failed to load users: {ex.Message}{Environment.NewLine}");
             AnsiConsole.MarkupLine("[bold red]Failed to send email: " + ex.Message + "[/]");
             return false;
         }

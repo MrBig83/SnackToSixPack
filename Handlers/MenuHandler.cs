@@ -87,9 +87,10 @@ public static async Task ShowMainMenu()
                         Console.WriteLine("Hejhej");
                         WPUI.ShowWPUI(plans);
                     }
-                    catch (FileNotFoundException)
+                    catch (FileNotFoundException ex)
                     {
-                        AnsiConsole.MarkupLine("[red]No workout plan genereated yet.[/]");
+                            File.AppendAllText("log.json", $"[{DateTime.Now}] ERROR: Failed to load users: {ex.Message}{Environment.NewLine}");
+                            AnsiConsole.MarkupLine("[red]No workout plan genereated yet.[/]");
                         AnsiConsole.MarkupLine("Please generate a workout plan from User Menu.");
                     }
                         break;
