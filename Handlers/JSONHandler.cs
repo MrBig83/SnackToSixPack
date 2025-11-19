@@ -63,6 +63,7 @@ namespace SnackToSixPack.Handlers
             }
             catch (Exception ex)
             {
+                File.AppendAllText("log.json", $"[{DateTime.Now}] ERROR: Failed to load users: {ex.Message}{Environment.NewLine}");
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"[ERROR] Failed to save users: {ex.Message}");
                 Console.ResetColor();
@@ -117,6 +118,7 @@ namespace SnackToSixPack.Handlers
             }
             catch (Exception ex)
             {
+                File.AppendAllText("log.json", $"[{DateTime.Now}] ERROR: Failed to load users: {ex.Message}{Environment.NewLine}");
                 Console.WriteLine("Failed to load profile: " + ex.Message);
                 return null;
             }
