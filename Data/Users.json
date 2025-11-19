@@ -1,0 +1,17 @@
+[
+  {
+    "Id": 1,
+    "UserName": "emelie",
+    "Name": null,
+    "Email": "emeliecaroline99@gmail.com",
+    "Phone": null,
+    "Age": 0,
+    "Password": "Emelie123!",
+    "Weight": 0,
+    "Length": 0,
+    "Gender": 0,
+    "Adress": null,
+    "Experience": 0,
+    "Profile": null
+  }
+]

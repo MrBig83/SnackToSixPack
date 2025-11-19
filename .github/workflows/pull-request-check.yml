@@ -8,6 +8,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    # Använd detta om du lagrat MAIL_AUTH_* och DISCORD_WEBHOOK som Environment secrets
+    # Annars kan du ta bort environment-blocket och använda repository secrets som vanligt.
+    environment:
+      name: Production
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -15,29 +20,49 @@ jobs:
       - name: Set up .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '9.x' # Anpassa om du har annan version
+          dotnet-version: '9.x'
+
+      # Om ditt .csproj förväntar sig appsettings.json men den inte är committad
+      - name: Ensure appsettings.json exists
+        run: |
+          mkdir -p SnackToSixPack
+          [ -f SnackToSixPack/appsettings.json ] || echo '{"Smtp":{"Host":"smtp.gmail.com","Port":"587"}}' > SnackToSixPack/appsettings.json
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore SnackToSixPack.slnx
 
       - name: Build
         id: buildstep
         run: dotnet build --no-restore
 
-      - name: Send Discord Notification (Success)
-        if: success()
+      # Kör appen men låt jobbet fortsätta även om den failar (t.ex. p.g.a. interaktiv input)
+      - name: Run SnackToSixPack (non-blocking)
+        id: runapp
+        continue-on-error: true
         env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          DOTNET_ENVIRONMENT: Production
+          MAIL_AUTH_UN: ${{ secrets.MAIL_AUTH_UN }}
+          MAIL_AUTH_PW: ${{ secrets.MAIL_AUTH_PW }}
+          # Valfritt om du implementerar headless 2FA:
+          # TWO_FA_CODE: ${{ secrets.TWO_FA_CODE }}
         run: |
-          curl -H "Content-Type: application/json" \
-            -d "{\"content\":\":white_check_mark: Build succeeded for PR #${{ github.event.pull_request.number }} on branch ${{ github.head_ref }}.\"}" \
-            $DISCORD_WEBHOOK
+          # OBS: Din app använder ReadKey(); i CI finns ingen interaktiv TTY.
+          # Detta steg kan därför falla, men det är OK tack vare continue-on-error.
+          dotnet run --project SnackToSixPack/SnackToSixPack.csproj
 
-      - name: Send Discord Notification (Failure)
-        if: failure()
+      # Skicka Discord-notis ALLTID, oavsett om build/app-run lyckas
+      - name: Send Discord Notification (Always)
+        if: always()
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          BRANCH: ${{ github.head_ref }}
+          BUILD_STATUS: ${{ job.status }}              # success | failure | cancelled
+          RUN_STATUS: ${{ steps.runapp.outcome }}      # success | failure | cancelled | skipped
         run: |
+          if [ "$BUILD_STATUS" = "success" ]; then BUILD_ICON=":white_check_mark:"; else BUILD_ICON=":x:"; fi
+          if [ "$RUN_STATUS" = "success" ]; then RUN_ICON=":rocket:"; else RUN_ICON=":rocket:"; fi
+          CONTENT="$BUILD_ICON Build $BUILD_STATUS for PR #$PR_NUMBER on branch $BRANCH."
           curl -H "Content-Type: application/json" \
-            -d "{\"content\":\":x: Build FAILED for PR #${{ github.event.pull_request.number }} on branch ${{ github.head_ref }}!\"}" \
-            $DISCORD_WEBHOOK
+               -d "{\"content\":\"$CONTENT\"}" \
+               "$DISCORD_WEBHOOK"
