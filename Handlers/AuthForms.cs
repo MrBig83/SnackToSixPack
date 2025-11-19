@@ -87,7 +87,7 @@ namespace SnackToSixPack.Classes
                 AnsiConsole.Clear();
                 Session.SetCurrentUser(user);
                 //Authentication.TwoFactorAuth();
-                Console.WriteLine("Hej");
+                Console.WriteLine("Hej"); // ======= Ta bort denna raden
                 var userProfile = JSONFileHanldler<Profile>.Load<Profile>(
                 Path.Combine($"Data/Users/{Session.CurrentUser.Id}", "profile.json")
                 );

@@ -21,11 +21,11 @@ public class OpenAIHandler
         client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", apiKey);
 
         Console.WriteLine("Beskriv vad som �r m�let med din tr�ning:");
-        Console.WriteLine(apiKey);
+
         string userInput = Console.ReadLine();
 
         string AiPrompt = $@"
-           Skapa ett tr�ningsschema i JSON-format med f�ljande egenskaper:
+           Skapa ett tr�ningsschema i JSON-format med f�ljande egenskaper: (Jag vill även att du tar hänsyn till användarens kroppsliga profil: {Session.CurrentUser.Profile})
            - ""PlanName"": (Namn p� tr�ningsschemat)
            - ""Goal"": (tydlig och inspirerande beskrivning av tr�ningschemat p� svenska, baserat p� informationen ifr�n anv�ndaren : {userInput})
            - ""StartDate"": (Dagens datum om inget annat specificerats i {userInput})            
