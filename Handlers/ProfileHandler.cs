@@ -80,7 +80,7 @@ namespace SnackToSixPack.Classes
         {
             Profile profile = new Profile();
             AnsiConsole.Clear();
-            AnsiConsole.MarkupLine("[bold purple]Create your profile[/]");
+            AnsiConsole.MarkupLine("[BlueViolet]Create your profile[/]");
             AnsiConsole.MarkupLine("---------------------------");
             AnsiConsole.Markup("[bold] Full name: [/]");
             profile.Name = Console.ReadLine();

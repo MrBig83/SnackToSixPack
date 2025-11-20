@@ -15,7 +15,7 @@ namespace SnackToSixPack.Classes
             {
             AnsiConsole.Clear();
 
-            var heading = new Panel("[green] Log in[/]")
+            var heading = new Panel("[lime] Log in[/]")
                 .Border(BoxBorder.Double)
                 .BorderStyle(new Style(Color.White))
                 .Padding(10, 0);
