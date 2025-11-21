@@ -23,12 +23,12 @@ namespace SnackToSixPack.Handlers
             );
 
             AnsiConsole.Clear();
-            AnsiConsole.MarkupLine("[bold yellow]=== REGISTER NEW USER ===[/]");
+            AnsiConsole.MarkupLine("[BlueViolet]=== REGISTER NEW USER ===[/]");
 
             string username;
             while (true)
             {
-                AnsiConsole.Markup("[green]Enter username:[/] ");
+                AnsiConsole.Markup("[aqua]Enter username:[/] ");
                 username = Console.ReadLine();
 
                 if (string.IsNullOrWhiteSpace(username))

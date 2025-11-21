@@ -17,9 +17,15 @@ public static async Task ShowMainMenu()
     bool exit = false;
     while (!exit)
     {
-        AnsiConsole.Clear();
+                // TITEL SCREEN
+                AnsiConsole.Clear();
+                AnsiConsole.Write(
+                new FigletText("SnackToSixPack")
+                        .Centered()
+                        .Color(Color.BlueViolet));
+
         var menu = new SelectionPrompt<string>()
-            .Title("[bold green]Welcome to SnackToSixPack! Please choose an option:[/]")
+            .Title("[BlueViolet] Welcome to SnackToSixPack! Please choose an option:[/]")
             .PageSize(10)
             .AddChoices("Login", "Register", "Quit");
 
@@ -57,7 +63,7 @@ public static async Task ShowMainMenu()
             {
                 AnsiConsole.Clear();
                 var menu = new SelectionPrompt<string>()
-                    .Title("[bold green]User Menu - Please choose an option:[/]")
+                    .Title("[cyan1] User Menu - Please choose an option:[/]")
                     .PageSize(10)
                     .AddChoices(new[]
                     {
@@ -84,8 +90,6 @@ public static async Task ShowMainMenu()
                         var plans = JSONFileHanldler<WorkoutPlan>.Load<WorkoutPlan>(
                         Path.Combine($"Data/Users/{Session.CurrentUser.Id}", "workoutplans.json"));
 
-                        //JSONHelper.ReadWP();
-                        Console.WriteLine("Hejhej");
                         WPUI.ShowWPUI(plans);
                     }
                     catch (FileNotFoundException ex)
