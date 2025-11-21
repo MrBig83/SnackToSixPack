@@ -99,7 +99,6 @@ namespace SnackToSixPack.Classes
                 AnsiConsole.Clear();
                 Session.SetCurrentUser(user);
                 //Authentication.TwoFactorAuth();
-                Console.WriteLine("Hej"); // ======= Ta bort denna raden
                 Profile userProfile;
                 try
                 {
