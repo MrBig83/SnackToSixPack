@@ -64,6 +64,7 @@ public static async Task ShowMainMenu()
                         "Show Profile",
                         "Update Profile",
                         "Show Schedule",
+                        "Update Schedule",
                         "Create Workout Plan",
                         "Log Out"
                     });
@@ -92,6 +93,19 @@ public static async Task ShowMainMenu()
                             File.AppendAllText("log.json", $"[{DateTime.Now}] ERROR: Failed to load users: {ex.Message}{Environment.NewLine}");
                             AnsiConsole.MarkupLine("[red]No workout plan genereated yet.[/]");
                         AnsiConsole.MarkupLine("Please generate a workout plan from User Menu.");
+                    }
+                        break;
+                    case "Update Schedule":
+                    try
+                    {
+                        var workoutPlan = JSONFileHanldler<WorkoutPlan>.Load<WorkoutPlan>(
+                        Path.Combine($"Data/Users/{Session.CurrentUser.Id}", "workoutplans.json"));
+                        WPUI.UpdateSchedule(workoutPlan);
+                    }
+                    catch (FileNotFoundException ex)
+                    {
+                        File.AppendAllText("log.json", $"[{DateTime.Now}] ERROR: Failed to load users: {ex.Message}{Environment.NewLine}");
+                        AnsiConsole.MarkupLine("[red]No workout plan generated yet.[/]");
                     }
                         break;
                     case "Create Workout Plan":
