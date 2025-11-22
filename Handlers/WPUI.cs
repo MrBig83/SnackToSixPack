@@ -188,6 +188,66 @@ namespace SnackToSixPack.Handlers
                 AnsiConsole.MarkupLine("[red]Invalid number, please try again.[/]");
             }
         }
+
+        public static void RemoveExercise(WorkoutPlan exercise)
+        {
+            var dayNames = exercise.Workouts
+                .Select(d => d.DayOfWeek)
+                .ToList();
+
+            var updateWorkoutplanDay = new SelectionPrompt<string>()
+                .Title("Choose which day to edit")
+                .PageSize(10)
+                .AddChoices(dayNames);
+
+            string dayChoice = AnsiConsole.Prompt(updateWorkoutplanDay);
+
+            var selectedDay = exercise.Workouts
+                .First(d => d.DayOfWeek == dayChoice);
+
+            var exerciseNames = selectedDay.Exercises
+                .Select(n => n.Name)
+                .ToList();
+
+            var updateExercise = new SelectionPrompt<string>()
+                .Title("Which exercise would you like to delete?")
+                .PageSize(10)
+                .AddChoices(exerciseNames);
+            
+            string workoutChoice = AnsiConsole.Prompt(updateExercise);
+
+            var selectedExercise = selectedDay.Exercises
+                .First(e => e.Name == workoutChoice);
+            
+                // Confirmation menu
+    var confirmDelete = new SelectionPrompt<string>()
+        .Title($"Are you sure you want to delete [red]{selectedExercise.Name}[/]?")
+        .AddChoices("[green]Yes, delete[/]", "[yellow]No, cancel[/]");
+
+    string confirmChoice = AnsiConsole.Prompt(confirmDelete);
+
+    switch (confirmChoice)
+    {
+        case "[green]Yes, delete[/]":
+            selectedDay.Exercises.Remove(selectedExercise);
+
+            // Save changes
+            JSONFileHanldler<WorkoutPlan>.Save(
+                Path.Combine($"Data/Users/{Session.CurrentUser.Id}", "workoutplans.json"),
+                exercise
+            );
+
+            AnsiConsole.MarkupLine($"[green]Exercise '{selectedExercise.Name}' deleted successfully![/]");
+            break;
+
+        case "[yellow]No, cancel[/]":
+            AnsiConsole.MarkupLine("[yellow]Deletion cancelled.[/]");
+            break;
+    }
+
+
+            
+        }
     }      
 }
 
