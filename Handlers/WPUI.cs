@@ -273,16 +273,47 @@ namespace SnackToSixPack.Handlers
                     );
 
                     AnsiConsole.MarkupLine($"[green]Exercise '{selectedExercise.Name}' deleted successfully![/]");
+                    AnsiConsole.MarkupLine("[grey]Press any key to continue...[/]");
+                    Console.ReadKey(true);
                     break;
 
                 case "[yellow]No, cancel[/]":
                     AnsiConsole.MarkupLine("[yellow]Deletion cancelled.[/]");
+                    AnsiConsole.MarkupLine("[grey]Press any key to continue...[/]");
+                    Console.ReadKey(true);
                     break;
             }
         }
         // Remove metoden behvöer veta vilken dag övningen tillhör
         public static Stack<(string Day, Exercise Exercise)> undoRemoveStack  = new Stack<(string, Exercise)>();
+      
+        public static void UndoLastDelete(WorkoutPlan exercise)
+        {
+            if (undoRemoveStack.Count > 0)
+            {
+                var (day, exerciseObj) = undoRemoveStack.Pop();
 
-    }      
+                var dayToRestore = exercise.Workouts
+                    .First(d => d.DayOfWeek == day);
+
+                dayToRestore.Exercises.Add(exerciseObj);
+
+                JSONFileHanldler<WorkoutPlan>.Save(
+                    Path.Combine($"Data/Users/{Session.CurrentUser.Id}", "workoutplans.json"),
+                    exercise
+                );
+
+                AnsiConsole.MarkupLine($"[green]Restored deleted exercise: {exerciseObj.Name}[/]");
+                AnsiConsole.MarkupLine("[grey]Press any key to continue...[/]");
+                Console.ReadKey(true);
+            }
+            else
+            {
+                AnsiConsole.MarkupLine("[yellow]No deleted exercise to restore.[/]");
+                AnsiConsole.MarkupLine("[grey]Press any key to continue...[/]");
+                Console.ReadKey(true);
+            }
+        }
+    }
 }
 

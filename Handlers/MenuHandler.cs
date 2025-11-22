@@ -160,8 +160,8 @@ public static async Task ShowMainMenu()
                         "Show Schedule",
                         "Update Exercise",
                         "Remove Exercise",
-                        "Add Exercise",
                         "Undo Last Delete",
+                        "Add Exercise",
                         "Back"
                     });
 
@@ -195,11 +195,15 @@ public static async Task ShowMainMenu()
                     case "Remove Exercise":
                         WPUI.RemoveExercise(plan);
                         break;
+                    
+                    case "Undo Last Delete":
+                        WPUI.UndoLastDelete(plan);
+                        break;
 
                     case "Add Exercise":
                        // WPUI.AddExercise(plan);
                         break;
-                        
+
                     case "Back":
                         running = false;
                         break;
