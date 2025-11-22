@@ -65,7 +65,7 @@ namespace SnackToSixPack.Handlers
             }
         }
 
-        public static void UpdateSchedule(WorkoutPlan exercise)
+        public static void UpdateExercise(WorkoutPlan exercise)
         {
             // Create a list with days
             var dayNames = exercise.Workouts
@@ -174,6 +174,8 @@ namespace SnackToSixPack.Handlers
                         selectedExercise.RestTime = previous.RestTime;
 
                         AnsiConsole.MarkupLine("[green]Reverted to previous version![/]");
+                        AnsiConsole.MarkupLine("[grey]Press ENTER to continue./]");
+                        Console.ReadKey(true);
                     }
                     else
                     {
@@ -203,12 +205,17 @@ namespace SnackToSixPack.Handlers
 
                     AnsiConsole.MarkupLine("[green]Exercise updated![/]");
                     updateWorkoutplan = false;
+
+                    AnsiConsole.MarkupLine("[grey]Press ENTER to continue./]");
+                    Console.ReadKey(true);
                     return;
                     
                     case "[red]Exit[/]":
                     AnsiConsole.Clear();
                     // if exit, no change
                     AnsiConsole.MarkupLine("[yellow]No changes saved.[/]");
+                    AnsiConsole.MarkupLine("[grey]Press ENTER to continue./]");
+                    Console.ReadKey(true);
                     return;
                 }
             }
@@ -250,7 +257,7 @@ namespace SnackToSixPack.Handlers
             if (selectedDay.Exercises.Count == 0)
             {
                 AnsiConsole.MarkupLine("[yellow]There are no exercises on this day.[/]");
-                AnsiConsole.MarkupLine("[grey]Press any key to continue...[/]");
+                AnsiConsole.MarkupLine("[grey]Press ENTER to continue./]");
                 Console.ReadKey(true);
                 return;
             }
@@ -291,13 +298,13 @@ namespace SnackToSixPack.Handlers
                     );
 
                     AnsiConsole.MarkupLine($"[green]Exercise '{selectedExercise.Name}' deleted successfully![/]");
-                    AnsiConsole.MarkupLine("[grey]Press any key to continue...[/]");
+                    AnsiConsole.MarkupLine("[grey]Press ENTER to continue./]");
                     Console.ReadKey(true);
                     break;
 
                 case "[yellow]No, cancel[/]":
                     AnsiConsole.MarkupLine("[yellow]Deletion cancelled.[/]");
-                    AnsiConsole.MarkupLine("[grey]Press any key to continue...[/]");
+                    AnsiConsole.MarkupLine("[grey]Press ENTER to continue./]");
                     Console.ReadKey(true);
                     break;
             }
@@ -322,13 +329,13 @@ namespace SnackToSixPack.Handlers
                 );
 
                 AnsiConsole.MarkupLine($"[green]Restored deleted exercise: {exerciseObj.Name}[/]");
-                AnsiConsole.MarkupLine("[grey]Press any key to continue...[/]");
+                AnsiConsole.MarkupLine("[grey]Press ENTER to continue./]");
                 Console.ReadKey(true);
             }
             else
             {
                 AnsiConsole.MarkupLine("[yellow]No deleted exercise to restore.[/]");
-                AnsiConsole.MarkupLine("[grey]Press any key to continue...[/]");
+                AnsiConsole.MarkupLine("[grey]Press ENTER to continue./]");
                 Console.ReadKey(true);
             }
         }

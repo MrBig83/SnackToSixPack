@@ -189,7 +189,7 @@ public static async Task ShowMainMenu()
                         break;
 
                     case "Update Exercise":
-                        WPUI.UpdateSchedule(plan);
+                        WPUI.UpdateExercise(plan);
                         break;
 
                     case "Remove Exercise":
