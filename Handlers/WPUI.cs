@@ -122,7 +122,7 @@ namespace SnackToSixPack.Handlers
                 var SelectExerciseUpdateOption = new SelectionPrompt<string>()
                     .Title("Which part of the exercise would you like to update?")
                     .PageSize(10)
-                    .AddChoices("Sets", "Reps", "Weight", "Resttime", "[green]Done[/]", "[red]Exit[/]");
+                    .AddChoices("Sets", "Reps", "Weight", "Resttime", "[yellow]Undo Last Change[/]", "[green]Done[/]", "[red]Exit[/]");
 
                 string updateOption = AnsiConsole.Prompt(SelectExerciseUpdateOption);
 
@@ -152,8 +152,39 @@ namespace SnackToSixPack.Handlers
                     case "Resttime":
                     tempExercise.Sets = PromptForInt("[bold]New Resttime: [/]");
                     break;
+                    case "[yellow]Undo Last Change[/]":
+    if (undoStack.Count > 0)
+    {
+        // "Pop" tar tillbaka den gamla versionen
+        var previous = undoStack.Pop();
+
+        selectedExercise.Name = previous.Name;
+        selectedExercise.Sets = previous.Sets;
+        selectedExercise.Reps = previous.Reps;
+        selectedExercise.Weight = previous.Weight;
+        selectedExercise.RestTime = previous.RestTime;
+
+        AnsiConsole.MarkupLine("[green]Reverted to previous version![/]");
+    }
+    else
+    {
+        AnsiConsole.MarkupLine("[yellow]No changes to undo.[/]");
+    }
+    break;
+
                     case "[green]Done[/]":
                     AnsiConsole.Clear();
+                    
+                    // spara orginal versionen så vi kan gå tillbaka till den om användaren trycker undo
+                    undoStack.Push(new Exercise
+                    {
+                        Name = selectedExercise.Name,
+                        Sets = selectedExercise.Sets,
+                        Reps = selectedExercise.Reps,
+                        Weight = selectedExercise.Weight,
+                        RestTime = selectedExercise.RestTime
+                    });
+
                     // if user press done, thats when the change happen
                     selectedExercise.Sets = tempExercise.Sets;
                     selectedExercise.Reps = tempExercise.Reps;
@@ -172,6 +203,7 @@ namespace SnackToSixPack.Handlers
                 }
             }
         }
+        private static Stack<Exercise> undoStack = new Stack<Exercise>();
 
         private static int PromptForInt(string message)
         {
@@ -229,6 +261,9 @@ namespace SnackToSixPack.Handlers
             switch (confirmChoice)
             {
                 case "[green]Yes, delete[/]":
+                    // pushar till undo stack innan den raderas
+                    undoRemoveStack.Push((selectedDay.DayOfWeek, selectedExercise));
+                    //raderar övningen
                     selectedDay.Exercises.Remove(selectedExercise);
 
                     // Save changes
@@ -245,6 +280,9 @@ namespace SnackToSixPack.Handlers
                     break;
             }
         }
+        // Remove metoden behvöer veta vilken dag övningen tillhör
+        public static Stack<(string Day, Exercise Exercise)> undoRemoveStack  = new Stack<(string, Exercise)>();
+
     }      
 }
 

@@ -161,6 +161,7 @@ public static async Task ShowMainMenu()
                         "Update Exercise",
                         "Remove Exercise",
                         "Add Exercise",
+                        "Undo Last Delete",
                         "Back"
                     });
 
@@ -198,7 +199,7 @@ public static async Task ShowMainMenu()
                     case "Add Exercise":
                        // WPUI.AddExercise(plan);
                         break;
-
+                        
                     case "Back":
                         running = false;
                         break;
