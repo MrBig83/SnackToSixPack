@@ -220,33 +220,30 @@ namespace SnackToSixPack.Handlers
                 .First(e => e.Name == workoutChoice);
             
                 // Confirmation menu
-    var confirmDelete = new SelectionPrompt<string>()
-        .Title($"Are you sure you want to delete [red]{selectedExercise.Name}[/]?")
-        .AddChoices("[green]Yes, delete[/]", "[yellow]No, cancel[/]");
+            var confirmDelete = new SelectionPrompt<string>()
+                .Title($"Are you sure you want to delete [red]{selectedExercise.Name}[/]?")
+                .AddChoices("[green]Yes, delete[/]", "[yellow]No, cancel[/]");
 
-    string confirmChoice = AnsiConsole.Prompt(confirmDelete);
+            string confirmChoice = AnsiConsole.Prompt(confirmDelete);
 
-    switch (confirmChoice)
-    {
-        case "[green]Yes, delete[/]":
-            selectedDay.Exercises.Remove(selectedExercise);
+            switch (confirmChoice)
+            {
+                case "[green]Yes, delete[/]":
+                    selectedDay.Exercises.Remove(selectedExercise);
 
-            // Save changes
-            JSONFileHanldler<WorkoutPlan>.Save(
-                Path.Combine($"Data/Users/{Session.CurrentUser.Id}", "workoutplans.json"),
-                exercise
-            );
+                    // Save changes
+                    JSONFileHanldler<WorkoutPlan>.Save(
+                        Path.Combine($"Data/Users/{Session.CurrentUser.Id}", "workoutplans.json"),
+                        exercise
+                    );
 
-            AnsiConsole.MarkupLine($"[green]Exercise '{selectedExercise.Name}' deleted successfully![/]");
-            break;
+                    AnsiConsole.MarkupLine($"[green]Exercise '{selectedExercise.Name}' deleted successfully![/]");
+                    break;
 
-        case "[yellow]No, cancel[/]":
-            AnsiConsole.MarkupLine("[yellow]Deletion cancelled.[/]");
-            break;
-    }
-
-
-            
+                case "[yellow]No, cancel[/]":
+                    AnsiConsole.MarkupLine("[yellow]Deletion cancelled.[/]");
+                    break;
+            }
         }
     }      
 }

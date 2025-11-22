@@ -99,14 +99,12 @@ public static async Task ShowMainMenu()
                         break;
                 }
                 if (!skipPause && Session.CurrentUser != null)
-{
-    AnsiConsole.WriteLine();
-    AnsiConsole.Markup("[grey]Press any key to return to the User Menu...[/]");
-    Console.ReadKey(true);
-}
-
-skipPause = false;   // återställ inför nästa loop
-
+                {
+                    AnsiConsole.WriteLine();
+                    AnsiConsole.Markup("[grey]Press any key to return to the User Menu...[/]");
+                    Console.ReadKey(true);
+                }
+                skipPause = false; // återställ inför nästa loop, gäller för det aktuella valet inte för alla kommande.
             }
         }
         
