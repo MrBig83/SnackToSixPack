@@ -1,4 +1,5 @@
-﻿using Spectre.Console;
+﻿using SnackToSixPack.Classes;
+using Spectre.Console;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -63,5 +64,130 @@ namespace SnackToSixPack.Handlers
                 AnsiConsole.WriteLine();
             }
         }
-    }
+
+        public static void UpdateSchedule(WorkoutPlan exercise)
+        {
+            // Create a list with days
+            var dayNames = exercise.Workouts
+                .Select(d => d.DayOfWeek)
+                .ToList();
+
+            // Prompt
+            var updateWorkoutplanDay = new SelectionPrompt<string>()
+                .Title("Choose which day to edit")
+                .PageSize(10)
+                .AddChoices(dayNames);
+
+            string dayChoice = AnsiConsole.Prompt(updateWorkoutplanDay);
+
+            var selectedDay = exercise.Workouts
+                .First(d => d.DayOfWeek == dayChoice);
+
+            // Create a list with exercises
+            var exerciseNames = selectedDay.Exercises
+                .Select(n => n.Name)
+                .ToList();
+
+            //Prompt
+            var updateExercise = new SelectionPrompt<string>()
+                .Title("Which exercise would you like to update?")
+                .PageSize(10)
+                .AddChoices(exerciseNames);
+            
+            string workoutChoice = AnsiConsole.Prompt(updateExercise);
+
+            var selectedExercise = selectedDay.Exercises
+                .First(e => e.Name == workoutChoice);
+            
+            // temporary cpy of the exercise
+            var tempExercise = new Exercise
+            {
+                Name = selectedExercise.Name,
+                Sets = selectedExercise.Sets,
+                Reps = selectedExercise.Reps,
+                Weight = selectedExercise.Weight,
+                RestTime = selectedExercise.RestTime
+            };
+            AnsiConsole.MarkupLine("[bold yellow]You selected: [/]" + selectedExercise.Name);
+            AnsiConsole.MarkupLine($"Name: [blue]{selectedExercise.Name}[/]");
+            AnsiConsole.MarkupLine($"Sets: [blue]{selectedExercise.Sets}[/]");
+            AnsiConsole.MarkupLine($"Reps: [blue]{selectedExercise.Reps}[/]");
+            AnsiConsole.MarkupLine($"Weight: [blue]{selectedExercise.Weight} kg[/]");
+            AnsiConsole.MarkupLine($"Resttime: [blue]{selectedExercise.RestTime} sek[/]");
+            bool updateWorkoutplan = true;
+
+            while (updateWorkoutplan)
+            {
+                AnsiConsole.WriteLine();
+                var SelectExerciseUpdateOption = new SelectionPrompt<string>()
+                    .Title("Which part of the exercise would you like to update?")
+                    .PageSize(10)
+                    .AddChoices("Sets", "Reps", "Weight", "Resttime", "[green]Done[/]", "[red]Exit[/]");
+
+                string updateOption = AnsiConsole.Prompt(SelectExerciseUpdateOption);
+
+                switch (updateOption)
+                {
+                    case "Sets":
+                    tempExercise.Sets = PromptForInt("[bold]New Sets: [/]");
+                    break;
+                    case "Reps":
+                    tempExercise.Reps = PromptForInt("[bold]New Reps: [/]");
+                    break;
+                    case "Weight":            
+                    while (true)
+                    {
+                        AnsiConsole.Markup("[bold]New Weight (kg): [/]");
+                        string input = Console.ReadLine();
+
+                        if (double.TryParse(input, out double weight))
+                        {
+                            tempExercise.Weight = weight;
+                            break;
+                        }
+
+                        AnsiConsole.MarkupLine("[red]Invalid number, please try again.[/]");
+                    }
+                    break;
+                    case "Resttime":
+                    tempExercise.Sets = PromptForInt("[bold]New Resttime: [/]");
+                    break;
+                    case "[green]Done[/]":
+                    AnsiConsole.Clear();
+                    // if user press done, thats when the change happen
+                    selectedExercise.Sets = tempExercise.Sets;
+                    selectedExercise.Reps = tempExercise.Reps;
+                    selectedExercise.Weight = tempExercise.Weight;
+                    selectedExercise.RestTime = tempExercise.RestTime;
+                    JSONFileHanldler<WorkoutPlan>.Save(Path.Combine($"Data/Users/{Session.CurrentUser.Id}", "workoutplans.json"),exercise);
+
+                    AnsiConsole.MarkupLine("[green]Exercise updated![/]");
+                    updateWorkoutplan = false;
+                    return;
+                    case "[red]Exit[/]":
+                    AnsiConsole.Clear();
+                    // if exit, no change
+                    AnsiConsole.MarkupLine("[yellow]No changes saved.[/]");
+                    return;
+                }
+            }
+        }
+
+        private static int PromptForInt(string message)
+        {
+            while (true)
+            {
+                 AnsiConsole.Markup($"[bold]{message}[/] ");
+                string input = Console.ReadLine();
+
+                if (int.TryParse(input, out int value))
+                {
+                    return value;
+                }
+
+                AnsiConsole.MarkupLine("[red]Invalid number, please try again.[/]");
+            }
+        }
+    }      
 }
+
