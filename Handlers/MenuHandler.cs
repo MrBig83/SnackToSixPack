@@ -201,7 +201,7 @@ public static async Task ShowMainMenu()
                         break;
 
                     case "Add Exercise":
-                       // WPUI.AddExercise(plan);
+                       // WPUI.AddExercise(plan); inte klar 
                         break;
 
                     case "Back":
