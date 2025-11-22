@@ -83,6 +83,13 @@ namespace SnackToSixPack.Handlers
             var selectedDay = exercise.Workouts
                 .First(d => d.DayOfWeek == dayChoice);
 
+            if (selectedDay.Exercises.Count == 0)
+            {
+                AnsiConsole.MarkupLine("[yellow]There are no exercises on this day.[/]");
+                AnsiConsole.MarkupLine("[grey]Press any key to continue...[/]");
+                Console.ReadKey(true);
+                return;
+            }
             // Create a list with exercises
             var exerciseNames = selectedDay.Exercises
                 .Select(n => n.Name)
@@ -108,12 +115,14 @@ namespace SnackToSixPack.Handlers
                 Weight = selectedExercise.Weight,
                 RestTime = selectedExercise.RestTime
             };
+
             AnsiConsole.MarkupLine("[bold yellow]You selected: [/]" + selectedExercise.Name);
             AnsiConsole.MarkupLine($"Name: [blue]{selectedExercise.Name}[/]");
             AnsiConsole.MarkupLine($"Sets: [blue]{selectedExercise.Sets}[/]");
             AnsiConsole.MarkupLine($"Reps: [blue]{selectedExercise.Reps}[/]");
             AnsiConsole.MarkupLine($"Weight: [blue]{selectedExercise.Weight} kg[/]");
             AnsiConsole.MarkupLine($"Resttime: [blue]{selectedExercise.RestTime} sek[/]");
+
             bool updateWorkoutplan = true;
 
             while (updateWorkoutplan)
@@ -150,27 +159,27 @@ namespace SnackToSixPack.Handlers
                     }
                     break;
                     case "Resttime":
-                    tempExercise.Sets = PromptForInt("[bold]New Resttime: [/]");
+                    tempExercise.RestTime = PromptForInt("[bold]New Resttime: [/]");
                     break;
                     case "[yellow]Undo Last Change[/]":
-    if (undoStack.Count > 0)
-    {
-        // "Pop" tar tillbaka den gamla versionen
-        var previous = undoStack.Pop();
+                    if (undoStack.Count > 0)
+                    {
+                        // "Pop" tar tillbaka den gamla versionen
+                        var previous = undoStack.Pop();
 
-        selectedExercise.Name = previous.Name;
-        selectedExercise.Sets = previous.Sets;
-        selectedExercise.Reps = previous.Reps;
-        selectedExercise.Weight = previous.Weight;
-        selectedExercise.RestTime = previous.RestTime;
+                        selectedExercise.Name = previous.Name;
+                        selectedExercise.Sets = previous.Sets;
+                        selectedExercise.Reps = previous.Reps;
+                        selectedExercise.Weight = previous.Weight;
+                        selectedExercise.RestTime = previous.RestTime;
 
-        AnsiConsole.MarkupLine("[green]Reverted to previous version![/]");
-    }
-    else
-    {
-        AnsiConsole.MarkupLine("[yellow]No changes to undo.[/]");
-    }
-    break;
+                        AnsiConsole.MarkupLine("[green]Reverted to previous version![/]");
+                    }
+                    else
+                    {
+                        AnsiConsole.MarkupLine("[yellow]No changes to undo.[/]");
+                    }
+                    break;
 
                     case "[green]Done[/]":
                     AnsiConsole.Clear();
@@ -195,6 +204,7 @@ namespace SnackToSixPack.Handlers
                     AnsiConsole.MarkupLine("[green]Exercise updated![/]");
                     updateWorkoutplan = false;
                     return;
+                    
                     case "[red]Exit[/]":
                     AnsiConsole.Clear();
                     // if exit, no change
@@ -236,6 +246,14 @@ namespace SnackToSixPack.Handlers
 
             var selectedDay = exercise.Workouts
                 .First(d => d.DayOfWeek == dayChoice);
+            
+            if (selectedDay.Exercises.Count == 0)
+            {
+                AnsiConsole.MarkupLine("[yellow]There are no exercises on this day.[/]");
+                AnsiConsole.MarkupLine("[grey]Press any key to continue...[/]");
+                Console.ReadKey(true);
+                return;
+            }
 
             var exerciseNames = selectedDay.Exercises
                 .Select(n => n.Name)
