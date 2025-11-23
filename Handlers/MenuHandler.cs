@@ -71,7 +71,6 @@ public static async Task ShowMainMenu()
                     {
                         "Show Profile",
                         "Update Profile",
-                        "Schedule Options",
                         "Create Workout Plan",
                         "Log Out"
                     });
@@ -173,6 +172,7 @@ public static async Task ShowMainMenu()
                         "Show Schedule",
                         "Update Exercise",
                         "Remove Exercise",
+                        "Undo Last Delete",
                         "Add Exercise",
                         "Back"
                     });
@@ -201,15 +201,19 @@ public static async Task ShowMainMenu()
                         break;
 
                     case "Update Exercise":
-                        WPUI.UpdateSchedule(plan);
+                        WPUI.UpdateExercise(plan);
                         break;
 
                     case "Remove Exercise":
                         WPUI.RemoveExercise(plan);
                         break;
+                    
+                    case "Undo Last Delete":
+                        WPUI.UndoLastDelete(plan);
+                        break;
 
                     case "Add Exercise":
-                       // WPUI.AddExercise(plan);
+                       // WPUI.AddExercise(plan); inte klar 
                         break;
 
                     case "Back":

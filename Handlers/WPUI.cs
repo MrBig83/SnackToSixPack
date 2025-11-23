@@ -65,7 +65,7 @@ namespace SnackToSixPack.Handlers
             }
         }
 
-        public static void UpdateSchedule(WorkoutPlan exercise)
+        public static void UpdateExercise(WorkoutPlan exercise)
         {
             // Create a list with days
             var dayNames = exercise.Workouts
@@ -83,6 +83,13 @@ namespace SnackToSixPack.Handlers
             var selectedDay = exercise.Workouts
                 .First(d => d.DayOfWeek == dayChoice);
 
+            if (selectedDay.Exercises.Count == 0)
+            {
+                AnsiConsole.MarkupLine("[yellow]There are no exercises on this day.[/]");
+                AnsiConsole.MarkupLine("[grey]Press any key to continue...[/]");
+                Console.ReadKey(true);
+                return;
+            }
             // Create a list with exercises
             var exerciseNames = selectedDay.Exercises
                 .Select(n => n.Name)
@@ -108,12 +115,14 @@ namespace SnackToSixPack.Handlers
                 Weight = selectedExercise.Weight,
                 RestTime = selectedExercise.RestTime
             };
+
             AnsiConsole.MarkupLine("[bold yellow]You selected: [/]" + selectedExercise.Name);
             AnsiConsole.MarkupLine($"Name: [blue]{selectedExercise.Name}[/]");
             AnsiConsole.MarkupLine($"Sets: [blue]{selectedExercise.Sets}[/]");
             AnsiConsole.MarkupLine($"Reps: [blue]{selectedExercise.Reps}[/]");
             AnsiConsole.MarkupLine($"Weight: [blue]{selectedExercise.Weight} kg[/]");
             AnsiConsole.MarkupLine($"Resttime: [blue]{selectedExercise.RestTime} sek[/]");
+
             bool updateWorkoutplan = true;
 
             while (updateWorkoutplan)
@@ -122,7 +131,7 @@ namespace SnackToSixPack.Handlers
                 var SelectExerciseUpdateOption = new SelectionPrompt<string>()
                     .Title("Which part of the exercise would you like to update?")
                     .PageSize(10)
-                    .AddChoices("Sets", "Reps", "Weight", "Resttime", "[green]Done[/]", "[red]Exit[/]");
+                    .AddChoices("Sets", "Reps", "Weight", "Resttime", "[yellow]Undo Last Change[/]", "[green]Done[/]", "[red]Exit[/]");
 
                 string updateOption = AnsiConsole.Prompt(SelectExerciseUpdateOption);
 
@@ -150,10 +159,43 @@ namespace SnackToSixPack.Handlers
                     }
                     break;
                     case "Resttime":
-                    tempExercise.Sets = PromptForInt("[bold]New Resttime: [/]");
+                    tempExercise.RestTime = PromptForInt("[bold]New Resttime: [/]");
                     break;
+                    case "[yellow]Undo Last Change[/]":
+                    if (undoStack.Count > 0)
+                    {
+                        // "Pop" tar tillbaka den gamla versionen
+                        var previous = undoStack.Pop();
+
+                        selectedExercise.Name = previous.Name;
+                        selectedExercise.Sets = previous.Sets;
+                        selectedExercise.Reps = previous.Reps;
+                        selectedExercise.Weight = previous.Weight;
+                        selectedExercise.RestTime = previous.RestTime;
+
+                        AnsiConsole.MarkupLine("[green]Reverted to previous version![/]");
+                        AnsiConsole.MarkupLine("[grey]Press ENTER to continue./]");
+                        Console.ReadKey(true);
+                    }
+                    else
+                    {
+                        AnsiConsole.MarkupLine("[yellow]No changes to undo.[/]");
+                    }
+                    break;
+
                     case "[green]Done[/]":
                     AnsiConsole.Clear();
+                    
+                    // spara orginal versionen så vi kan gå tillbaka till den om användaren trycker undo
+                    undoStack.Push(new Exercise
+                    {
+                        Name = selectedExercise.Name,
+                        Sets = selectedExercise.Sets,
+                        Reps = selectedExercise.Reps,
+                        Weight = selectedExercise.Weight,
+                        RestTime = selectedExercise.RestTime
+                    });
+
                     // if user press done, thats when the change happen
                     selectedExercise.Sets = tempExercise.Sets;
                     selectedExercise.Reps = tempExercise.Reps;
@@ -163,15 +205,22 @@ namespace SnackToSixPack.Handlers
 
                     AnsiConsole.MarkupLine("[green]Exercise updated![/]");
                     updateWorkoutplan = false;
+
+                    AnsiConsole.MarkupLine("[grey]Press ENTER to continue./]");
+                    Console.ReadKey(true);
                     return;
+                    
                     case "[red]Exit[/]":
                     AnsiConsole.Clear();
                     // if exit, no change
                     AnsiConsole.MarkupLine("[yellow]No changes saved.[/]");
+                    AnsiConsole.MarkupLine("[grey]Press ENTER to continue./]");
+                    Console.ReadKey(true);
                     return;
                 }
             }
         }
+        private static Stack<Exercise> undoStack = new Stack<Exercise>();
 
         private static int PromptForInt(string message)
         {
@@ -204,6 +253,14 @@ namespace SnackToSixPack.Handlers
 
             var selectedDay = exercise.Workouts
                 .First(d => d.DayOfWeek == dayChoice);
+            
+            if (selectedDay.Exercises.Count == 0)
+            {
+                AnsiConsole.MarkupLine("[yellow]There are no exercises on this day.[/]");
+                AnsiConsole.MarkupLine("[grey]Press ENTER to continue./]");
+                Console.ReadKey(true);
+                return;
+            }
 
             var exerciseNames = selectedDay.Exercises
                 .Select(n => n.Name)
@@ -229,6 +286,9 @@ namespace SnackToSixPack.Handlers
             switch (confirmChoice)
             {
                 case "[green]Yes, delete[/]":
+                    // pushar till undo stack innan den raderas
+                    undoRemoveStack.Push((selectedDay.DayOfWeek, selectedExercise));
+                    //raderar övningen
                     selectedDay.Exercises.Remove(selectedExercise);
 
                     // Save changes
@@ -238,13 +298,47 @@ namespace SnackToSixPack.Handlers
                     );
 
                     AnsiConsole.MarkupLine($"[green]Exercise '{selectedExercise.Name}' deleted successfully![/]");
+                    AnsiConsole.MarkupLine("[grey]Press ENTER to continue./]");
+                    Console.ReadKey(true);
                     break;
 
                 case "[yellow]No, cancel[/]":
                     AnsiConsole.MarkupLine("[yellow]Deletion cancelled.[/]");
+                    AnsiConsole.MarkupLine("[grey]Press ENTER to continue./]");
+                    Console.ReadKey(true);
                     break;
             }
         }
-    }      
+        // Remove metoden behvöer veta vilken dag övningen tillhör
+        public static Stack<(string Day, Exercise Exercise)> undoRemoveStack  = new Stack<(string, Exercise)>();
+      
+        public static void UndoLastDelete(WorkoutPlan exercise)
+        {
+            if (undoRemoveStack.Count > 0)
+            {
+                var (day, exerciseObj) = undoRemoveStack.Pop();
+
+                var dayToRestore = exercise.Workouts
+                    .First(d => d.DayOfWeek == day);
+
+                dayToRestore.Exercises.Add(exerciseObj);
+
+                JSONFileHanldler<WorkoutPlan>.Save(
+                    Path.Combine($"Data/Users/{Session.CurrentUser.Id}", "workoutplans.json"),
+                    exercise
+                );
+
+                AnsiConsole.MarkupLine($"[green]Restored deleted exercise: {exerciseObj.Name}[/]");
+                AnsiConsole.MarkupLine("[grey]Press ENTER to continue./]");
+                Console.ReadKey(true);
+            }
+            else
+            {
+                AnsiConsole.MarkupLine("[yellow]No deleted exercise to restore.[/]");
+                AnsiConsole.MarkupLine("[grey]Press ENTER to continue./]");
+                Console.ReadKey(true);
+            }
+        }
+    }
 }
 
