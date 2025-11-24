@@ -106,7 +106,7 @@ namespace SnackToSixPack.Handlers
             var selectedExercise = selectedDay.Exercises
                 .First(e => e.Name == workoutChoice);
             
-            // temporary cpy of the exercise
+            // temporary copy of the exercise
             var tempExercise = new Exercise
             {
                 Name = selectedExercise.Name,
@@ -120,7 +120,13 @@ namespace SnackToSixPack.Handlers
             AnsiConsole.MarkupLine($"Name: [blue]{selectedExercise.Name}[/]");
             AnsiConsole.MarkupLine($"Sets: [blue]{selectedExercise.Sets}[/]");
             AnsiConsole.MarkupLine($"Reps: [blue]{selectedExercise.Reps}[/]");
-            AnsiConsole.MarkupLine($"Weight: [blue]{selectedExercise.Weight} kg[/]");
+            
+            if (selectedExercise.Weight != null)
+            {
+                AnsiConsole.MarkupLine($"Weight: [blue]{selectedExercise.Weight} kg[/]");
+            }
+
+
             AnsiConsole.MarkupLine($"Resttime: [blue]{selectedExercise.RestTime} sek[/]");
 
             bool updateWorkoutplan = true;

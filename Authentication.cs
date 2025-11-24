@@ -25,6 +25,7 @@ public class Authentication
             if (!sent)
             {
                 AnsiConsole.MarkupLine("\n[bold red]Failed to send authentication email.[/]");
+                // KOLLAAAAAAAAAA DETTA----------------------------
                 AnsiConsole.MarkupLine("[bold yellow]Press enter to return to login or 'Q' to quit.[/]");
                 var key = Console.ReadKey(true);
                 if (key.Key == ConsoleKey.Q)
