@@ -67,8 +67,8 @@ namespace SnackToSixPack.Classes
                 AnsiConsole.Status()
                     .Start("Verifying credentials...", ctx =>
                     {
-                        // Simulate some work, 3 seconds
-                        System.Threading.Thread.Sleep(3000);
+                        // Simulate some work, 2 seconds
+                        System.Threading.Thread.Sleep(2000);
                     });
 
                 if (user == null)
@@ -93,8 +93,8 @@ namespace SnackToSixPack.Classes
                 AnsiConsole.Status()
                     .Start("Proceeding to authentication...", ctx =>
                     {
-                        // Simulate some work, 3 seconds
-                        System.Threading.Thread.Sleep(3000);
+                        // Simulate some work, 2 seconds
+                        System.Threading.Thread.Sleep(2000);
                     });
                 AnsiConsole.Clear();
                 Session.SetCurrentUser(user);
