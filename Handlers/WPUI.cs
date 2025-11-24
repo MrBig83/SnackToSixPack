@@ -120,14 +120,8 @@ namespace SnackToSixPack.Handlers
             AnsiConsole.MarkupLine($"Name: [blue]{selectedExercise.Name}[/]");
             AnsiConsole.MarkupLine($"Sets: [blue]{selectedExercise.Sets}[/]");
             AnsiConsole.MarkupLine($"Reps: [blue]{selectedExercise.Reps}[/]");
-            
-            if (selectedExercise.Weight != null)
-            {
-                AnsiConsole.MarkupLine($"Weight: [blue]{selectedExercise.Weight} kg[/]");
-            }
-
-
-            AnsiConsole.MarkupLine($"Resttime: [blue]{selectedExercise.RestTime} sek[/]");
+            AnsiConsole.MarkupLine(selectedExercise.Weight != null ? $"Weight: [blue]{selectedExercise.Weight} kg[/]": "Weight: -");
+            AnsiConsole.MarkupLine(selectedExercise.RestTime != null ? $"Resttime: [blue]{selectedExercise.RestTime} sek[/]": "Resttime: -");
 
             bool updateWorkoutplan = true;
 
@@ -180,7 +174,7 @@ namespace SnackToSixPack.Handlers
                         selectedExercise.RestTime = previous.RestTime;
 
                         AnsiConsole.MarkupLine("[green]Reverted to previous version![/]");
-                        AnsiConsole.MarkupLine("[grey]Press ENTER to continue./]");
+                        AnsiConsole.MarkupLine("[grey]Press ENTER to continue.[/]");
                         Console.ReadKey(true);
                     }
                     else
@@ -212,7 +206,7 @@ namespace SnackToSixPack.Handlers
                     AnsiConsole.MarkupLine("[green]Exercise updated![/]");
                     updateWorkoutplan = false;
 
-                    AnsiConsole.MarkupLine("[grey]Press ENTER to continue./]");
+                    AnsiConsole.MarkupLine("[grey]Press ENTER to continue.[/]");
                     Console.ReadKey(true);
                     return;
                     
@@ -220,7 +214,7 @@ namespace SnackToSixPack.Handlers
                     AnsiConsole.Clear();
                     // if exit, no change
                     AnsiConsole.MarkupLine("[yellow]No changes saved.[/]");
-                    AnsiConsole.MarkupLine("[grey]Press ENTER to continue./]");
+                    AnsiConsole.MarkupLine("[grey]Press ENTER to continue.[/]");
                     Console.ReadKey(true);
                     return;
                 }
@@ -263,7 +257,7 @@ namespace SnackToSixPack.Handlers
             if (selectedDay.Exercises.Count == 0)
             {
                 AnsiConsole.MarkupLine("[yellow]There are no exercises on this day.[/]");
-                AnsiConsole.MarkupLine("[grey]Press ENTER to continue./]");
+                AnsiConsole.MarkupLine("[grey]Press ENTER to continue.[/]");
                 Console.ReadKey(true);
                 return;
             }
@@ -304,13 +298,13 @@ namespace SnackToSixPack.Handlers
                     );
 
                     AnsiConsole.MarkupLine($"[green]Exercise '{selectedExercise.Name}' deleted successfully![/]");
-                    AnsiConsole.MarkupLine("[grey]Press ENTER to continue./]");
+                    AnsiConsole.MarkupLine("[grey]Press ENTER to continue.[/]");
                     Console.ReadKey(true);
                     break;
 
                 case "[yellow]No, cancel[/]":
                     AnsiConsole.MarkupLine("[yellow]Deletion cancelled.[/]");
-                    AnsiConsole.MarkupLine("[grey]Press ENTER to continue./]");
+                    AnsiConsole.MarkupLine("[grey]Press ENTER to continue.[/]");
                     Console.ReadKey(true);
                     break;
             }
@@ -335,13 +329,13 @@ namespace SnackToSixPack.Handlers
                 );
 
                 AnsiConsole.MarkupLine($"[green]Restored deleted exercise: {exerciseObj.Name}[/]");
-                AnsiConsole.MarkupLine("[grey]Press ENTER to continue./]");
+                AnsiConsole.MarkupLine("[grey]Press ENTER to continue.[/]");
                 Console.ReadKey(true);
             }
             else
             {
                 AnsiConsole.MarkupLine("[yellow]No deleted exercise to restore.[/]");
-                AnsiConsole.MarkupLine("[grey]Press ENTER to continue./]");
+                AnsiConsole.MarkupLine("[grey]Press ENTER to continue.[/]");
                 Console.ReadKey(true);
             }
         }
