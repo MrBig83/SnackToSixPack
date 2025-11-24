@@ -71,6 +71,7 @@ public static async Task ShowMainMenu()
                     {
                         "Show Profile",
                         "Update Profile",
+                        "Schedule Options",
                         "Create Workout Plan",
                         "Log Out"
                     });
@@ -95,7 +96,7 @@ public static async Task ShowMainMenu()
                     {
                         var workoutPlan = JSONFileHanldler<WorkoutPlan>.Load<WorkoutPlan>(
                         Path.Combine($"Data/Users/{Session.CurrentUser.Id}", "workoutplans.json"));
-                        WPUI.UpdateSchedule(workoutPlan);
+                        WPUI.UpdateExercise(workoutPlan);
                     }
                     catch (FileNotFoundException ex)
                     {
@@ -182,7 +183,7 @@ public static async Task ShowMainMenu()
                 switch (choice)
                 {
                     case "Show Schedule":
-                                            try
+                    try
                     {
                         var plans = JSONFileHanldler<WorkoutPlan>.Load<WorkoutPlan>(
                         Path.Combine($"Data/Users/{Session.CurrentUser.Id}", "workoutplans.json"));
