@@ -131,7 +131,7 @@ namespace SnackToSixPack.Handlers
                 var SelectExerciseUpdateOption = new SelectionPrompt<string>()
                     .Title("Which part of the exercise would you like to update?")
                     .PageSize(10)
-                    .AddChoices("Sets", "Reps", "Weight", "Resttime", "[yellow]Undo Last Change[/]", "[green]Done[/]", "[red]Exit[/]");
+                    .AddChoices("Sets", "Reps", "Weight", "Rest time", "[yellow]Undo Last Change[/]", "[green]Done[/]", "[red]Exit[/]");
 
                 string updateOption = AnsiConsole.Prompt(SelectExerciseUpdateOption);
 
@@ -158,8 +158,8 @@ namespace SnackToSixPack.Handlers
                         AnsiConsole.MarkupLine("[red]Invalid number, please try again.[/]");
                     }
                     break;
-                    case "Resttime":
-                    tempExercise.RestTime = PromptForInt("[bold]New Resttime: [/]");
+                    case "Rest time":
+                    tempExercise.RestTime = PromptForInt("[bold]New Rest time: [/]");
                     break;
                     case "[yellow]Undo Last Change[/]":
                     if (undoStack.Count > 0)
@@ -220,7 +220,7 @@ namespace SnackToSixPack.Handlers
                 }
             }
         }
-        private static Stack<Exercise> undoStack = new Stack<Exercise>();
+        public static Stack<Exercise> undoStack = new Stack<Exercise>();
 
         private static int PromptForInt(string message)
         {
@@ -312,33 +312,57 @@ namespace SnackToSixPack.Handlers
         // Remove metoden behvöer veta vilken dag övningen tillhör
         public static Stack<(string Day, Exercise Exercise)> undoRemoveStack  = new Stack<(string, Exercise)>();
       
-        public static void UndoLastDelete(WorkoutPlan exercise)
+        public static void UndoLastDelete(WorkoutPlan plan)
         {
-            if (undoRemoveStack.Count > 0)
-            {
-                var (day, exerciseObj) = undoRemoveStack.Pop();
-
-                var dayToRestore = exercise.Workouts
-                    .First(d => d.DayOfWeek == day);
-
-                dayToRestore.Exercises.Add(exerciseObj);
-
-                JSONFileHanldler<WorkoutPlan>.Save(
-                    Path.Combine($"Data/Users/{Session.CurrentUser.Id}", "workoutplans.json"),
-                    exercise
-                );
-
-                AnsiConsole.MarkupLine($"[green]Restored deleted exercise: {exerciseObj.Name}[/]");
-                AnsiConsole.MarkupLine("[grey]Press ENTER to continue.[/]");
-                Console.ReadKey(true);
-            }
-            else
+            if (undoRemoveStack.Count == 0)
             {
                 AnsiConsole.MarkupLine("[yellow]No deleted exercise to restore.[/]");
                 AnsiConsole.MarkupLine("[grey]Press ENTER to continue.[/]");
                 Console.ReadKey(true);
+                return;
+            }
+
+            // 2. Titta på vad som ska återskapas (poppa inte ännu)
+            var (dayName, deletedExercise) = undoRemoveStack.Peek();
+
+            var confirmMenu = new SelectionPrompt<string>()
+                .Title($"[yellow]Restore deleted exercise: {deletedExercise.Name} (Day: {dayName})?[/]")
+                .AddChoices("[green]Yes, restore[/]", "[yellow]No, cancel[/]");
+
+            string confirm = AnsiConsole.Prompt(confirmMenu);
+
+            switch (confirm)
+            {
+                case "[green]Yes, restore[/]":
+                    // 4. Pop från stacken nu när vi vet att användaren vill
+                    undoRemoveStack.Pop();
+
+                    // 5. Hitta rätt dag
+                    var dayToRestore = plan.Workouts
+                        .First(d => d.DayOfWeek == dayName);
+
+                    // 6. Lägg tillbaka övningen
+                    dayToRestore.Exercises.Add(deletedExercise);
+
+                    // 7. Spara
+                    JSONFileHanldler<WorkoutPlan>.Save(
+                        Path.Combine($"Data/Users/{Session.CurrentUser.Id}", "workoutplans.json"),
+                        plan
+                    );
+
+                    AnsiConsole.MarkupLine($"[green]Restored exercise: {deletedExercise.Name}[/]");
+                    AnsiConsole.MarkupLine("[grey]Press ENTER to continue.[/]");
+                    Console.ReadKey(true);
+                    break;
+
+                case "[yellow]No, cancel[/]":
+                    AnsiConsole.MarkupLine("[yellow]Restore cancelled.[/]");
+                    AnsiConsole.MarkupLine("[grey]Press ENTER to continue.[/]");
+                    Console.ReadKey(true);
+                    break;
             }
         }
+
     }
 }
 

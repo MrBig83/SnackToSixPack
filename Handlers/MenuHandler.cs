@@ -88,21 +88,8 @@ public static async Task ShowMainMenu()
                         
                         break;
                     case "Schedule Options":
-                    skipPause = true;
+                        skipPause = true;
                         ScheduleHandler();
-                        break;
-                    case "Update Schedule":
-                    try
-                    {
-                        var workoutPlan = JSONFileHanldler<WorkoutPlan>.Load<WorkoutPlan>(
-                        Path.Combine($"Data/Users/{Session.CurrentUser.Id}", "workoutplans.json"));
-                        WPUI.UpdateExercise(workoutPlan);
-                    }
-                    catch (FileNotFoundException ex)
-                    {
-                        File.AppendAllText("log.json", $"[{DateTime.Now}] ERROR: Failed to load users: {ex.Message}{Environment.NewLine}");
-                        AnsiConsole.MarkupLine("[red]No workout plan generated yet.[/]");
-                    }
                         break;
                     case "Create Workout Plan":
                         await AIMenu();
@@ -161,6 +148,7 @@ public static async Task ShowMainMenu()
             }
 
             bool running = true;
+            bool hasDeleteExercise = false;
 
             while (running)
             {
@@ -172,14 +160,17 @@ public static async Task ShowMainMenu()
                     {
                         "Show Schedule",
                         "Update Exercise",
-                        "Remove Exercise",
-                        "Undo Last Delete",
-                        "Add Exercise",
-                        "Back"
+                        "Remove Exercise"
                     });
+                if (hasDeleteExercise == true)
+                {
+                    menu.AddChoice("Restore Deleted Exercise");
+                }
+
+                menu.AddChoices("Add Exercise", "[yellow]Back[/]");
 
                 string choice = AnsiConsole.Prompt(menu);
-
+                
                 switch (choice)
                 {
                     case "Show Schedule":
@@ -200,26 +191,31 @@ public static async Task ShowMainMenu()
                         AnsiConsole.MarkupLine("Please generate a workout plan from User Menu.");
                     }
                         break;
-
+                    
                     case "Update Exercise":
                         WPUI.UpdateExercise(plan);
                         break;
 
                     case "Remove Exercise":
                         WPUI.RemoveExercise(plan);
+                        // now 
+                        hasDeleteExercise = true;
                         break;
                     
-                    case "Undo Last Delete":
+                    case "Restore Deleted Exercise":
                         WPUI.UndoLastDelete(plan);
+                            // efter Undo:
+                        hasDeleteExercise = WPUI.undoRemoveStack.Count > 0;
                         break;
 
                     case "Add Exercise":
                        // WPUI.AddExercise(plan); inte klar 
                         break;
 
-                    case "Back":
+                    case "[yellow]Back[/]":
                         running = false;
                         break;
+                    
                 }
             }
         }
