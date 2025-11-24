@@ -1,4 +1,4 @@
-using SnackToSixPack.Classes;
+﻿using SnackToSixPack.Classes;
 using SnackToSixPack.Handlers;
 using Spectre.Console;
 using System.Reflection;
@@ -51,8 +51,9 @@ namespace SnackToSixPack.Classes
             AnsiConsole.WriteLine();
 
             var exitPrompt = new SelectionPrompt<string>();
-            exitPrompt.AddChoice("Log in");
-            exitPrompt.AddChoice("[red]Exit[/]");
+                exitPrompt.AddChoice("Log in");
+                exitPrompt.AddChoice("Forget password");
+                exitPrompt.AddChoice("[red]Exit[/]");
 
             var exitChoice = AnsiConsole.Prompt<string>(exitPrompt);
 
@@ -74,17 +75,44 @@ namespace SnackToSixPack.Classes
                 if (user == null)
                 {
                     AnsiConsole.Clear();
-                    AnsiConsole.MarkupLine("[red]Invalid username or password. Press enter to try again.[/]");
-                    bool pressedEnter = false;
-                    while (!pressedEnter)
+                    AnsiConsole.MarkupLine("[red]Invalid username or password.[/]");
+                    AnsiConsole.MarkupLine("Press Enter to try again or type [yellow]f[/] to reset password.");
+
+                    while (true)
                     {
                         var key = Console.ReadKey(true);
+
                         if (key.Key == ConsoleKey.Enter)
+                            break;
+
+                        if (char.ToLower(key.KeyChar) == 'f')   // User pressed "f"
                         {
-                            pressedEnter = true;
+                            Console.Clear();
+                            Console.Write("Enter your email: ");
+                            var email = Console.ReadLine();
+
+                            SendPasswordResetEmail(email);
+
+                            Console.WriteLine("A verification code has been sent to your email.");
+                            Console.Write("Enter verification code: ");
+                            var code = Console.ReadLine();
+
+                            // TODO: verify code
+                            // Example:
+                            // if (PasswordResetStore.Codes[email] == code)
+
+                            Console.WriteLine("Verification successful. You can now create a new password.");
+                            Console.Write("New password: ");
+                            var newPassword = Console.ReadLine();
+
+                            // TODO: Save new password to user account.
+
+                            Console.WriteLine("Password reset successfully.");
+                            Console.ReadKey(true);
+                            break;
                         }
                     }
-                    // if invalid, loop again
+
                     continue;
                 }
 
@@ -130,6 +158,15 @@ namespace SnackToSixPack.Classes
                 running = false;
                 return;
             }
+        }
+
+        private static void SendPasswordResetEmail(string? email)
+        {
+            string token = Guid.NewGuid().ToString();
+            string resetLink = $"https://example.com/reset-password?token={token}";
+
+            Console.WriteLine($"Reset link sent to {email}");
+            Console.WriteLine(resetLink);
         }
     }
 }

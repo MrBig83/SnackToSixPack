@@ -339,6 +339,11 @@ namespace SnackToSixPack.Handlers
                 Console.ReadKey(true);
             }
         }
+
+        internal static void UpdateSchedule(WorkoutPlan workoutPlan)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 
