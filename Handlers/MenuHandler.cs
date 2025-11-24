@@ -95,7 +95,7 @@ public static async Task ShowMainMenu()
                     {
                         var workoutPlan = JSONFileHanldler<WorkoutPlan>.Load<WorkoutPlan>(
                         Path.Combine($"Data/Users/{Session.CurrentUser.Id}", "workoutplans.json"));
-                        WPUI.UpdateSchedule(workoutPlan);
+                        WPUI.UpdateExercise(workoutPlan);
                     }
                     catch (FileNotFoundException ex)
                     {
