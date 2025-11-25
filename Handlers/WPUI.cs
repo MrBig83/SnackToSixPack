@@ -167,11 +167,11 @@ namespace SnackToSixPack.Handlers
                         // "Pop" tar tillbaka den gamla versionen
                         var previous = undoStack.Pop();
 
-                        selectedExercise.Name = previous.Name;
-                        selectedExercise.Sets = previous.Sets;
-                        selectedExercise.Reps = previous.Reps;
-                        selectedExercise.Weight = previous.Weight;
-                        selectedExercise.RestTime = previous.RestTime;
+                        tempExercise.Name = previous.Name;
+                        tempExercise.Sets = previous.Sets;
+                        tempExercise.Reps = previous.Reps;
+                        tempExercise.Weight = previous.Weight;
+                        tempExercise.RestTime = previous.RestTime;
 
                         AnsiConsole.MarkupLine("[green]Reverted to previous version![/]");
                         AnsiConsole.MarkupLine("[grey]Press ENTER to continue.[/]");
@@ -181,30 +181,28 @@ namespace SnackToSixPack.Handlers
                     {
                         AnsiConsole.MarkupLine("[yellow]No changes to undo.[/]");
                     }
-                    break;
-
-                    case "[green]Done[/]":
-                    AnsiConsole.Clear();
+                    break; 
                     
-                    // spara orginal versionen så vi kan gå tillbaka till den om användaren trycker undo
-                    undoStack.Push(new Exercise
-                    {
-                        Name = selectedExercise.Name,
-                        Sets = selectedExercise.Sets,
-                        Reps = selectedExercise.Reps,
-                        Weight = selectedExercise.Weight,
-                        RestTime = selectedExercise.RestTime
-                    });
+                    case "[green]Done[/]":
+                        // Spara originalvärdena i undo-stacken
+                        undoStack.Push(new Exercise
+                        {
+                            Name = selectedExercise.Name,
+                            Sets = selectedExercise.Sets,
+                            Reps = selectedExercise.Reps,
+                            Weight = selectedExercise.Weight,
+                            RestTime = selectedExercise.RestTime
+                        });
 
-                    // if user press done, thats when the change happen
-                    selectedExercise.Sets = tempExercise.Sets;
-                    selectedExercise.Reps = tempExercise.Reps;
-                    selectedExercise.Weight = tempExercise.Weight;
-                    selectedExercise.RestTime = tempExercise.RestTime;
-                    JSONFileHanldler<WorkoutPlan>.Save(Path.Combine($"Data/Users/{Session.CurrentUser.Id}", "workoutplans.json"),exercise);
+                        // Applicera ändringarna
+                        selectedExercise.Sets = tempExercise.Sets;
+                        selectedExercise.Reps = tempExercise.Reps;
+                        selectedExercise.Weight = tempExercise.Weight;
+                        selectedExercise.RestTime = tempExercise.RestTime;
 
-                    AnsiConsole.MarkupLine("[green]Exercise updated![/]");
-                    updateWorkoutplan = false;
+                        JSONFileHanldler<WorkoutPlan>.Save(Path.Combine($"Data/Users/{Session.CurrentUser.Id}", "workoutplans.json"),exercise);
+
+                        AnsiConsole.MarkupLine("[green]Exercise updated![/]");
 
                     AnsiConsole.MarkupLine("[grey]Press ENTER to continue.[/]");
                     Console.ReadKey(true);
@@ -221,6 +219,154 @@ namespace SnackToSixPack.Handlers
             }
         }
         public static Stack<Exercise> undoStack = new Stack<Exercise>();
+
+/*public static Exercise CloneExercise(Exercise ex)
+{
+    return new Exercise
+    {
+        Name = ex.Name,
+        Sets = ex.Sets,
+        Reps = ex.Reps,
+        Weight = ex.Weight,
+        RestTime = ex.RestTime
+    };
+}
+
+public static void UpdateExercise(WorkoutPlan plan)
+{
+    // Pick day
+    var dayNames = plan.Workouts.Select(d => d.DayOfWeek).ToList();
+    var dayPrompt = new SelectionPrompt<string>()
+        .Title("Choose which day to edit")
+        .AddChoices(dayNames);
+
+    string dayChoice = AnsiConsole.Prompt(dayPrompt);
+    var selectedDay = plan.Workouts.First(d => d.DayOfWeek == dayChoice);
+
+    if (selectedDay.Exercises.Count == 0)
+    {
+        AnsiConsole.MarkupLine("[yellow]There are no exercises on this day.[/]");
+        Console.ReadKey();
+        return;
+    }
+
+    // Pick exercise
+    var exerciseNames = selectedDay.Exercises.Select(e => e.Name).ToList();
+    var exercisePrompt = new SelectionPrompt<string>()
+        .Title("Which exercise would you like to update?")
+        .AddChoices(exerciseNames);
+
+    string exerciseChoice = AnsiConsole.Prompt(exercisePrompt);
+    var selectedExercise = selectedDay.Exercises.First(e => e.Name == exerciseChoice);
+
+    // Save ORIGINAL before anything is changed
+    undoStack.Push(CloneExercise(selectedExercise));
+
+    // Create temp copy for editing
+    var temp = CloneExercise(selectedExercise);
+
+    // Display current
+    AnsiConsole.MarkupLine($"[yellow]Editing: {selectedExercise.Name}[/]");
+    AnsiConsole.MarkupLine($"Sets: [blue]{selectedExercise.Sets}[/]");
+    AnsiConsole.MarkupLine($"Reps: [blue]{selectedExercise.Reps}[/]");
+    AnsiConsole.MarkupLine(selectedExercise.Weight != null
+        ? $"Weight: [blue]{selectedExercise.Weight} kg[/]"
+        : "Weight: -");
+    AnsiConsole.MarkupLine($"Rest time: [blue]{selectedExercise.RestTime}[/] sec");
+
+    bool editing = true;
+
+    while (editing)
+    {
+        var option = new SelectionPrompt<string>()
+            .Title("What do you want to update?")
+            .AddChoices("Sets", "Reps", "Weight", "Rest time", "[yellow]Undo Last Change[/]", "[green]Done[/]", "[red]Exit[/]");
+
+        string choice = AnsiConsole.Prompt(option);
+
+        switch (choice)
+        {
+            case "Sets":
+                temp.Sets = PromptForInt("New Sets:");
+                break;
+
+            case "Reps":
+                temp.Reps = PromptForInt("New Reps:");
+                break;
+
+            case "Weight":
+                while (true)
+                {
+                    AnsiConsole.Markup("New Weight (kg) or '-' for none: ");
+                    string w = Console.ReadLine();
+
+                    if (w == "-")
+                    {
+                        temp.Weight = null;
+                        break;
+                    }
+
+                    if (double.TryParse(w, out double weight))
+                    {
+                        temp.Weight = weight;
+                        break;
+                    }
+
+                    AnsiConsole.MarkupLine("[red]Invalid input.[/]");
+                }
+                break;
+
+            case "Rest time":
+                temp.RestTime = PromptForInt("New Rest time (sec):");
+                break;
+
+            case "[yellow]Undo Last Change[/]":
+                if (undoStack.Count > 0)
+                {
+                    var previous = undoStack.Pop();
+
+                    selectedExercise.Name = previous.Name;
+                    selectedExercise.Sets = previous.Sets;
+                    selectedExercise.Reps = previous.Reps;
+                    selectedExercise.Weight = previous.Weight;
+                    selectedExercise.RestTime = previous.RestTime;
+
+                    JSONFileHanldler<WorkoutPlan>.Save(
+                        Path.Combine($"Data/Users/{Session.CurrentUser.Id}", "workoutplans.json"), plan);
+
+                    AnsiConsole.MarkupLine("[green]Reverted to previous version![/]");
+                    Console.ReadKey();
+                    return;
+                }
+                else
+                {
+                    AnsiConsole.MarkupLine("[yellow]No changes to undo.[/]");
+                }
+                break;
+
+            case "[green]Done[/]":
+                // Apply changes
+                selectedExercise.Name = temp.Name;
+                selectedExercise.Sets = temp.Sets;
+                selectedExercise.Reps = temp.Reps;
+                selectedExercise.Weight = temp.Weight;
+                selectedExercise.RestTime = temp.RestTime;
+
+                JSONFileHanldler<WorkoutPlan>.Save(
+                    Path.Combine($"Data/Users/{Session.CurrentUser.Id}", "workoutplans.json"), plan);
+
+                AnsiConsole.MarkupLine("[green]Exercise updated![/]");
+                Console.ReadKey();
+                return;
+
+            case "[red]Exit[/]":
+                AnsiConsole.MarkupLine("[yellow]No changes saved.[/]");
+                Console.ReadKey();
+                return;
+        }
+    }
+}*/
+
 
         private static int PromptForInt(string message)
         {
