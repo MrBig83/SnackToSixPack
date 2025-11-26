@@ -32,8 +32,8 @@ namespace SnackToSixPack.Classes
             AnsiConsole.WriteLine();
             var choice = AnsiConsole.Prompt(
                 new SelectionPrompt<string>()
-                .Title("[bold]Select fitness level:[/]")
-                .AddChoices("Beginner", "Intermediate", "Advanced"));
+                    .Title("[bold]Select fitness level:[/]")
+                    .AddChoices("Beginner", "Intermediate", "Advanced"));
 
             AnsiConsole.WriteLine("Level: " + choice);
             switch (choice)
@@ -57,8 +57,8 @@ namespace SnackToSixPack.Classes
             AnsiConsole.WriteLine();
             var choice = AnsiConsole.Prompt(
                 new SelectionPrompt<string>()
-                .Title("[bold]Select gender:[/]")
-                .AddChoices("Woman", "Man", "PreferNotToSay")
+                    .Title("[bold]Select gender:[/]")
+                    .AddChoices("Woman", "Man", "PreferNotToSay")
             );
 
             AnsiConsole.WriteLine("Gender: " + choice);
@@ -71,6 +71,7 @@ namespace SnackToSixPack.Classes
                 case "PreferNotToSay":
                     return Gender.PreferNotToSay;
             }
+
             // No default case needed because the user must select one of the provided options,
             // but the compiler does not know that, so we handle the "impossible" case below.
             throw new Exception("Unexpected gender selecion.");
@@ -127,7 +128,7 @@ namespace SnackToSixPack.Classes
         public static async Task ShowProfile(Profile profile)
         {
             AnsiConsole.Clear();
-            
+
             if (profile == null)
             {
                 AnsiConsole.MarkupLine("[red]Profile does not exist.[/]");
@@ -135,9 +136,9 @@ namespace SnackToSixPack.Classes
             }
 
             AnsiConsole.Write(
-            new FigletText($"{profile.Name}'s Profile")
-                .Centered()
-                .Color(Color.Purple));
+                new FigletText($"{profile.Name}'s Profile")
+                    .Centered()
+                    .Color(Color.Purple));
 
 
             AnsiConsole.WriteLine();
@@ -147,7 +148,7 @@ namespace SnackToSixPack.Classes
 
             var personalTable = new Table()
                 .Border(TableBorder.MinimalHeavyHead)
-                .Centered();   
+                .Centered();
 
             personalTable.AddColumn(new TableColumn("Field").Centered());
             personalTable.AddColumn(new TableColumn("Value").Centered());
@@ -212,8 +213,8 @@ namespace SnackToSixPack.Classes
             AnsiConsole.Write(fitnessTable);
 
             var personalMenu = new SelectionPrompt<string>()
-    .PageSize(10)
-    .AddChoices("Exit", "[red]Delete account[/]");
+                .PageSize(10)
+                .AddChoices("Exit", "[red]Delete account[/]");
 
             string choice = AnsiConsole.Prompt(personalMenu);
 
@@ -232,37 +233,58 @@ namespace SnackToSixPack.Classes
         {
             bool editing = true;
 
+            // en temp kopia 
+            var tempProfile = new Profile
+            {
+                Name = profile.Name,
+                Age = profile.Age,
+                Weight = profile.Weight,
+                Height = profile.Height,
+                FitnessLevel = profile.FitnessLevel,
+                Waist = profile.Waist,
+                Chest = profile.Chest,
+                Hips = profile.Hips,
+                Arm = profile.Arm,
+                Thigh = profile.Thigh
+            };
+
             while (editing)
             {
                 AnsiConsole.Clear();
                 AnsiConsole.MarkupLine("[bold purple]Update Your Profile[/]");
                 AnsiConsole.MarkupLine("[grey]Select a field to update:[/]");
+                AnsiConsole.WriteLine();
+
+                // Visa nuvarande (temp) värden
+                AnsiConsole.MarkupLine($"Name: [blue]{tempProfile.Name}[/]");
+                AnsiConsole.MarkupLine($"Age: [blue]{tempProfile.Age}[/]");
+                AnsiConsole.MarkupLine($"Height: [blue]{tempProfile.Height} cm[/]");
+                AnsiConsole.MarkupLine($"Weight: [blue]{tempProfile.Weight} kg[/]");
+                AnsiConsole.MarkupLine($"Waist: [blue]{tempProfile.Waist} cm[/]");
+                AnsiConsole.MarkupLine($"Chest: [blue]{tempProfile.Chest} cm[/]");
+                AnsiConsole.MarkupLine($"Hips: [blue]{tempProfile.Hips} cm[/]");
+                AnsiConsole.MarkupLine($"Arm: [blue]{tempProfile.Arm} cm[/]");
+                AnsiConsole.MarkupLine($"Thigh: [blue]{tempProfile.Thigh} cm[/]");
+                AnsiConsole.MarkupLine($"Fitness Level: [blue]{tempProfile.FitnessLevel}[/]");
+                AnsiConsole.WriteLine();
 
                 var choice = AnsiConsole.Prompt(
                     new SelectionPrompt<string>()
                         .Title("[bold]What do you want to update?[/]")
-                        .AddChoices(new[]
-                        {
-                            "Name",
-                            "Age",
-                            "Height",
-                            "Weight",
-                            "Waist",
-                            "Chest",
-                            "Hips",
-                            "Arm",
-                            "Thigh",
+                        .AddChoices(
+                            "Name", "Age", "Height", "Weight",
+                            "Waist", "Chest", "Hips", "Arm", "Thigh",
                             "Fitness Level",
                             "[green]Done[/]",
                             "[red]Exit[/]"
-                        })
+                        )
                 );
 
                 switch (choice)
                 {
                     case "Name":
                         AnsiConsole.Markup("[bold]New Name: [/]");
-                        profile.Name = Console.ReadLine();
+                        tempProfile.Name = Console.ReadLine();
                         break;
 
                     case "Age":
@@ -272,58 +294,74 @@ namespace SnackToSixPack.Classes
                             string input = Console.ReadLine();
                             if (int.TryParse(input, out int age))
                             {
-                                profile.Age = age;
+                                tempProfile.Age = age;
                                 break;
                             }
+
                             AnsiConsole.MarkupLine("[yellow]Invalid number, try again.[/]");
                         }
                         break;
 
                     case "Height":
-                        profile.Height = ReadDoubleInput("New Height (cm): ");
+                        tempProfile.Height = ReadDoubleInput("New Height (cm): ");
                         break;
 
                     case "Weight":
-                        profile.Weight = ReadDoubleInput("New Weight (kg): ");
+                        tempProfile.Weight = ReadDoubleInput("New Weight (kg): ");
                         break;
 
                     case "Waist":
-                        profile.Waist = ReadDoubleInput("New Waist (cm): ");
+                        tempProfile.Waist = ReadDoubleInput("New Waist (cm): ");
                         break;
 
                     case "Chest":
-                        profile.Chest = ReadDoubleInput("New Chest (cm): ");
+                        tempProfile.Chest = ReadDoubleInput("New Chest (cm): ");
                         break;
 
                     case "Hips":
-                        profile.Hips = ReadDoubleInput("New Hips (cm): ");
+                        tempProfile.Hips = ReadDoubleInput("New Hips (cm): ");
                         break;
 
                     case "Arm":
-                        profile.Arm = ReadDoubleInput("New Arm (cm): ");
+                        tempProfile.Arm = ReadDoubleInput("New Arm (cm): ");
                         break;
 
                     case "Thigh":
-                        profile.Thigh = ReadDoubleInput("New Thigh (cm): ");
+                        tempProfile.Thigh = ReadDoubleInput("New Thigh (cm): ");
                         break;
 
                     case "Fitness Level":
-                        profile.FitnessLevel = ReadFitnessLevel();
+                        tempProfile.FitnessLevel = ReadFitnessLevel();
                         break;
 
                     case "[green]Done[/]":
-                        editing = false;
-                        break;
+                        // Kopiera alla värden från temp → original
+                        profile.Name = tempProfile.Name;
+                        profile.Age = tempProfile.Age;
+                        profile.Weight = tempProfile.Weight;
+                        profile.Height = tempProfile.Height;
+                        profile.FitnessLevel = tempProfile.FitnessLevel;
+                        profile.Waist = tempProfile.Waist;
+                        profile.Chest = tempProfile.Chest;
+                        profile.Hips = tempProfile.Hips;
+                        profile.Arm = tempProfile.Arm;
+                        profile.Thigh = tempProfile.Thigh;
+                        
+                        Session.CurrentUser.Profile = profile;
+                        JSONFileHanldler<Profile>.Save($"Data/Users/{Session.CurrentUser.Id}/profile.json", profile);
+
+                        AnsiConsole.MarkupLine("\n[bold green]Profile updated successfully![/]");
+                        Console.ReadKey(true);
+                        MenuHandler.skipPause = true;
+                        return;
+
                     case "[red]Exit[/]":
-                        MenuHandler.ShowUserMenu();
+                        AnsiConsole.MarkupLine("[yellow]No changes saved.[/]");
+                        Console.ReadKey(true);
+                        MenuHandler.skipPause = true;
                         return;
                 }
-
-                // Save back to current user
-                Session.CurrentUser.Profile = profile;
-                JSONFileHanldler<Profile>.Save($"Data/Users/{Session.CurrentUser.Id}/profile.json", profile);
             }
-            AnsiConsole.MarkupLine("\n[bold green]Profile updated successfully![/]");
         }
     }
 }

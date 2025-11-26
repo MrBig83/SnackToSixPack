@@ -12,55 +12,54 @@ namespace SnackToSixPack.Handlers
     public class MenuHandler
     {
 
-public static async Task ShowMainMenu()
-{
-    bool exit = false;
-    while (!exit)
-    {
-                // TITEL SCREEN
-                AnsiConsole.Clear();
-                AnsiConsole.Write(
-                new FigletText("SnackToSixPack")
-                        .Centered()
-                        .Color(Color.BlueViolet));
-
-        var menu = new SelectionPrompt<string>()
-            .Title("[BlueViolet] Welcome to SnackToSixPack! Please choose an option:[/]")
-            .PageSize(10)
-            .AddChoices("Login", "Register", "Quit");
-
-        string choice = AnsiConsole.Prompt(menu);
-
-        switch (choice)
+        public static async Task ShowMainMenu()
         {
-            case "Login":
-                AuthForms.ShowLogInForm();
+            bool exit = false;
+            while (!exit)
+            {
+                        // TITEL SCREEN
+                        AnsiConsole.Clear();
+                        AnsiConsole.Write(
+                        new FigletText("SnackToSixPack")
+                                .Centered()
+                                .Color(Color.BlueViolet));
 
-                // Visa UserMenu bara om login lyckades
-                if (Session.CurrentUser != null)
-                    await ShowUserMenu();
-                break;
+                var menu = new SelectionPrompt<string>()
+                    .Title("[BlueViolet] Welcome to SnackToSixPack! Please choose an option:[/]")
+                    .PageSize(10)
+                    .AddChoices("Login", "Register", "Quit");
 
-            case "Register":
-                    await RegistrationHandler.Run();
-                    if (Session.CurrentUser != null)
-                    await ShowUserMenu();
-                break;
+                string choice = AnsiConsole.Prompt(menu);
 
-            case "Quit":
-                exit = true;
-                break;
+                switch (choice)
+                {
+                    case "Login":
+                        AuthForms.ShowLogInForm();
+
+                        // Visa UserMenu bara om login lyckades
+                        if (Session.CurrentUser != null)
+                            await ShowUserMenu();
+                        break;
+
+                    case "Register":
+                            await RegistrationHandler.Run();
+                            if (Session.CurrentUser != null)
+                            await ShowUserMenu();
+                        break;
+
+                    case "Quit":
+                        exit = true;
+                        break;
+                }
+            }
         }
-    }
-
-}
+        
+        public static bool skipPause = false;
 
         //public static async Task ShowUserMenu();
         //User menu , Show profile, Edit profile, Show schedule, Create Workout plan, LogOut
         public static async Task ShowUserMenu()
         {
-            bool skipPause = false;
-
             while (Session.CurrentUser != null)
             {
                 AnsiConsole.Clear();

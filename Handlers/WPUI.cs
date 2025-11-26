@@ -203,10 +203,9 @@ namespace SnackToSixPack.Handlers
                         JSONFileHanldler<WorkoutPlan>.Save(Path.Combine($"Data/Users/{Session.CurrentUser.Id}", "workoutplans.json"),exercise);
 
                         AnsiConsole.MarkupLine("[green]Exercise updated![/]");
-
-                    AnsiConsole.MarkupLine("[grey]Press ENTER to continue.[/]");
-                    Console.ReadKey(true);
-                    return;
+                        AnsiConsole.MarkupLine("[grey]Press ENTER to continue.[/]");
+                        Console.ReadKey(true);
+                        return;
                     
                     case "[red]Exit[/]":
                     AnsiConsole.Clear();
