@@ -20,7 +20,7 @@ public class OpenAIHandler
 
         client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", apiKey);
 
-        Console.WriteLine("Describe the goal of your training journey:");
+        Console.WriteLine("Beskriv vad som �r m�let med din tr�ning:");
 
         string userInput = Console.ReadLine();
         string todaysDate = DateTime.Now.ToShortDateString();
@@ -33,9 +33,9 @@ public class OpenAIHandler
            - ""EndDate"": (Datum då målet bör vara nått)
            - ""Workouts"": (En lista med träningsdagar som passar baserat på {userInput}. Varje dag skall ha en titel som med ett eller två ord sammanfattar dagens träningsplan)
                [
-                   - ""DayOfWeek"": (Vilken dag i veckan träningen avser)
-                   - ""Title"": (Kort sammanfattning med 1-2 ord som namn på dagens träning)
-                   - ""Exercises"": (En lista över övningar som skall utföras på den specifika dagen)
+                   - ""DayOfWeek"": (Vilken dag i veckan tr�ningen avser)
+                   - ""Title"": (Kort sammanfattning med 1-2 ord som namn p� dagens tr�ning)
+                   - ""Exercises"": (En lista �ver �vningar som skall utf�ras p� den specifika dagen)
                            [
                                - ""Name"": (Namn på övningen)
                                - ""Sets"": (Antal set om det är applicerbart, annars 0)
@@ -60,20 +60,8 @@ public class OpenAIHandler
         string json = JsonSerializer.Serialize(requestBody);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-        string responseString = "";
-
-        await AnsiConsole.Status()
-            .Spinner(Spinner.Known.Dots)
-            .StartAsync("Pratar med OpenAI...", async ctx =>
-            {
-
-                var response = await client.PostAsync(
-                    "https://api.openai.com/v1/chat/completions",
-                    content);
-
-                response.EnsureSuccessStatusCode();
-                responseString = await response.Content.ReadAsStringAsync();
-            });
+        var response = await client.PostAsync("https://api.openai.com/v1/chat/completions", content); // =========== L�gg till en loading-spinnr h�r
+        string responseString = await response.Content.ReadAsStringAsync();
 
         using JsonDocument doc = JsonDocument.Parse(responseString);
         string reply = doc.RootElement
@@ -88,24 +76,18 @@ public class OpenAIHandler
         .Trim();
 
         WorkoutPlan AiReply = JsonSerializer.Deserialize<WorkoutPlan>(cleanedJson);
-        try
+        
+        if (AiReply == null)
         {
-            JSONFileHanldler<WorkoutPlan>.Save($"Data/Users/{Session.CurrentUser.Id}/workoutplans.json", AiReply);
-            WPUI.ShowWPUI(AiReply);
-
-        } catch (FileNotFoundException ex) {
-            File.AppendAllText("log.json", $"[{DateTime.Now}] ERROR: Failed to load users: {ex.Message}{Environment.NewLine}");
-            AnsiConsole.MarkupLine("[red] Could not found workout plan .[/]");
-            AnsiConsole.MarkupLine("Press any key to return to the main menu...");
-            Console.ReadKey(true);
+            AnsiConsole.MarkupLine("[red]Failed to generate workout plan from AI output.[/]");
             return;
         }
         
         JSONFileHanldler.Save($"Data/Users/{Session.CurrentUser.Id}/workoutplans.json", AiReply);
 
-
-
-        ////======== Spara en Sample-workout till en JSON-fil OBS! Detta är bara i utvecklingssyfte =======
+         WPUI.ShowWPUI(AiReply);
+            
+        ////======== Spara en Sample-workout till en JSON-fil =======
         //string json2Store = cleanedJson;
 
         // Spara det till en fil
