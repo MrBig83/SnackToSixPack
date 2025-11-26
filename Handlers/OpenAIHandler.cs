@@ -60,8 +60,20 @@ public class OpenAIHandler
         string json = JsonSerializer.Serialize(requestBody);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-        var response = await client.PostAsync("https://api.openai.com/v1/chat/completions", content); // =========== L�gg till en loading-spinnr h�r
-        string responseString = await response.Content.ReadAsStringAsync();
+        string responseString = "";
+
+        await AnsiConsole.Status()
+            .Spinner(Spinner.Known.Dots)
+            .StartAsync("Pratar med OpenAI...", async ctx =>
+            {
+
+                var response = await client.PostAsync(
+                    "https://api.openai.com/v1/chat/completions",
+                    content);
+
+                response.EnsureSuccessStatusCode();
+                responseString = await response.Content.ReadAsStringAsync();
+            });
 
         using JsonDocument doc = JsonDocument.Parse(responseString);
         string reply = doc.RootElement
