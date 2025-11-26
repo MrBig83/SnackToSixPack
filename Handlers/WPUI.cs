@@ -160,62 +160,62 @@ namespace SnackToSixPack.Handlers
                         AnsiConsole.MarkupLine("[red]Invalid number, please try again.[/]");
                     }
                     break;
-                    case "Rest time":
-                    tempExercise.RestTime = PromptForInt("[bold]New Rest time: [/]");
-                    break;
-                    case "[yellow]Undo Last Change[/]":
-                    if (undoStack.Count > 0)
-                    {
-                        // "Pop" tar tillbaka den gamla versionen
-                        var previous = undoStack.Pop();
-
-                        tempExercise.Name = previous.Name;
-                        tempExercise.Sets = previous.Sets;
-                        tempExercise.Reps = previous.Reps;
-                        tempExercise.Weight = previous.Weight;
-                        tempExercise.RestTime = previous.RestTime;
-
-                        AnsiConsole.MarkupLine("[green]Reverted to previous version![/]");
-                        AnsiConsole.MarkupLine("[grey]Press ENTER to continue.[/]");
-                        Console.ReadKey(true);
-                    }
-                    else
-                    {
-                        AnsiConsole.MarkupLine("[yellow]No changes to undo.[/]");
-                    }
-                    break; 
-                    
-                    case "[green]Done[/]":
-                        // Spara originalvärdena i undo-stacken
-                        undoStack.Push(new Exercise
+                        case "Rest time":
+                        tempExercise.RestTime = PromptForInt("[bold]New Rest time: [/]");
+                        break;
+                        case "[yellow]Undo Last Change[/]":
+                        if (undoStack.Count > 0)
                         {
-                            Name = selectedExercise.Name,
-                            Sets = selectedExercise.Sets,
-                            Reps = selectedExercise.Reps,
-                            Weight = selectedExercise.Weight,
-                            RestTime = selectedExercise.RestTime
-                        });
+                            // "Pop" tar tillbaka den gamla versionen
+                            var previous = undoStack.Pop();
 
-                        // Applicera ändringarna
-                        selectedExercise.Sets = tempExercise.Sets;
-                        selectedExercise.Reps = tempExercise.Reps;
-                        selectedExercise.Weight = tempExercise.Weight;
-                        selectedExercise.RestTime = tempExercise.RestTime;
+                            tempExercise.Name = previous.Name;
+                            tempExercise.Sets = previous.Sets;
+                            tempExercise.Reps = previous.Reps;
+                            tempExercise.Weight = previous.Weight;
+                            tempExercise.RestTime = previous.RestTime;
 
-                        JSONFileHanldler.Save(Path.Combine($"Data/Users/{Session.CurrentUser.Id}", "workoutplans.json"),exercise);
+                            AnsiConsole.MarkupLine("[green]Reverted to previous version![/]");
+                            AnsiConsole.MarkupLine("[grey]Press ENTER to continue.[/]");
+                            Console.ReadKey(true);
+                        }
+                        else
+                        {
+                            AnsiConsole.MarkupLine("[yellow]No changes to undo.[/]");
+                        }
+                        break; 
+                        
+                        case "[green]Done[/]":
+                            // Spara originalvärdena i undo-stacken
+                            undoStack.Push(new Exercise
+                            {
+                                Name = selectedExercise.Name,
+                                Sets = selectedExercise.Sets,
+                                Reps = selectedExercise.Reps,
+                                Weight = selectedExercise.Weight,
+                                RestTime = selectedExercise.RestTime
+                            });
 
-                        AnsiConsole.MarkupLine("[green]Exercise updated![/]");
+                            // Applicera ändringarna
+                            selectedExercise.Sets = tempExercise.Sets;
+                            selectedExercise.Reps = tempExercise.Reps;
+                            selectedExercise.Weight = tempExercise.Weight;
+                            selectedExercise.RestTime = tempExercise.RestTime;
+
+                            JSONFileHanldler.Save(Path.Combine($"Data/Users/{Session.CurrentUser.Id}", "workoutplans.json"),exercise);
+
+                            AnsiConsole.MarkupLine("[green]Exercise updated![/]");
+                            AnsiConsole.MarkupLine("[grey]Press ENTER to continue.[/]");
+                            Console.ReadKey(true);
+                            return;
+                        
+                        case "[red]Exit[/]":
+                        AnsiConsole.Clear();
+                        // if exit, no change
+                        AnsiConsole.MarkupLine("[yellow]No changes saved.[/]");
                         AnsiConsole.MarkupLine("[grey]Press ENTER to continue.[/]");
                         Console.ReadKey(true);
                         return;
-                    
-                    case "[red]Exit[/]":
-                    AnsiConsole.Clear();
-                    // if exit, no change
-                    AnsiConsole.MarkupLine("[yellow]No changes saved.[/]");
-                    AnsiConsole.MarkupLine("[grey]Press ENTER to continue.[/]");
-                    Console.ReadKey(true);
-                    return;
                 }
             }
         }
@@ -362,6 +362,60 @@ namespace SnackToSixPack.Handlers
             }
         }
 
+        public static void AddExercise(WorkoutPlan exercise, Exercise addedExercise)
+        {
+            var dayNames = exercise.Workouts
+                .Select(d => d.DayOfWeek)
+                .ToList();
+            
+            string chosenDay = AnsiConsole.Prompt(
+                new SelectionPrompt<string>()
+                    .Title("[blue]Choose which day to add an exercise on: [/]")
+                    .PageSize(10)
+                    .AddChoices(dayNames)
+            );
+            
+            AnsiConsole.MarkupLine("[blue]Fill in the details below.[/]");
+            AnsiConsole.MarkupLine("------------------------------------");
+
+            AnsiConsole.Markup("Name of the exercise: ");
+            addedExercise.Name = Console.ReadLine();
+            addedExercise.Sets = ReadIntInput("Sets: ");
+            addedExercise.Reps = ReadIntInput("Reps: ");
+            addedExercise.Weight = ReadIntInput("Weight: ");
+            addedExercise.RestTime = ReadIntInput("RestTime: ");
+
+            // Hitta rätt dag för att lägga övningen i
+            var selectedDay = exercise.Workouts
+                .First(d => d.DayOfWeek == chosenDay);
+            
+            selectedDay.Exercises.Add(addedExercise);
+            
+            JSONFileHanldler.Save(
+                Path.Combine($"Data/Users/{Session.CurrentUser.Id}", "workoutplans.json"),
+                exercise
+            );
+            
+            AnsiConsole.MarkupLine($"[green]Added exercise: {addedExercise.Name} on {chosenDay}[/]");
+            AnsiConsole.MarkupLine("[grey]Press ENTER to continue.[/]");
+            Console.ReadKey(true);
+        }
+        private static int ReadIntInput(string label)
+        {
+            while (true)
+            {
+                AnsiConsole.Markup("[bold]" + label + "[/]");
+
+                try
+                {
+                    return int.Parse(Console.ReadLine());
+                }
+                catch
+                {
+                    AnsiConsole.MarkupLine("[yellow]Wrong input, try again[/]");
+                }
+            }
+        }
     }
 }
 
