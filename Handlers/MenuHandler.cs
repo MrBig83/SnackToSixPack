@@ -204,7 +204,7 @@ namespace SnackToSixPack.Handlers
                         break;
 
                     case "Add Exercise":
-                       // WPUI.AddExercise(plan); inte klar 
+                       WPUI.AddExercise(plan, new Exercise()); 
                         break;
 
                     case "[yellow]Back[/]":
