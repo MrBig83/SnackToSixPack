@@ -49,12 +49,14 @@ namespace SnackToSixPack.Handlers
 
                 foreach (var ex in day.Exercises)
                 {
-                    string weightText = ex.Weight.HasValue ? $"{ex.Weight} kg" : "-";
+                    string setsText = ex.Sets > 0 ? $"{ex.Sets}" : "-";
+                    string repsText = ex.Reps > 0 ? $"{ex.Reps}" : "-";
+                    string weightText = ex.Weight > 0 ? $"{ex.Weight} kg" : "-";
 
                     dayTable.AddRow(
                         ex.Name,
-                        ex.Sets.ToString(),
-                        ex.Reps.ToString(),
+                        setsText,
+                        repsText,
                         weightText,
                         ex.RestTime.ToString()
                     );
