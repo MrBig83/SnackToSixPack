@@ -11,22 +11,26 @@ namespace SnackToSixPack.Handlers
 {
     public class MenuHandler
     {
+        public static void ShowTitle()
+        {
+            // TITEL SCREEN
+            AnsiConsole.Clear();
+            AnsiConsole.Write(
+            new FigletText("SnackToSixPack")
+                    .Centered()
+                    .Color(Color.BlueViolet));
+        }
 
         public static async Task ShowMainMenu()
         {
             bool exit = false;
             while (!exit)
             {
-                        // TITEL SCREEN
-                        AnsiConsole.Clear();
-                        AnsiConsole.Write(
-                        new FigletText("SnackToSixPack")
-                                .Centered()
-                                .Color(Color.BlueViolet));
+                ShowTitle();
 
                 var menu = new SelectionPrompt<string>()
                     .Title("[BlueViolet] Welcome to SnackToSixPack! Please choose an option:[/]")
-                    .PageSize(10)
+                    .WrapAround(true)
                     .AddChoices("Login", "Register", "Quit");
 
                 string choice = AnsiConsole.Prompt(menu);
@@ -61,6 +65,7 @@ namespace SnackToSixPack.Handlers
             while (Session.CurrentUser != null)
             {
                 AnsiConsole.Clear();
+                ShowTitle();
                 var menu = new SelectionPrompt<string>()
                     .Title("[cyan1] User Menu - Please choose an option:[/]")
                     .PageSize(10)
@@ -111,6 +116,7 @@ namespace SnackToSixPack.Handlers
 
             while (running)
             {
+                ShowTitle();
                 var choice = AnsiConsole.Prompt(
                     new SelectionPrompt<string>()
                         .Title("Choose an option:")
@@ -151,7 +157,7 @@ namespace SnackToSixPack.Handlers
             while (running)
             {
                 AnsiConsole.Clear();
-
+                ShowTitle();
                 var menu = new SelectionPrompt<string>()
                     .Title("[cyan]Schedule Menu - Choose an option:[/]")
                     .AddChoices(new[]

@@ -14,7 +14,7 @@ namespace SnackToSixPack.Classes
             while (running)
             {
                 AnsiConsole.Clear();
-
+                MenuHandler.ShowTitle();
                 var heading = new Panel("[lime] Log in[/]")
                     .Border(BoxBorder.Double)
                     .BorderStyle(new Style(Color.White))

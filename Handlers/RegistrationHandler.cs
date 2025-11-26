@@ -29,6 +29,7 @@ namespace SnackToSixPack.Handlers
             }
 
             AnsiConsole.Clear();
+            MenuHandler.ShowTitle();
             AnsiConsole.MarkupLine("[BlueViolet]=== REGISTER NEW USER ===[/]");
 
             string username;
