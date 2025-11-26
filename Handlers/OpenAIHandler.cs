@@ -71,7 +71,6 @@ public class OpenAIHandler
                     content);
 
                 response.EnsureSuccessStatusCode();
-
                 responseString = await response.Content.ReadAsStringAsync();
             });
 
