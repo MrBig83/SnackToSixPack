@@ -1,7 +1,7 @@
 using System.Text.Json;
 
 namespace SnackToSixPack.Classes;
-public static class JSONFileHanldler<T>
+public static class JSONFileHanldler
 {
     public static T Load<T>(string filePath)
     {

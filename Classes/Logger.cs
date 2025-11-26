@@ -4,8 +4,6 @@ namespace SnackToSixPack.Classes;
 
 public class Logger
 {
-    private static string logfile = "log.json";
-
     public static void LogError(string message)
     {
         // gör det mer struktuerat
@@ -17,6 +15,6 @@ public class Logger
         };
 
         string json = JsonSerializer.Serialize(logObject) + ",\n";
-        File.AppendAllText(logfile, json);
+        File.AppendAllText("log.json", json);
     }
 }

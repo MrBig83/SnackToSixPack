@@ -18,9 +18,15 @@ namespace SnackToSixPack.Handlers
         {
             User user = new User();
             // Läs in användare från JSON (eller skapa en tom lista)
-            List<User> users = JSONFileHanldler<List<User>>.Load<List<User>>(
+            List<User> users = JSONFileHanldler.Load<List<User>>(
             Path.Combine($"Data", "Users.json")
             );
+
+            if (users == null)
+            {
+                users = new List<User>();  // skapa tom lista om den inte finns
+                JSONFileHanldler.Save(Path.Combine("Data", "Users.json"), users);
+            }
 
             AnsiConsole.Clear();
             AnsiConsole.MarkupLine("[BlueViolet]=== REGISTER NEW USER ===[/]");
@@ -103,10 +109,11 @@ namespace SnackToSixPack.Handlers
 
             if (!Directory.Exists($"Data/Users/{nextId.ToString()}"))
                 Directory.CreateDirectory($"Data/Users/{nextId.ToString()}");
+            // om programmet krashar, kolla hit
             users.Add(newUser);
-
-            JSONFileHanldler<List<User>>.Save("Data/Users.json", users);
-            //SaveUsers(users);
+            
+            
+            JSONFileHanldler.Save("Data/Users.json", users);
 
             // Sätt inloggad användare temporärt så CreateProfile funkar
             Session.SetCurrentUser(newUser);
@@ -180,7 +187,7 @@ namespace SnackToSixPack.Handlers
         {
             var user = Session.CurrentUser;
 
-            List<User> users = JSONFileHanldler<List<User>>.Load<List<User>>(
+            List<User> users = JSONFileHanldler.Load<List<User>>(
             Path.Combine($"Data", "Users.json")
             );
 
@@ -193,8 +200,7 @@ namespace SnackToSixPack.Handlers
             if (choiceConfirmed == "Yes")
             {
                 int removed = users.RemoveAll(u => u.Id == user.Id);
-                JSONFileHanldler<List<User>>.Save("Data/Users.json", users);
-                //SaveUsers(users);
+                JSONFileHanldler.Save("Data/Users.json", users);
 
                 // 4. Ta bort användarmapp
                 string userFolder = "Data/Users/" + user.Id;
