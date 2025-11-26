@@ -23,12 +23,13 @@ public class OpenAIHandler
         Console.WriteLine("Describe the goal of your training journey:");
 
         string userInput = Console.ReadLine();
+        string todaysDate = DateTime.Now.ToShortDateString();
 
         string AiPrompt = $@"
            Skapa ett träningsschema i JSON-format med följande egenskaper: (Jag vill även att du tar hänsyn till användarens kroppsliga profil: {Session.CurrentUser.Profile})
            - ""PlanName"": (Namn på träningsschemat)
            - ""Goal"": (tydlig och inspirerande beskrivning av träningschemat p� svenska, baserat på informationen ifrån användaren : {userInput})
-           - ""StartDate"": (Dagens datum om inget annat specificerats i {userInput})            
+           - ""StartDate"": ({todaysDate} om inget annat specificerats i {userInput})            
            - ""EndDate"": (Datum då målet bör vara nått)
            - ""Workouts"": (En lista med träningsdagar som passar baserat på {userInput}. Varje dag skall ha en titel som med ett eller två ord sammanfattar dagens träningsplan)
                [
