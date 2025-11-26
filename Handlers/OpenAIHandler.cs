@@ -20,27 +20,27 @@ public class OpenAIHandler
 
         client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", apiKey);
 
-        Console.WriteLine("Beskriv vad som �r m�let med din tr�ning:");
+        Console.WriteLine("Describe the goal of your training journey:");
 
         string userInput = Console.ReadLine();
 
         string AiPrompt = $@"
-           Skapa ett tr�ningsschema i JSON-format med f�ljande egenskaper: (Jag vill även att du tar hänsyn till användarens kroppsliga profil: {Session.CurrentUser.Profile})
-           - ""PlanName"": (Namn p� tr�ningsschemat)
-           - ""Goal"": (tydlig och inspirerande beskrivning av tr�ningschemat p� svenska, baserat p� informationen ifr�n anv�ndaren : {userInput})
+           Skapa ett träningsschema i JSON-format med följande egenskaper: (Jag vill även att du tar hänsyn till användarens kroppsliga profil: {Session.CurrentUser.Profile})
+           - ""PlanName"": (Namn på träningsschemat)
+           - ""Goal"": (tydlig och inspirerande beskrivning av träningschemat p� svenska, baserat på informationen ifrån användaren : {userInput})
            - ""StartDate"": (Dagens datum om inget annat specificerats i {userInput})            
-           - ""EndDate"": (Datum d� m�let b�r vara n�tt)
-           - ""Workouts"": (En lista med tr�ningsdagar som passar baserat p� {userInput}. Varje dag skall ha en titel som med ett eller tv� ord sammanfattar dagens tr�ningsplan)
+           - ""EndDate"": (Datum då målet bör vara nått)
+           - ""Workouts"": (En lista med träningsdagar som passar baserat på {userInput}. Varje dag skall ha en titel som med ett eller två ord sammanfattar dagens träningsplan)
                [
-                   - ""DayOfWeek"": (Vilken dag i veckan tr�ningen avser)
-                   - ""Title"": (Kort sammanfattning med 1-2 ord som namn p� dagens tr�ning)
-                   - ""Exercises"": (En lista �ver �vningar som skall utf�ras p� den specifika dagen)
+                   - ""DayOfWeek"": (Vilken dag i veckan träningen avser)
+                   - ""Title"": (Kort sammanfattning med 1-2 ord som namn på dagens träning)
+                   - ""Exercises"": (En lista över övningar som skall utföras på den specifika dagen)
                            [
-                               - ""Name"": (Namn p� �vningen)
-                               - ""Sets"": (Antal set om det �r applicerbart)
-                               - ""Reps"": (repetitioner om det �r applicerbart)
-                               - ""Weight"": (F�rslagen vikt i kg om det �r applicerbart)
-                               - ""RestTime"": (Vilotid i sekunder mellan set om det �r applicerbart) 
+                               - ""Name"": (Namn på övningen)
+                               - ""Sets"": (Antal set om det är applicerbart)
+                               - ""Reps"": (repetitioner om det är applicerbart)
+                               - ""Weight"": (Förslagen vikt i kg om det är applicerbart)
+                               - ""RestTime"": (Vilotid i sekunder mellan set om det är applicerbart) 
                            ]
                ]
 
@@ -59,8 +59,20 @@ public class OpenAIHandler
         string json = JsonSerializer.Serialize(requestBody);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-        var response = await client.PostAsync("https://api.openai.com/v1/chat/completions", content); // =========== L�gg till en loading-spinnr h�r
-        string responseString = await response.Content.ReadAsStringAsync();
+        string responseString = "";
+
+        await AnsiConsole.Status()
+            .Spinner(Spinner.Known.Dots)
+            .StartAsync("Pratar med OpenAI...", async ctx =>
+            {
+
+                var response = await client.PostAsync(
+                    "https://api.openai.com/v1/chat/completions",
+                    content);
+
+                response.EnsureSuccessStatusCode();
+                responseString = await response.Content.ReadAsStringAsync();
+            });
 
         using JsonDocument doc = JsonDocument.Parse(responseString);
         string reply = doc.RootElement
@@ -92,7 +104,7 @@ public class OpenAIHandler
 
 
 
-        ////======== Spara en Sample-workout till en JSON-fil =======
+        ////======== Spara en Sample-workout till en JSON-fil OBS! Detta är bara i utvecklingssyfte =======
         //string json2Store = cleanedJson;
 
         // Spara det till en fil
