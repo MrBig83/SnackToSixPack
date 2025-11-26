@@ -100,8 +100,8 @@ public class OpenAIHandler
             Console.ReadKey(true);
             return;
         }
-
-
+        
+        JSONFileHanldler.Save($"Data/Users/{Session.CurrentUser.Id}/workoutplans.json", AiReply);
 
 
 

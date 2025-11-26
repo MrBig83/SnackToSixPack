@@ -120,8 +120,8 @@ namespace SnackToSixPack.Classes
 
 
             Session.CurrentUser.Profile = profile;
-            JSONFileHanldler<Profile>.Save($"Data/Users/{Session.CurrentUser.Id}/profile.json", profile);
-            //JSONHelper.SaveProfile(profile);
+            // profile can never be null here
+            JSONFileHanldler.Save($"Data/Users/{Session.CurrentUser.Id}/profile.json", profile);
             return profile;
         }
 
@@ -348,8 +348,15 @@ namespace SnackToSixPack.Classes
                         profile.Thigh = tempProfile.Thigh;
                         
                         Session.CurrentUser.Profile = profile;
-                        JSONFileHanldler<Profile>.Save($"Data/Users/{Session.CurrentUser.Id}/profile.json", profile);
+                        JSONFileHanldler.Save($"Data/Users/{Session.CurrentUser.Id}/profile.json", profile);
 
+                        if (profile == null)
+                        {
+                            AnsiConsole.MarkupLine("[red]Failed to update profile.[/]");
+                            Console.ReadKey(true);
+                            return;
+                        }
+                        
                         AnsiConsole.MarkupLine("\n[bold green]Profile updated successfully![/]");
                         Console.ReadKey(true);
                         MenuHandler.skipPause = true;

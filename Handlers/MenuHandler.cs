@@ -133,17 +133,17 @@ namespace SnackToSixPack.Handlers
         {
             var planPath = Path.Combine($"Data/Users/{Session.CurrentUser.Id}", "workoutplans.json");
             WorkoutPlan plan;
+            
+            plan = JSONFileHanldler.Load<WorkoutPlan>(planPath);
 
-            try
-            {
-                plan = JSONFileHanldler<WorkoutPlan>.Load<WorkoutPlan>(planPath);
-            }
-            catch
+            if (plan == null)
             {
                 AnsiConsole.MarkupLine("[red]No workout plan generated yet.[/]");
+                AnsiConsole.MarkupLine("[grey]Press ENTER to continue...[/]");
+                Console.ReadKey(true);
                 return;
             }
-
+            
             bool running = true;
             bool hasDeleteExercise = false;
 
@@ -171,22 +171,18 @@ namespace SnackToSixPack.Handlers
                 switch (choice)
                 {
                     case "Show Schedule":
-                    try
-                    {
-                        var plans = JSONFileHanldler<WorkoutPlan>.Load<WorkoutPlan>(
+                        var plans = JSONFileHanldler.Load<WorkoutPlan>(
                         Path.Combine($"Data/Users/{Session.CurrentUser.Id}", "workoutplans.json"));
 
+                        if (plans  == null)
+                        {
+                            AnsiConsole.MarkupLine("[red]No workout plan generated yet.2[/]");
+                            AnsiConsole.MarkupLine("[grey]Press ENTER to continue...[/]");
+                            Console.ReadKey(true);
+                            return;
+                        }
                         WPUI.ShowWPUI(plans);
-                        AnsiConsole.MarkupLine("[grey]Press ENTER to continue[/]");
-                        Console.ReadLine();
 
-                    }
-                    catch (FileNotFoundException ex)
-                    {
-                        File.AppendAllText("log.json", $"[{DateTime.Now}] ERROR: Failed to load users: {ex.Message}{Environment.NewLine}");
-                        AnsiConsole.MarkupLine("[red]No workout plan genereated yet.[/]");
-                        AnsiConsole.MarkupLine("Please generate a workout plan from User Menu.");
-                    }
                         break;
                     
                     case "Update Exercise":
