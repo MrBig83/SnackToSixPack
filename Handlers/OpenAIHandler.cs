@@ -37,10 +37,10 @@ public class OpenAIHandler
                    - ""Exercises"": (En lista över övningar som skall utföras på den specifika dagen)
                            [
                                - ""Name"": (Namn på övningen)
-                               - ""Sets"": (Antal set om det är applicerbart)
-                               - ""Reps"": (repetitioner om det är applicerbart)
-                               - ""Weight"": (Förslagen vikt i kg om det är applicerbart)
-                               - ""RestTime"": (Vilotid i sekunder mellan set om det är applicerbart) 
+                               - ""Sets"": (Antal set om det är applicerbart, annars 0)
+                               - ""Reps"": (repetitioner om det är applicerbart, annars 0)
+                               - ""Weight"": (Förslagen vikt i kg om det är applicerbart, annars 0)
+                               - ""RestTime"": (Vilotid i sekunder mellan set om det är applicerbart, annars 0) 
                            ]
                ]
 
