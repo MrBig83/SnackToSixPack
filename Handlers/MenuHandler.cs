@@ -124,6 +124,7 @@ namespace SnackToSixPack.Handlers
 
                     case "Quit":
                         running = false;
+                        skipPause = true;
                         break;
                 }
             }
@@ -173,7 +174,10 @@ namespace SnackToSixPack.Handlers
                     case "Show Schedule":
                         var plans = JSONFileHanldler.Load<WorkoutPlan>(
                         Path.Combine($"Data/Users/{Session.CurrentUser.Id}", "workoutplans.json"));
-
+                        WPUI.ShowWPUI(plans);
+                        AnsiConsole.MarkupLine("[grey]Press ENTER to continue...[/]");
+                        Console.ReadKey(true);
+                        
                         if (plans  == null)
                         {
                             AnsiConsole.MarkupLine("[red]No workout plan generated yet.2[/]");
@@ -181,8 +185,6 @@ namespace SnackToSixPack.Handlers
                             Console.ReadKey(true);
                             return;
                         }
-                        WPUI.ShowWPUI(plans);
-
                         break;
                     
                     case "Update Exercise":
