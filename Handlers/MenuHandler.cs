@@ -56,8 +56,6 @@ namespace SnackToSixPack.Handlers
         
         public static bool skipPause = false;
 
-        //public static async Task ShowUserMenu();
-        //User menu , Show profile, Edit profile, Show schedule, Create Workout plan, LogOut
         public static async Task ShowUserMenu()
         {
             while (Session.CurrentUser != null)
