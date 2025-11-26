@@ -23,24 +23,25 @@ public class OpenAIHandler
         Console.WriteLine("Beskriv vad som �r m�let med din tr�ning:");
 
         string userInput = Console.ReadLine();
+        string todaysDate = DateTime.Now.ToShortDateString();
 
         string AiPrompt = $@"
-           Skapa ett tr�ningsschema i JSON-format med f�ljande egenskaper: (Jag vill även att du tar hänsyn till användarens kroppsliga profil: {Session.CurrentUser.Profile})
-           - ""PlanName"": (Namn p� tr�ningsschemat)
-           - ""Goal"": (tydlig och inspirerande beskrivning av tr�ningschemat p� svenska, baserat p� informationen ifr�n anv�ndaren : {userInput})
-           - ""StartDate"": (Dagens datum om inget annat specificerats i {userInput})            
-           - ""EndDate"": (Datum d� m�let b�r vara n�tt)
-           - ""Workouts"": (En lista med tr�ningsdagar som passar baserat p� {userInput}. Varje dag skall ha en titel som med ett eller tv� ord sammanfattar dagens tr�ningsplan)
+           Skapa ett träningsschema i JSON-format med följande egenskaper: (Jag vill även att du tar hänsyn till användarens kroppsliga profil: {Session.CurrentUser.Profile})
+           - ""PlanName"": (Namn på träningsschemat)
+           - ""Goal"": (tydlig och inspirerande beskrivning av träningschemat p� svenska, baserat på informationen ifrån användaren : {userInput})
+           - ""StartDate"": ({todaysDate} om inget annat specificerats i {userInput})            
+           - ""EndDate"": (Datum då målet bör vara nått)
+           - ""Workouts"": (En lista med träningsdagar som passar baserat på {userInput}. Varje dag skall ha en titel som med ett eller två ord sammanfattar dagens träningsplan)
                [
                    - ""DayOfWeek"": (Vilken dag i veckan tr�ningen avser)
                    - ""Title"": (Kort sammanfattning med 1-2 ord som namn p� dagens tr�ning)
                    - ""Exercises"": (En lista �ver �vningar som skall utf�ras p� den specifika dagen)
                            [
-                               - ""Name"": (Namn p� �vningen)
-                               - ""Sets"": (Antal set om det �r applicerbart)
-                               - ""Reps"": (repetitioner om det �r applicerbart)
-                               - ""Weight"": (F�rslagen vikt i kg om det �r applicerbart)
-                               - ""RestTime"": (Vilotid i sekunder mellan set om det �r applicerbart) 
+                               - ""Name"": (Namn på övningen)
+                               - ""Sets"": (Antal set om det är applicerbart, annars 0)
+                               - ""Reps"": (repetitioner om det är applicerbart, annars 0)
+                               - ""Weight"": (Förslagen vikt i kg om det är applicerbart, annars 0)
+                               - ""RestTime"": (Vilotid i sekunder mellan set om det är applicerbart, annars 0) 
                            ]
                ]
 
