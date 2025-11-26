@@ -128,7 +128,7 @@ namespace SnackToSixPack.Classes
         public static async Task ShowProfile(Profile profile)
         {
             AnsiConsole.Clear();
-
+            MenuHandler.ShowTitle();
             if (profile == null)
             {
                 AnsiConsole.MarkupLine("[red]Profile does not exist.[/]");
@@ -251,6 +251,7 @@ namespace SnackToSixPack.Classes
             while (editing)
             {
                 AnsiConsole.Clear();
+                MenuHandler.ShowTitle();
                 AnsiConsole.MarkupLine("[bold purple]Update Your Profile[/]");
                 AnsiConsole.MarkupLine("[grey]Select a field to update:[/]");
                 AnsiConsole.WriteLine();
