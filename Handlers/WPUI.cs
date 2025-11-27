@@ -24,8 +24,8 @@ namespace SnackToSixPack.Handlers
             header.Title = new TableTitle($"[bold yellow]{plan.PlanName}[/]");
             header.AddColumn(new TableColumn("[bold]Info[/]"));
 
-            header.AddRow($"[bold]Mål:[/]\n{plan.Goal}");
-            header.AddRow($"[bold]Period:[/] {plan.StartDate.ToShortDateString()} till {plan.EndDate.ToShortDateString()}");
+            header.AddRow($"[bold]Goal:[/]\n{plan.Goal}");
+            header.AddRow($"[bold]Period:[/] {plan.StartDate.ToShortDateString()} to {plan.EndDate.ToShortDateString()}");
             header.AddEmptyRow();
 
             AnsiConsole.Write(header);
@@ -41,11 +41,11 @@ namespace SnackToSixPack.Handlers
                 
                 dayTable.Title = new TableTitle($"[yellow]{day.DayOfWeek} – {day.Title}[/]");
 
-                dayTable.AddColumn(new TableColumn("[bold]Övning[/]").Centered().Width(40));
+                dayTable.AddColumn(new TableColumn("[bold]Exercise[/]").Centered().Width(40));
                 dayTable.AddColumn(new TableColumn("[bold]Set[/]").Centered());
                 dayTable.AddColumn(new TableColumn("[bold]Reps[/]").Centered());
-                dayTable.AddColumn(new TableColumn("[bold]Vikt[/]").Centered());
-                dayTable.AddColumn(new TableColumn("[bold]Vila (sek)[/]").Centered());
+                dayTable.AddColumn(new TableColumn("[bold]Weight[/]").Centered());
+                dayTable.AddColumn(new TableColumn("[bold]Rest time (sec)[/]").Centered());
 
                 foreach (var ex in day.Exercises)
                 {
@@ -73,7 +73,9 @@ namespace SnackToSixPack.Handlers
             var dayNames = exercise.Workouts
                 .Select(d => d.DayOfWeek)
                 .ToList();
-
+            
+            dayNames.Add("[yellow]Back[/]");
+            
             // Prompt
             var updateWorkoutplanDay = new SelectionPrompt<string>()
                 .Title("Choose which day to edit")
@@ -81,6 +83,11 @@ namespace SnackToSixPack.Handlers
                 .AddChoices(dayNames);
 
             string dayChoice = AnsiConsole.Prompt(updateWorkoutplanDay);
+
+            if (dayChoice == "[yellow]Back[/]")
+            {
+                return;
+            }
 
             var selectedDay = exercise.Workouts
                 .First(d => d.DayOfWeek == dayChoice);
@@ -96,7 +103,9 @@ namespace SnackToSixPack.Handlers
             var exerciseNames = selectedDay.Exercises
                 .Select(n => n.Name)
                 .ToList();
-
+            
+            exerciseNames.Add("[yellow]Back[/]");
+            
             //Prompt
             var updateExercise = new SelectionPrompt<string>()
                 .Title("Which exercise would you like to update?")
@@ -104,6 +113,11 @@ namespace SnackToSixPack.Handlers
                 .AddChoices(exerciseNames);
             
             string workoutChoice = AnsiConsole.Prompt(updateExercise);
+
+            if (workoutChoice == "[yellow]Back[/]")
+            {
+                return;
+            }
 
             var selectedExercise = selectedDay.Exercises
                 .First(e => e.Name == workoutChoice);

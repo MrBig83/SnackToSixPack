@@ -10,7 +10,6 @@ public class OpenAIHandler
 
     public static async Task AskAI()
     {
-
         string apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
         if (string.IsNullOrEmpty(apiKey))
         {
@@ -20,33 +19,35 @@ public class OpenAIHandler
 
         client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", apiKey);
 
-        Console.WriteLine("Beskriv vad som �r m�let med din tr�ning:");
+        Console.WriteLine("Describe the goal of your training:");
 
         string userInput = Console.ReadLine();
         string todaysDate = DateTime.Now.ToShortDateString();
 
         string AiPrompt = $@"
-           Skapa ett träningsschema i JSON-format med följande egenskaper: (Jag vill även att du tar hänsyn till användarens kroppsliga profil: {Session.CurrentUser.Profile})
-           - ""PlanName"": (Namn på träningsschemat)
-           - ""Goal"": (tydlig och inspirerande beskrivning av träningschemat p� svenska, baserat på informationen ifrån användaren : {userInput})
-           - ""StartDate"": ({todaysDate} om inget annat specificerats i {userInput})            
-           - ""EndDate"": (Datum då målet bör vara nått)
-           - ""Workouts"": (En lista med träningsdagar som passar baserat på {userInput}. Varje dag skall ha en titel som med ett eller två ord sammanfattar dagens träningsplan)
-               [
-                   - ""DayOfWeek"": (Vilken dag i veckan tr�ningen avser)
-                   - ""Title"": (Kort sammanfattning med 1-2 ord som namn p� dagens tr�ning)
-                   - ""Exercises"": (En lista �ver �vningar som skall utf�ras p� den specifika dagen)
-                           [
-                               - ""Name"": (Namn på övningen)
-                               - ""Sets"": (Antal set om det är applicerbart, annars 0)
-                               - ""Reps"": (repetitioner om det är applicerbart, annars 0)
-                               - ""Weight"": (Förslagen vikt i kg om det är applicerbart, annars 0)
-                               - ""RestTime"": (Vilotid i sekunder mellan set om det är applicerbart, annars 0) 
-                           ]
-               ]
+        Create a workout schedule in JSON format with the following structure.
+        Also take the user's physical profile into account: {Session.CurrentUser.Profile}
 
-           Svara ENDAST med giltig, minimerad JSON och ingen annan text.";
+        - ""PlanName"": (A suitable name for the workout plan)
+        - ""Goal"": (A clear and inspiring description of the workout plan in English, based on the user's input: {userInput})
+        - ""StartDate"": ({todaysDate} unless the user specifies something else in {userInput})
+        - ""EndDate"": (The date when the goal should ideally be reached)
+        - ""Workouts"": (A list of workout days based on {userInput}. Each day should have a short title summarizing the training focus in one or two words)
+            [
+                - ""DayOfWeek"": (The day of the week the workout applies to, in English, e.g. ""Monday"")
+                - ""Title"": (A brief 1–2 word summary of the day's workout)
+                - ""Exercises"": (A list of exercises to be performed on that day)
+                    [
+                        - ""Name"": (Name of the exercise)
+                        - ""Sets"": (Number of sets if applicable, otherwise 0)
+                        - ""Reps"": (Number of repetitions if applicable, otherwise 0)
+                        - ""Weight"": (Suggested weight in kg if applicable, otherwise 0)
+                        - ""RestTime"": (Rest time in seconds between sets if applicable, otherwise 0)
+                    ]
+            ]
 
+        Respond ONLY with valid, minified JSON and nothing else.";
+        
         var requestBody = new
         {
             model = "gpt-4.1-mini",
@@ -64,7 +65,7 @@ public class OpenAIHandler
 
         await AnsiConsole.Status()
             .Spinner(Spinner.Known.Dots)
-            .StartAsync("Pratar med OpenAI...", async ctx =>
+            .StartAsync("Communicating with OpenAI...", async ctx =>
             {
 
                 var response = await client.PostAsync(
@@ -98,19 +99,20 @@ public class OpenAIHandler
         JSONFileHanldler.Save($"Data/Users/{Session.CurrentUser.Id}/workoutplans.json", AiReply);
 
          WPUI.ShowWPUI(AiReply);
-            
-        ////======== Spara en Sample-workout till en JSON-fil =======
-        //string json2Store = cleanedJson;
+         Console.ReadKey(true);
 
-        // Spara det till en fil
-        //File.WriteAllText("sample_workoutplans.json", json2Store);
+         ////======== Spara en Sample-workout till en JSON-fil =======
+         //string json2Store = cleanedJson;
 
-        /*string localJson = File.ReadAllText("sample_workoutplans.json");
-        var AiReply = JsonSerializer.Deserialize<WorkoutPlan>(localJson);
-        JSONFileHanldler<WorkoutPlan>.Save($"Data/Users/{Session.CurrentUser.Id}/workoutplans.json", AiReply);
-        //JSONFileHanldler<List<User>>.Save("Data/Users.json", users);
-        //JSONHelper.SaveWP(AiReply);
-        WPUI.ShowWPUI(AiReply);*/
+         // Spara det till en fil
+         //File.WriteAllText("sample_workoutplans.json", json2Store);
+
+         /*string localJson = File.ReadAllText("sample_workoutplans.json");
+         var AiReply = JsonSerializer.Deserialize<WorkoutPlan>(localJson);
+         JSONFileHanldler<WorkoutPlan>.Save($"Data/Users/{Session.CurrentUser.Id}/workoutplans.json", AiReply);
+         //JSONFileHanldler<List<User>>.Save("Data/Users.json", users);
+         //JSONHelper.SaveWP(AiReply);
+         WPUI.ShowWPUI(AiReply);*/
 
     }
 }
