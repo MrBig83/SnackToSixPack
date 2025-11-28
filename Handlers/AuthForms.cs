@@ -52,70 +52,68 @@ namespace SnackToSixPack.Classes
                     return; 
                 }
 
-                var user = users.FirstOrDefault(u => u.UserName.Equals(usernameInput, StringComparison.OrdinalIgnoreCase)
-                                                         && u.Password.Equals(passwordInput));
-
-                    AnsiConsole.Status()
+                AnsiConsole.Status()
                         .Start("Verifying credentials...", ctx =>
                         {
                             // Simulate some work, 2 seconds
                             System.Threading.Thread.Sleep(2000);
                         });
 
-                    if (user == null)
+                var userByUsername = users.FirstOrDefault(u =>
+                        u.UserName.Equals(usernameInput, StringComparison.OrdinalIgnoreCase));
+
+                if (userByUsername == null)
+                {
+                    AnsiConsole.MarkupLine("[red]Invalid username.[/]");
+                    AnsiConsole.MarkupLine("[grey]Press Enter to try again.[/]");
+                    Console.ReadKey(true);
+                    continue;
+                }
+                // användarnamn finns, kolla nu lösenordet
+                var user = users.FirstOrDefault(u =>
+                        u.UserName.Equals(usernameInput, StringComparison.OrdinalIgnoreCase) &&
+                        u.Password.Equals(passwordInput));
+                    
+                if (user == null)
+                {
+                    AnsiConsole.MarkupLine("[red]Incorrect password.[/]");
+    
+                    Authentication auth = new Authentication();
+                    bool goBackToMain = auth.ForgotPassword(users);
+
+                    if (goBackToMain)
                     {
-                        AnsiConsole.Clear();
-                        AnsiConsole.MarkupLine("[red]Invalid username or password. Press enter to try again.[/]");
-                        bool pressedEnter = false;
-                        while (!pressedEnter)
-                        {
-                            var key = Console.ReadKey(true);
-                            if (key.Key == ConsoleKey.Enter)
-                            {
-                                pressedEnter = true;
-                            }
-                        }
-                        // if invalid, loop again
-                        continue;
+                        return; // → Gå till första sidan
                     }
 
-                    AnsiConsole.Clear();
-                    AnsiConsole.WriteLine("Processing login...");
-                    AnsiConsole.Status()
+                    continue; // → Gå till login igen
+                }
+                    
+                AnsiConsole.Clear();
+                AnsiConsole.WriteLine("Processing login...");
+                AnsiConsole.Status()
                         .Start("Proceeding to authentication...", ctx =>
                         {
                             // Simulate some work, 2 seconds
                             System.Threading.Thread.Sleep(2000);
                         });
-                    AnsiConsole.Clear();
-                    Session.SetCurrentUser(user);
-                    //Authentication.TwoFactorAuth();
-                    Profile userProfile;
+                AnsiConsole.Clear();
+                Session.SetCurrentUser(user);
+                //Authentication.TwoFactorAuth();
+                Profile userProfile;
 
-                    userProfile =
-                        JSONFileHanldler.Load<Profile>(Path.Combine($"Data/Users/{Session.CurrentUser.Id}",
-                            "profile.json"));
+                userProfile = JSONFileHanldler.Load<Profile>(Path.Combine($"Data/Users/{Session.CurrentUser.Id}", "profile.json"));
                     
-                    if (userProfile == null)    
-                    {
-                        AnsiConsole.MarkupLine("[red]Could not load user profile![/]");
-                        Console.ReadKey(true);
-                        return;
-                    }
-
-                    Session.CurrentUser.Profile = userProfile;
-                    AnsiConsole.WriteLine();
-
-                    AnsiConsole.Write(
-                        new FigletText("Welcome " + usernameInput!)
-                            .Centered()
-                            .Color(Color.Purple));
-
-                    AnsiConsole.Write(new Markup
-                                        ("[bold yellow]Glad to see you back![/]").Centered());
-
-                    running = false;
+                if (userProfile == null)    
+                {
+                    AnsiConsole.MarkupLine("[red]Could not load user profile![/]");
+                    Console.ReadKey(true);
                     return;
+                }
+
+                Session.CurrentUser.Profile = userProfile;
+              
+                running = false;
             }
         }
     }
