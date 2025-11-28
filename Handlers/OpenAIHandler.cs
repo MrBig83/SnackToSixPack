@@ -23,10 +23,11 @@ public class OpenAIHandler
 
         string userInput = Console.ReadLine();
         string todaysDate = DateTime.Now.ToShortDateString();
+        string userProfile = JsonSerializer.Serialize(Session.CurrentUser.Profile, new JsonSerializerOptions());
 
         string AiPrompt = $@"
         Create a workout schedule in JSON format with the following structure.
-        Also take the user's physical profile into account: {Session.CurrentUser.Profile}
+        Also take the user's physical profile into account: {userProfile}
 
         - ""PlanName"": (A suitable name for the workout plan)
         - ""Goal"": (A clear and inspiring description of the workout plan in English, based on the user's input: {userInput})
