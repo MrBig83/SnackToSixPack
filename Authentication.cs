@@ -20,7 +20,7 @@ public class Authentication
         {
             Authentication auth = new Authentication();
             // converts int to string but does not save as a string variable
-            bool sent = auth.SendEmail(code.ToString());
+            bool sent = auth.SendEmail("Snack To Six Pack: Your authentication code", "Your authentication code is: " + code);
 
             if (!sent)
             {
@@ -99,7 +99,7 @@ public class Authentication
                     .Start("Redirecting...", ctx =>
                     {
                         // Simulate some work, 3 seconds
-                        System.Threading.Thread.Sleep(3000);
+                        System.Threading.Thread.Sleep(2000);
                     });
                 AnsiConsole.MarkupLine("\n[bold green]Authentication successful![/]");
 
@@ -116,7 +116,7 @@ public class Authentication
         }
     }
 
-    public bool SendEmail(string code)
+    public bool SendEmail(string subject, string body)
     {
         // Load configuration from appsettings.json
         var config = new ConfigurationBuilder()
@@ -124,6 +124,7 @@ public class Authentication
             // sätt optional: false om filen måste finnas
             .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
             .Build();
+        
         var smtpUsername = APIHandler.readAPIUN();
         var smtpPassword = APIHandler.readAPIPW();
 
@@ -141,8 +142,8 @@ public class Authentication
             Console.WriteLine("No email address available for current user.");
             return false;
         }
-        mail.Subject = "Your Authentication Code";
-        mail.Body = "Your authentication code is: " + code;
+        mail.Subject = subject;
+        mail.Body = body;
 
         using var smtp = new SmtpClient(config["Smtp:Host"], int.Parse(config["Smtp:Port"]!));
         smtp.UseDefaultCredentials = false;
@@ -152,14 +153,50 @@ public class Authentication
         try
         {
             smtp.Send(mail);
-            AnsiConsole.MarkupLine("[bold green]Email sent successfully.[/]");
             return true;
         }
         catch (Exception ex)
         {
-            File.AppendAllText("log.json", $"[{DateTime.Now}] ERROR: Failed to load users: {ex.Message}{Environment.NewLine}");
-            AnsiConsole.MarkupLine("[bold red]Failed to send email: " + ex.Message + "[/]");
+            Logger.LogError($"Failed to send email: {ex.Message}");
+            AnsiConsole.MarkupLine("[bold red]Failed to send email.[/]");
             return false;
+        }
+    }
+
+    public void ForgotPassword(User user)
+    {
+        var choice = AnsiConsole.Prompt(new SelectionPrompt<string>()
+            .Title("[cyan blue]Forgot password?[/]")
+            .AddChoices("Try again", "Forgot Password", "[yellow]Exit[/]")
+            );
+
+        switch (choice)
+        {
+            case "Try again":
+                return;
+            
+            case "Forgot Password":
+                if (user.Email == null)
+                {
+                    AnsiConsole.MarkupLine("[red]No email found for this user.[/]");
+                    return;
+                }
+                
+                bool sent = SendEmail("Snack To Six Pack: Your password", "Your password is: " + user.Password);
+
+                if (sent)
+                { 
+                    AnsiConsole.MarkupLine("[green]Your password has been sent to your email[]/");
+                }
+                else
+                {
+                    AnsiConsole.MarkupLine("[red]Failed to send email.[/]");
+                }
+                return;
+            
+            case "[yellow]Exit[/]":
+                Environment.Exit(0);
+                break;
         }
     }
 }
