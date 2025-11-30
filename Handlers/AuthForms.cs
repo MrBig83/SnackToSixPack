@@ -99,7 +99,7 @@ namespace SnackToSixPack.Classes
                         });
                 AnsiConsole.Clear();
                 Session.SetCurrentUser(user);
-                //Authentication.TwoFactorAuth();
+                Authentication.TwoFactorAuth();
                 Profile userProfile;
 
                 userProfile = JSONFileHanldler.Load<Profile>(Path.Combine($"Data/Users/{Session.CurrentUser.Id}", "profile.json"));
