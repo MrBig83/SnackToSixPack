@@ -8,7 +8,7 @@ utifrån profilen som man fyllt i och beskrivningen man ger när man skapar en t
 - En giltig OpenAI API-nyckel
 - Internetanslutning (för API-anrop)
 - Sätt miljövariablerna
-- Installerade NuGet-paket
+- Appen använder NuGet paket. Kör en NuGet installation innan appen körs för första gången.
 
 ## API-nyckel (måste göras innan programmet körs)
 För att kunna använda OpenAI-funktionerna krävs att användaren sätter sin API-nyckel som en miljövariabel på datorn.
