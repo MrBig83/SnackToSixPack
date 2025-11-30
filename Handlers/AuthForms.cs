@@ -51,6 +51,9 @@ namespace SnackToSixPack.Classes
                 {
                     return; 
                 }
+                
+                var userByUsername = users.FirstOrDefault(u =>
+                    u.UserName.Equals(usernameInput, StringComparison.OrdinalIgnoreCase));
 
                 AnsiConsole.Status()
                         .Start("Verifying credentials...", ctx =>
@@ -58,9 +61,6 @@ namespace SnackToSixPack.Classes
                             // Simulate some work, 2 seconds
                             System.Threading.Thread.Sleep(2000);
                         });
-
-                var userByUsername = users.FirstOrDefault(u =>
-                        u.UserName.Equals(usernameInput, StringComparison.OrdinalIgnoreCase));
 
                 if (userByUsername == null)
                 {
@@ -83,10 +83,10 @@ namespace SnackToSixPack.Classes
 
                     if (goBackToMain)
                     {
-                        return; // → Gå till första sidan
+                        return; // användaren ska logga in
                     }
 
-                    continue; // → Gå till login igen
+                    continue; // Gå till login igen
                 }
                     
                 AnsiConsole.Clear();
