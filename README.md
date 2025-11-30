@@ -8,6 +8,7 @@ utifrån profilen som man fyllt i och beskrivningen man ger när man skapar en t
 - En giltig OpenAI API-nyckel
 - Internetanslutning (för API-anrop)
 - Sätt miljövariablerna
+- Installerade NuGet-paket
 
 ## API-nyckel (måste göras innan programmet körs)
 För att kunna använda OpenAI-funktionerna krävs att användaren sätter sin API-nyckel som en miljövariabel på datorn.
@@ -26,3 +27,7 @@ setx MAIL_AUTH_PW "ditt-app-password"
 macOS/Linux (bash/zsh):
 export MAIL_AUTH_UN="din-mailadress"
 export MAIL_AUTH_PW="ditt-app-password"
+
+- Det viktiga är att app-lösenord är inte synligt förrän du har aktiverat 2-stegsverifiering.
+- Vi använder oss utav Gmail och skapar applösenord på vårat egna privata Google konto genom denna länk: https://myaccount.google.com/signinoptions/twosv?rapt=AEjHL4PQYWP-py1CQTY39dxFlxMTIgu8MftMwi-87TtgHR4voeAFtqCwokp9puiRToNH95OMgwPFH3TrcSCqnJcSHVSrn5vPznPiaNB8ZpAnNNXpqmd-Rt8
+
