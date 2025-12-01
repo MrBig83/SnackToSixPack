@@ -10,7 +10,7 @@ using System.Linq;
 
 public class Authentication
 {
-    private static bool emailSent = false;
+    public static bool emailSent = false;
 
     public static void TwoFactorAuth(int? existingCode = null)
     {
@@ -200,7 +200,7 @@ public class Authentication
 
                     // skicka mejl och gå ur loopen
                     SendEmail(user.Email, "Snack To Six Pack", "Your password is " + user.Password);
-                    AnsiConsole.MarkupLine("[Green]A reset email has been sent to your email.[/]");
+                    AnsiConsole.MarkupLine("[Green]An email has been sent to your email.[/]");
                     AnsiConsole.MarkupLine("[grey]Press Enter to log in again.[/]");
                     Console.ReadKey(true);
                     break;

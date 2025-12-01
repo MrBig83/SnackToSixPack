@@ -98,6 +98,7 @@ namespace SnackToSixPack.Handlers
                         break;
                     case "Log Out":
                         Session.CurrentUserLogout();
+                        Authentication.emailSent = false;
                         break;
                 }
                 if (!skipPause && Session.CurrentUser != null)
